@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Athletix\Admin\Tables\FilterableTable;
 use Athletix\Support\Keys;
 
 /**
@@ -76,43 +77,39 @@ class RulesAdmin {
 		}
 
 		$action = esc_url( admin_url( 'admin-post.php' ) );
-		$rules  = $this->rules->rules();
 		$events = RuleManager::events();
 		$types  = RuleManager::actions();
+
+		$table = new FilterableTable(
+			array(
+				'columns'    => array(
+					'when'    => __( 'When', 'athletix' ),
+					'do'      => __( 'Do', 'athletix' ),
+					'details' => __( 'Details', 'athletix' ),
+					'actions' => '',
+				),
+				'sortable'   => array( 'when', 'do' ),
+				'searchable' => array( 'when', 'do', 'details' ),
+				'filters'    => array(
+					'event' => array(
+						'label'   => __( 'All events', 'athletix' ),
+						'options' => $events,
+					),
+				),
+				'per_page'   => 20,
+				'base_url'   => admin_url( 'admin.php?page=' . self::PAGE ),
+				'rows'       => array( $this, 'rows' ),
+				'render'     => array(
+					'actions' => array( $this, 'render_actions' ),
+				),
+			)
+		);
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Automation Rules', 'athletix' ); ?></h1>
 			<p class="description"><?php esc_html_e( 'Run an action when a plugin event occurs. Templates support {placeholders} such as {home}, {away}, {home_score}, {away_score}, {team_id}.', 'athletix' ); ?></p>
 
-			<table class="widefat striped">
-				<thead><tr>
-					<th><?php esc_html_e( 'When', 'athletix' ); ?></th>
-					<th><?php esc_html_e( 'Do', 'athletix' ); ?></th>
-					<th><?php esc_html_e( 'Details', 'athletix' ); ?></th>
-					<th></th>
-				</tr></thead>
-				<tbody>
-				<?php if ( empty( $rules ) ) : ?>
-					<tr><td colspan="4"><?php esc_html_e( 'No rules yet.', 'athletix' ); ?></td></tr>
-				<?php else : ?>
-					<?php foreach ( $rules as $index => $rule ) : ?>
-						<tr>
-							<td><?php echo esc_html( isset( $events[ $rule['event'] ] ) ? $events[ $rule['event'] ] : $rule['event'] ); ?></td>
-							<td><?php echo esc_html( isset( $types[ $rule['action'] ] ) ? $types[ $rule['action'] ] : $rule['action'] ); ?></td>
-							<td><?php echo esc_html( $rule['subject'] ? $rule['subject'] : $rule['body'] ); ?></td>
-							<td>
-								<form method="post" action="<?php echo esc_url( $action ); ?>">
-									<input type="hidden" name="action" value="<?php echo esc_attr( self::ACTION_DELETE ); ?>" />
-									<input type="hidden" name="index" value="<?php echo esc_attr( $index ); ?>" />
-									<?php wp_nonce_field( self::ACTION_DELETE ); ?>
-									<button class="button-link delete"><?php esc_html_e( 'Delete', 'athletix' ); ?></button>
-								</form>
-							</td>
-						</tr>
-					<?php endforeach; ?>
-				<?php endif; ?>
-				</tbody>
-			</table>
+			<?php $table->render(); ?>
 
 			<h2><?php esc_html_e( 'Add Rule', 'athletix' ); ?></h2>
 			<form method="post" action="<?php echo esc_url( $action ); ?>">
@@ -156,6 +153,54 @@ class RulesAdmin {
 			</form>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Build the rule rows for the table.
+	 *
+	 * Each row keeps its original index so the delete action targets the right
+	 * rule after the DataSet filters/sorts.
+	 *
+	 * @return array[]
+	 */
+	public function rows() {
+		$events = RuleManager::events();
+		$types  = RuleManager::actions();
+		$rows   = array();
+
+		foreach ( $this->rules->rules() as $index => $rule ) {
+			$rows[] = array(
+				'index'   => (int) $index,
+				'event'   => $rule['event'],
+				'when'    => isset( $events[ $rule['event'] ] ) ? $events[ $rule['event'] ] : $rule['event'],
+				'do'      => isset( $types[ $rule['action'] ] ) ? $types[ $rule['action'] ] : $rule['action'],
+				'details' => $rule['subject'] ? $rule['subject'] : $rule['body'],
+			);
+		}
+
+		return $rows;
+	}
+
+	/**
+	 * Render the delete-action cell.
+	 *
+	 * @param array $row Row.
+	 * @return string
+	 */
+	public function render_actions( array $row ) {
+		return sprintf(
+			'<form method="post" action="%1$s">
+				<input type="hidden" name="action" value="%2$s" />
+				<input type="hidden" name="index" value="%3$d" />
+				%4$s
+				<button class="button-link delete">%5$s</button>
+			</form>',
+			esc_url( admin_url( 'admin-post.php' ) ),
+			esc_attr( self::ACTION_DELETE ),
+			(int) $row['index'],
+			wp_nonce_field( self::ACTION_DELETE, '_wpnonce', true, false ),
+			esc_html__( 'Delete', 'athletix' )
+		);
 	}
 
 	/**
@@ -218,10 +263,9 @@ class RulesAdmin {
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'post_type' => Keys::TEAM,
-					'page'      => self::PAGE,
+					'page' => self::PAGE,
 				),
-				admin_url( 'edit.php' )
+				admin_url( 'admin.php' )
 			)
 		);
 		exit;

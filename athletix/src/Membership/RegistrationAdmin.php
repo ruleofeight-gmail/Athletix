@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Athletix\Admin\Tables\FilterableTable;
 use Athletix\Plugin;
 use Athletix\Support\Keys;
 
@@ -77,7 +78,40 @@ class RegistrationAdmin {
 			return;
 		}
 
-		$pending     = get_posts(
+		$table = new FilterableTable(
+			array(
+				'columns'    => array(
+					'team'        => __( 'Team', 'athletix' ),
+					'contact'     => __( 'Contact', 'athletix' ),
+					'eligibility' => __( 'Eligibility', 'athletix' ),
+					'actions'     => '',
+				),
+				'sortable'   => array( 'team', 'contact' ),
+				'searchable' => array( 'team', 'contact' ),
+				'per_page'   => 20,
+				'base_url'   => admin_url( 'admin.php?page=' . self::PAGE ),
+				'rows'       => array( $this, 'rows' ),
+				'render'     => array(
+					'eligibility' => array( $this, 'render_eligibility' ),
+					'actions'     => array( $this, 'render_actions' ),
+				),
+			)
+		);
+		?>
+		<div class="wrap">
+			<h1><?php esc_html_e( 'Pending Registrations', 'athletix' ); ?></h1>
+			<?php $table->render(); ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Build the pending-registration rows.
+	 *
+	 * @return array[]
+	 */
+	public function rows() {
+		$pending = get_posts(
 			array(
 				'post_type'   => Keys::TEAM,
 				'post_status' => 'draft',
@@ -86,55 +120,77 @@ class RegistrationAdmin {
 				'meta_value'  => 'pending', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
 			)
 		);
-		$action      = esc_url( admin_url( 'admin-post.php' ) );
+
 		$eligibility = new Eligibility( $this->plugin );
-		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Pending Registrations', 'athletix' ); ?></h1>
-			<table class="widefat striped">
-				<thead><tr>
-					<th><?php esc_html_e( 'Team', 'athletix' ); ?></th>
-					<th><?php esc_html_e( 'Contact', 'athletix' ); ?></th>
-					<th><?php esc_html_e( 'Eligibility', 'athletix' ); ?></th>
-					<th></th>
-				</tr></thead>
-				<tbody>
-				<?php if ( empty( $pending ) ) : ?>
-					<tr><td colspan="4"><?php esc_html_e( 'No pending registrations.', 'athletix' ); ?></td></tr>
-				<?php else : ?>
-					<?php foreach ( $pending as $team ) : ?>
-						<?php $check = $eligibility->check( $team->ID ); ?>
-						<tr>
-							<td><?php echo esc_html( get_the_title( $team ) ); ?></td>
-							<td><?php echo esc_html( (string) get_post_meta( $team->ID, '_ax_registration_contact', true ) ); ?></td>
-							<td>
-								<?php
-								echo $check['eligible']
-									? '<span style="color:#2e7d32;">' . esc_html__( 'Eligible', 'athletix' ) . '</span>'
-									: esc_html( implode( ', ', $check['reasons'] ) );
-								?>
-							</td>
-							<td>
-								<form method="post" action="<?php echo esc_url( $action ); ?>" style="display:inline;">
-									<input type="hidden" name="action" value="<?php echo esc_attr( self::ACTION_APPROVE ); ?>" />
-									<input type="hidden" name="team" value="<?php echo esc_attr( $team->ID ); ?>" />
-									<?php wp_nonce_field( self::ACTION_APPROVE ); ?>
-									<button class="button button-primary"><?php esc_html_e( 'Approve', 'athletix' ); ?></button>
-								</form>
-								<form method="post" action="<?php echo esc_url( $action ); ?>" style="display:inline;">
-									<input type="hidden" name="action" value="<?php echo esc_attr( self::ACTION_REJECT ); ?>" />
-									<input type="hidden" name="team" value="<?php echo esc_attr( $team->ID ); ?>" />
-									<?php wp_nonce_field( self::ACTION_REJECT ); ?>
-									<button class="button-link delete"><?php esc_html_e( 'Reject', 'athletix' ); ?></button>
-								</form>
-							</td>
-						</tr>
-					<?php endforeach; ?>
-				<?php endif; ?>
-				</tbody>
-			</table>
-		</div>
-		<?php
+		$rows        = array();
+
+		foreach ( $pending as $team ) {
+			$check  = $eligibility->check( $team->ID );
+			$rows[] = array(
+				'team_id'  => (int) $team->ID,
+				'team'     => get_the_title( $team ),
+				'contact'  => (string) get_post_meta( $team->ID, '_ax_registration_contact', true ),
+				'eligible' => ! empty( $check['eligible'] ),
+				'reasons'  => implode( ', ', (array) $check['reasons'] ),
+			);
+		}
+
+		return $rows;
+	}
+
+	/**
+	 * Render the eligibility cell.
+	 *
+	 * @param array $row Row.
+	 * @return string
+	 */
+	public function render_eligibility( array $row ) {
+		if ( ! empty( $row['eligible'] ) ) {
+			return '<span style="color:#2e7d32;">' . esc_html__( 'Eligible', 'athletix' ) . '</span>';
+		}
+
+		return esc_html( (string) $row['reasons'] );
+	}
+
+	/**
+	 * Render the approve/reject action cell.
+	 *
+	 * @param array $row Row.
+	 * @return string
+	 */
+	public function render_actions( array $row ) {
+		$action  = esc_url( admin_url( 'admin-post.php' ) );
+		$team_id = (int) $row['team_id'];
+
+		$approve = sprintf(
+			'<form method="post" action="%1$s" style="display:inline;">
+				<input type="hidden" name="action" value="%2$s" />
+				<input type="hidden" name="team" value="%3$d" />
+				%4$s
+				<button class="button button-primary">%5$s</button>
+			</form>',
+			$action,
+			esc_attr( self::ACTION_APPROVE ),
+			$team_id,
+			wp_nonce_field( self::ACTION_APPROVE, '_wpnonce', true, false ),
+			esc_html__( 'Approve', 'athletix' )
+		);
+
+		$reject = sprintf(
+			'<form method="post" action="%1$s" style="display:inline;">
+				<input type="hidden" name="action" value="%2$s" />
+				<input type="hidden" name="team" value="%3$d" />
+				%4$s
+				<button class="button-link delete">%5$s</button>
+			</form>',
+			$action,
+			esc_attr( self::ACTION_REJECT ),
+			$team_id,
+			wp_nonce_field( self::ACTION_REJECT, '_wpnonce', true, false ),
+			esc_html__( 'Reject', 'athletix' )
+		);
+
+		return $approve . $reject;
 	}
 
 	/**
@@ -198,10 +254,9 @@ class RegistrationAdmin {
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'post_type' => Keys::TEAM,
-					'page'      => self::PAGE,
+					'page' => self::PAGE,
 				),
-				admin_url( 'edit.php' )
+				admin_url( 'admin.php' )
 			)
 		);
 		exit;

@@ -116,7 +116,9 @@ class FilterableTable implements Table {
 			)
 		);
 
-		$this->render_filter_bar( $filters, $search );
+		if ( $this->config['searchable'] || $this->config['filters'] ) {
+			$this->render_filter_bar( $filters, $search );
+		}
 		$this->render_table( $result['items'], $orderby, $order );
 		$this->render_pagination( $page, (int) $result['total'] );
 	}

@@ -305,12 +305,11 @@ class ImportExport {
 			add_query_arg(
 				array_merge(
 					array(
-						'post_type' => Keys::TEAM,
-						'page'      => self::PAGE,
+						'page' => self::PAGE,
 					),
 					$args
 				),
-				admin_url( 'edit.php' )
+				admin_url( 'admin.php' )
 			)
 		);
 		exit;

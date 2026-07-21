@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Athletix 2.0.0\n"
 "Report-Msgid-Bugs-To: https://example.com/support\n"
-"POT-Creation-Date: 2026-07-21 23:50+0000\n"
+"POT-Creation-Date: 2026-07-21 23:58+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -69,6 +69,10 @@ msgstr ""
 
 #: src/Taxonomies/Taxonomies.php
 msgid "All Sports"
+msgstr ""
+
+#: src/Automation/RulesAdmin.php
+msgid "All events"
 msgstr ""
 
 #: src/Payments/Invoice.php src/Payments/PaymentsAdmin.php
@@ -627,10 +631,6 @@ msgstr ""
 msgid "No payments recorded."
 msgstr ""
 
-#: src/Membership/RegistrationAdmin.php
-msgid "No pending registrations."
-msgstr ""
-
 #: templates/archive-ax_player.php templates/roster.php
 msgid "No players found."
 msgstr ""
@@ -653,10 +653,6 @@ msgstr ""
 
 #: src/Search/Directory.php src/Search/Search.php
 msgid "No results found."
-msgstr ""
-
-#: src/Automation/RulesAdmin.php
-msgid "No rules yet."
 msgstr ""
 
 #: templates/standings.php
