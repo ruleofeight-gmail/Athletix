@@ -49,6 +49,7 @@ class RestModule implements Module {
 						$plugin->make( 'repo.match' )
 					),
 					new MobileController( $plugin->make( 'engine.standings' ), $plugin->make( 'repo.match' ) ),
+					new MatchController( $plugin->make( 'repo.match' ), $plugin->events(), new Permissions() ),
 					new DocsController(),
 				);
 

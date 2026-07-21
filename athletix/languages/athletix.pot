@@ -1,0 +1,1126 @@
+# Copyright (C) Athletix
+# This file is distributed under the GPL-2.0-or-later license.
+msgid ""
+msgstr ""
+"Project-Id-Version: Athletix 2.0.0\n"
+"Report-Msgid-Bugs-To: https://example.com/support\n"
+"POT-Creation-Date: 2026-07-21 23:23+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Domain: athletix\n"
+
+#: src/Competition/CompetitionScheduler.php
+msgid "%1$s vs %2$s"
+msgstr ""
+
+#: src/Notifications/Notifier.php
+msgid "%1$s vs %2$s finished %3$s."
+msgstr ""
+
+#: src/Competition/TournamentBuilder.php
+msgid "A tournament name is required."
+msgstr ""
+
+#: src/Settings/SettingsPage.php
+msgid "Active Sport"
+msgstr ""
+
+#: src/Dashboard/DashboardPage.php
+msgid "Activity logging is not available."
+msgstr ""
+
+#: src/PostTypes/PostTypes.php
+msgid "Add New %s"
+msgstr ""
+
+#: src/Notifications/Announcements.php
+msgid "Add New Announcement"
+msgstr ""
+
+#: src/Taxonomies/Taxonomies.php
+msgid "Add New Sport"
+msgstr ""
+
+#: src/Calendar/Venues.php
+msgid "Add New Venue"
+msgstr ""
+
+#: src/Automation/RulesAdmin.php
+msgid "Add Rule"
+msgstr ""
+
+#: src/Settings/SettingsPage.php
+msgid "Advanced"
+msgstr ""
+
+#: src/Search/Directory.php
+msgid "All"
+msgstr ""
+
+#: src/PostTypes/PostTypes.php
+msgid "All %s"
+msgstr ""
+
+#: src/Taxonomies/Taxonomies.php
+msgid "All Sports"
+msgstr ""
+
+#: src/Payments/Invoice.php src/Payments/PaymentsAdmin.php
+msgid "Amount"
+msgstr ""
+
+#: src/Notifications/Announcements.php
+msgid "Announcements"
+msgstr ""
+
+#: src/Search/Directory.php
+msgid "Any sport"
+msgstr ""
+
+#: src/Membership/RegistrationAdmin.php
+msgid "Approve"
+msgstr ""
+
+#: src/Elementor/ElementorModule.php
+msgid "Athletix"
+msgstr ""
+
+#: src/Dashboard/DashboardPage.php
+msgid "Athletix Dashboard"
+msgstr ""
+
+#: src/Elementor/ElementorModule.php
+msgid "Athletix Elementor widgets require Elementor to be installed and active."
+msgstr ""
+
+#: src/Notifications/Preferences.php
+msgid "Athletix Notifications"
+msgstr ""
+
+#: src/Dashboard/Widgets.php
+msgid "Athletix Overview"
+msgstr ""
+
+#: src/Settings/SettingsPage.php
+msgid "Athletix Settings"
+msgstr ""
+
+#: src/Automation/RuleManager.php
+msgid "Athletix notification"
+msgstr ""
+
+#: src/Elementor/ElementorModule.php
+msgid "Athletix requires Elementor %s or newer."
+msgstr ""
+
+#: src/Dashboard/Widgets.php
+msgid "Athletix — Recent Matches"
+msgstr ""
+
+#: src/Dashboard/Widgets.php
+msgid "Athletix — Top Scorers"
+msgstr ""
+
+#: src/Automation/RulesAdmin.php
+msgid "Automation"
+msgstr ""
+
+#: src/Automation/RulesAdmin.php
+msgid "Automation Rules"
+msgstr ""
+
+#: src/Payments/OfflineGateway.php
+msgid "Awaiting manual payment."
+msgstr ""
+
+#: templates/schedule.php
+msgid "Away"
+msgstr ""
+
+#: src/Meta/MetaBoxManager.php
+msgid "Away Score"
+msgstr ""
+
+#: src/Meta/MetaBoxManager.php
+msgid "Away Team"
+msgstr ""
+
+#: src/Elementor/Widgets/MatchCardWidget.php
+msgid "Background"
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgid "CSV File"
+msgstr ""
+
+#: src/Elementor/Widgets/MatchCardWidget.php
+msgid "Card"
+msgstr ""
+
+#: src/Elementor/Widgets/TeamRosterWidget.php
+msgid "Columns"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "Competition Manager"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "Competitions"
+msgstr ""
+
+#: src/Meta/MetaBoxManager.php
+msgid "Completed"
+msgstr ""
+
+#: src/Membership/RegistrationAdmin.php
+msgid "Contact"
+msgstr ""
+
+#: src/Membership/Registration.php
+msgid "Contact Email"
+msgstr ""
+
+#: src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/MatchCardWidget.php src/Elementor/Widgets/PlayerProfileWidget.php src/Elementor/Widgets/ScheduleWidget.php src/Elementor/Widgets/StatisticsWidget.php src/Elementor/Widgets/TeamRosterWidget.php
+msgid "Content"
+msgstr ""
+
+#: src/Elementor/Tags/PlayerFieldTag.php src/Meta/MetaBoxManager.php templates/player.php
+msgid "Country"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "Creates fixtures for every team in the selected league."
+msgstr ""
+
+#: templates/standings.php
+msgid "D"
+msgstr ""
+
+#: src/Dashboard/DashboardPage.php
+msgid "Dashboard"
+msgstr ""
+
+#: src/Payments/Invoice.php templates/schedule.php
+msgid "Date"
+msgstr ""
+
+#: src/Elementor/Tags/PlayerFieldTag.php src/Meta/MetaBoxManager.php
+msgid "Date of Birth"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "Days between rounds"
+msgstr ""
+
+#: src/Automation/RulesAdmin.php
+msgid "Delete"
+msgstr ""
+
+#: src/Settings/SettingsPage.php
+msgid "Delete all data on uninstall"
+msgstr ""
+
+#: src/Automation/RulesAdmin.php src/Meta/MetaBoxManager.php
+msgid "Details"
+msgstr ""
+
+#: src/PostTypes/PostTypes.php
+msgid "Division"
+msgstr ""
+
+#: src/PostTypes/PostTypes.php
+msgid "Divisions"
+msgstr ""
+
+#: src/Automation/RulesAdmin.php
+msgid "Do"
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgid "Download Backup (JSON)"
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgid "Download CSV"
+msgstr ""
+
+#: templates/standings.php
+msgid "Drawn"
+msgstr ""
+
+#: src/PostTypes/PostTypes.php
+msgid "Edit %s"
+msgstr ""
+
+#: src/Notifications/Announcements.php
+msgid "Edit Announcement"
+msgstr ""
+
+#: src/Taxonomies/Taxonomies.php
+msgid "Edit Sport"
+msgstr ""
+
+#: src/Calendar/Venues.php
+msgid "Edit Venue"
+msgstr ""
+
+#: src/Membership/RegistrationAdmin.php
+msgid "Eligibility"
+msgstr ""
+
+#: src/Membership/RegistrationAdmin.php
+msgid "Eligible"
+msgstr ""
+
+#: src/Settings/SettingsPage.php
+msgid "Email match reminders"
+msgstr ""
+
+#: src/Settings/SettingsPage.php
+msgid "Email match results"
+msgstr ""
+
+#: src/Notifications/Preferences.php
+msgid "Email me when match results are posted"
+msgstr ""
+
+#: src/Automation/RulesAdmin.php
+msgid "Email recipient"
+msgstr ""
+
+#: src/Meta/MetaBoxManager.php
+msgid "End Date"
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgid "Export Standings"
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgid "Export or restore all leagues, teams, players, matches, relationships and statistics as a JSON file."
+msgstr ""
+
+#: src/Elementor/Tags/PlayerFieldTag.php
+msgid "Field"
+msgstr ""
+
+#: src/Search/Directory.php
+msgid "Filter"
+msgstr ""
+
+#: src/Payments/FinancialReport.php
+msgid "Financial Report"
+msgstr ""
+
+#: src/Payments/FinancialReport.php
+msgid "Financials"
+msgstr ""
+
+#: templates/single-ax_team.php
+msgid "Fixtures & Results"
+msgstr ""
+
+#: src/Meta/MetaBoxManager.php
+msgid "Founded (year)"
+msgstr ""
+
+#: src/Calendar/CalendarView.php
+msgid "Fri"
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgid "Full Backup"
+msgstr ""
+
+#: templates/match-card.php
+msgid "Full time"
+msgstr ""
+
+#: templates/standings.php
+msgid "GA"
+msgstr ""
+
+#: templates/standings.php
+msgid "GD"
+msgstr ""
+
+#: templates/standings.php
+msgid "GF"
+msgstr ""
+
+#: src/Elementor/Widgets/TeamRosterWidget.php
+msgid "Gap"
+msgstr ""
+
+#: src/Settings/SettingsPage.php
+msgid "General"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "Generate Playoffs"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "Generate Round-Robin Schedule"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "Generate Schedule"
+msgstr ""
+
+#: templates/standings.php
+msgid "Goal Difference"
+msgstr ""
+
+#: templates/standings.php
+msgid "Goals Against"
+msgstr ""
+
+#: templates/standings.php
+msgid "Goals For"
+msgstr ""
+
+#: src/Payments/FinancialReport.php
+msgid "Grand total"
+msgstr ""
+
+#: src/Elementor/Widgets/TeamRosterWidget.php
+msgid "Grid"
+msgstr ""
+
+#: src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/ScheduleWidget.php
+msgid "Header Background"
+msgstr ""
+
+#: src/Elementor/Widgets/StatisticsWidget.php
+msgid "Heading"
+msgstr ""
+
+#: src/Elementor/Tags/PlayerFieldTag.php src/Meta/MetaBoxManager.php templates/player.php
+msgid "Height"
+msgstr ""
+
+#: templates/schedule.php
+msgid "Home"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "Home &amp; away (double round-robin)"
+msgstr ""
+
+#: src/Meta/MetaBoxManager.php
+msgid "Home Score"
+msgstr ""
+
+#: src/Meta/MetaBoxManager.php
+msgid "Home Team"
+msgstr ""
+
+#: src/Meta/MetaBoxManager.php
+msgid "Home Venue"
+msgstr ""
+
+#: src/Elementor/Widgets/StatisticsWidget.php
+msgid "How many"
+msgstr ""
+
+#: src/Membership/Registration.php
+msgid "I accept the participation waiver and terms."
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgid "Import"
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgid "Import / Export"
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgid "Import CSV"
+msgstr ""
+
+#: src/Payments/Invoice.php
+msgid "Invoice — %s"
+msgstr ""
+
+#: src/Elementor/Tags/PlayerFieldTag.php src/Meta/MetaBoxManager.php
+msgid "Jersey Number"
+msgstr ""
+
+#: src/Search/Directory.php
+msgid "Keyword…"
+msgstr ""
+
+#: templates/standings.php
+msgid "L"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/ScheduleWidget.php src/Meta/MetaBoxManager.php src/PostTypes/PostTypes.php
+msgid "League"
+msgstr ""
+
+#: src/Security/Roles.php
+msgid "League Manager"
+msgstr ""
+
+#: src/Elementor/Widgets/LeagueTableWidget.php
+msgid "League Table"
+msgstr ""
+
+#: src/Dashboard/DashboardPage.php src/Dashboard/Widgets.php src/PostTypes/PostTypes.php
+msgid "Leagues"
+msgstr ""
+
+#: src/Meta/MatchStatsMetaBox.php
+msgid "Leave a row blank to ignore it. Saving replaces all statistics for this match."
+msgstr ""
+
+#: src/Elementor/Widgets/MatchCardWidget.php
+msgid "Leave empty to use the current match on a single match page."
+msgstr ""
+
+#: src/Elementor/Tags/PlayerFieldTag.php
+msgid "Leave empty to use the current player in the loop."
+msgstr ""
+
+#: src/Elementor/Widgets/PlayerProfileWidget.php
+msgid "Leave empty to use the current player on a single player page."
+msgstr ""
+
+#: src/Elementor/Widgets/StatisticsWidget.php
+msgid "List"
+msgstr ""
+
+#: templates/standings.php
+msgid "Lost"
+msgstr ""
+
+#: src/Payments/PaymentsAdmin.php
+msgid "Manual entry"
+msgstr ""
+
+#: src/Payments/PaymentsAdmin.php
+msgid "Manual entry only — no card data is processed or stored."
+msgstr ""
+
+#: src/Elementor/Widgets/MatchCardWidget.php src/PostTypes/PostTypes.php
+msgid "Match"
+msgstr ""
+
+#: src/Elementor/Widgets/MatchCardWidget.php
+msgid "Match Card"
+msgstr ""
+
+#: src/Meta/MetaBoxManager.php
+msgid "Match Date"
+msgstr ""
+
+#: src/Elementor/Widgets/ScheduleWidget.php
+msgid "Match Schedule"
+msgstr ""
+
+#: src/Automation/RuleManager.php
+msgid "Match completed"
+msgstr ""
+
+#: src/Notifications/Preferences.php
+msgid "Match results"
+msgstr ""
+
+#: src/Dashboard/DashboardPage.php src/Dashboard/Widgets.php src/PostTypes/PostTypes.php
+msgid "Matches"
+msgstr ""
+
+#: src/Elementor/Widgets/ScheduleWidget.php
+msgid "Max Matches"
+msgstr ""
+
+#: src/Automation/RulesAdmin.php
+msgid "Message template"
+msgstr ""
+
+#: src/Elementor/Widgets/StatisticsWidget.php src/Meta/MatchStatsMetaBox.php
+msgid "Metric"
+msgstr ""
+
+#: src/Calendar/CalendarView.php
+msgid "Mon"
+msgstr ""
+
+#: src/Elementor/Widgets/PlayerProfileWidget.php
+msgid "Name Color"
+msgstr ""
+
+#: src/PostTypes/PostTypes.php
+msgid "New %s"
+msgstr ""
+
+#: src/PostTypes/PostTypes.php
+msgid "No %s found"
+msgstr ""
+
+#: src/Analytics/PlayerAnalytics.php
+msgid "No data."
+msgstr ""
+
+#: src/Rest/MatchController.php
+msgid "No match found for that id."
+msgstr ""
+
+#: templates/schedule.php
+msgid "No matches scheduled."
+msgstr ""
+
+#: src/Dashboard/DashboardPage.php src/Dashboard/Widgets.php
+msgid "No matches yet."
+msgstr ""
+
+#: src/Payments/Invoice.php
+msgid "No payments recorded."
+msgstr ""
+
+#: src/Membership/RegistrationAdmin.php
+msgid "No pending registrations."
+msgstr ""
+
+#: templates/archive-ax_player.php templates/roster.php
+msgid "No players found."
+msgstr ""
+
+#: src/Reports/TeamReport.php
+msgid "No players."
+msgstr ""
+
+#: src/Dashboard/DashboardPage.php
+msgid "No recent activity."
+msgstr ""
+
+#: src/Analytics/TeamAnalytics.php
+msgid "No recent matches."
+msgstr ""
+
+#: src/Media/MediaShortcodes.php
+msgid "No recent results."
+msgstr ""
+
+#: src/Search/Directory.php src/Search/Search.php
+msgid "No results found."
+msgstr ""
+
+#: src/Automation/RulesAdmin.php
+msgid "No rules yet."
+msgstr ""
+
+#: templates/standings.php
+msgid "No standings available yet."
+msgstr ""
+
+#: src/Analytics/Leaderboards.php
+msgid "No statistics available yet."
+msgstr ""
+
+#: src/Dashboard/Widgets.php src/Reports/PlayerReport.php
+msgid "No statistics recorded."
+msgstr ""
+
+#: templates/archive-ax_team.php
+msgid "No teams found."
+msgstr ""
+
+#: src/Payments/Invoice.php
+msgid "Note"
+msgstr ""
+
+#: src/Settings/SettingsPage.php
+msgid "Notification email"
+msgstr ""
+
+#: src/Settings/SettingsPage.php
+msgid "Notifications"
+msgstr ""
+
+#: templates/player.php
+msgid "Number"
+msgstr ""
+
+#: src/Payments/OfflineGateway.php
+msgid "Offline / Manual"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "Options"
+msgstr ""
+
+#: templates/standings.php
+msgid "P"
+msgstr ""
+
+#: src/Automation/RuleManager.php
+msgid "Payment recorded"
+msgstr ""
+
+#: src/Membership/RegistrationAdmin.php
+msgid "Pending Registrations"
+msgstr ""
+
+#: src/Analytics/PlayerAnalytics.php
+msgid "Performance trend"
+msgstr ""
+
+#: templates/standings.php
+msgid "Played"
+msgstr ""
+
+#: src/Elementor/Tags/PlayerFieldTag.php src/Elementor/Widgets/PlayerProfileWidget.php src/Meta/MatchStatsMetaBox.php src/PostTypes/PostTypes.php src/Search/Directory.php src/Search/Search.php
+msgid "Player"
+msgstr ""
+
+#: src/Elementor/Tags/PlayerFieldTag.php
+msgid "Player Field"
+msgstr ""
+
+#: src/Elementor/Widgets/PlayerProfileWidget.php
+msgid "Player Profile"
+msgstr ""
+
+#: src/Meta/MatchStatsMetaBox.php
+msgid "Player Statistics"
+msgstr ""
+
+#: src/Dashboard/DashboardPage.php src/Dashboard/Widgets.php src/ImportExport/ImportExport.php src/PostTypes/PostTypes.php src/Search/Directory.php
+msgid "Players"
+msgstr ""
+
+#: src/Membership/Registration.php
+msgid "Please enter a team name."
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "Please select a league."
+msgstr ""
+
+#: templates/standings.php
+msgid "Points"
+msgstr ""
+
+#: src/Elementor/Widgets/LeagueTableWidget.php
+msgid "Points Color"
+msgstr ""
+
+#: src/Settings/SettingsPage.php
+msgid "Points for a Draw"
+msgstr ""
+
+#: src/Settings/SettingsPage.php
+msgid "Points for a Loss"
+msgstr ""
+
+#: src/Settings/SettingsPage.php
+msgid "Points for a Win"
+msgstr ""
+
+#: src/Elementor/Tags/PlayerFieldTag.php src/Meta/MetaBoxManager.php src/Search/Directory.php templates/player.php
+msgid "Position"
+msgstr ""
+
+#: src/Reports/TeamReport.php
+msgid "Position %1$d — %2$d pts from %3$d games"
+msgstr ""
+
+#: src/Elementor/Widgets/PlayerProfileWidget.php
+msgid "Profile"
+msgstr ""
+
+#: templates/standings.php
+msgid "Pts"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "Qualifying Teams"
+msgstr ""
+
+#: src/Dashboard/DashboardPage.php
+msgid "Recent Activity"
+msgstr ""
+
+#: templates/single-ax_team.php
+msgid "Recent Form"
+msgstr ""
+
+#: src/Dashboard/DashboardPage.php
+msgid "Recent Matches"
+msgstr ""
+
+#: src/Payments/PaymentsAdmin.php
+msgid "Record Payment"
+msgstr ""
+
+#: src/Payments/Ledger.php
+msgid "Refund"
+msgstr ""
+
+#: src/Membership/Registration.php
+msgid "Register Team"
+msgstr ""
+
+#: src/Payments/PaymentsAdmin.php
+msgid "Registration Payments"
+msgstr ""
+
+#: src/Membership/Eligibility.php
+msgid "Registration fee unpaid"
+msgstr ""
+
+#: src/Membership/RegistrationAdmin.php
+msgid "Registrations"
+msgstr ""
+
+#: src/Membership/RegistrationAdmin.php
+msgid "Reject"
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgid "Restore Backup"
+msgstr ""
+
+#: src/Automation/RulesAdmin.php
+msgid "Run an action when a plugin event occurs. Templates support {placeholders} such as {home}, {away}, {home_score}, {away_score}, {team_id}."
+msgstr ""
+
+#: src/Calendar/CalendarView.php
+msgid "Sat"
+msgstr ""
+
+#: src/Meta/MetaBoxManager.php templates/match-card.php
+msgid "Scheduled"
+msgstr ""
+
+#: src/Calendar/ConflictDetector.php
+msgid "Scheduling conflict on this date with:"
+msgstr ""
+
+#: templates/schedule.php
+msgid "Score"
+msgstr ""
+
+#: src/Elementor/Widgets/MatchCardWidget.php
+msgid "Score Color"
+msgstr ""
+
+#: src/Search/Search.php
+msgid "Search"
+msgstr ""
+
+#: src/PostTypes/PostTypes.php
+msgid "Search %s"
+msgstr ""
+
+#: src/Taxonomies/Taxonomies.php
+msgid "Search Sports"
+msgstr ""
+
+#: src/Calendar/Venues.php
+msgid "Search Venues"
+msgstr ""
+
+#: src/Search/Search.php
+msgid "Search teams &amp; players…"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php src/Meta/MetaBoxManager.php src/PostTypes/PostTypes.php
+msgid "Season"
+msgstr ""
+
+#: src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/StatisticsWidget.php
+msgid "Season ID (optional)"
+msgstr ""
+
+#: templates/single-ax_player.php
+msgid "Season Statistics"
+msgstr ""
+
+#: src/PostTypes/PostTypes.php
+msgid "Seasons"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "Seeds a single-elimination bracket from the current standings."
+msgstr ""
+
+#: src/Elementor/Widgets/ScheduleWidget.php
+msgid "Select a league to display its schedule."
+msgstr ""
+
+#: src/Elementor/Widgets/LeagueTableWidget.php
+msgid "Select a league to display standings."
+msgstr ""
+
+#: src/Elementor/Widgets/MatchCardWidget.php
+msgid "Select a match to display."
+msgstr ""
+
+#: src/Elementor/Widgets/PlayerProfileWidget.php
+msgid "Select a player to display."
+msgstr ""
+
+#: src/Elementor/Widgets/TeamRosterWidget.php
+msgid "Select a team to display its roster."
+msgstr ""
+
+#: src/Automation/RuleManager.php
+msgid "Send email"
+msgstr ""
+
+#: src/Meta/MatchStatsMetaBox.php
+msgid "Set the home and away teams (and give them players) to record statistics."
+msgstr ""
+
+#: src/Settings/SettingsPage.php
+msgid "Settings"
+msgstr ""
+
+#: src/Elementor/Widgets/PlayerProfileWidget.php
+msgid "Show Stats"
+msgstr ""
+
+#: src/Membership/Registration.php
+msgid "Sorry, your registration could not be saved."
+msgstr ""
+
+#: src/Reports/TeamReport.php templates/single-ax_team.php
+msgid "Squad"
+msgstr ""
+
+#: src/Reports/ReportBuilder.php
+msgid "Standings"
+msgstr ""
+
+#: src/Automation/RuleManager.php
+msgid "Standings updated"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php src/Meta/MetaBoxManager.php
+msgid "Start Date"
+msgstr ""
+
+#: src/Elementor/Widgets/StatisticsWidget.php
+msgid "Statistics Leaderboard"
+msgstr ""
+
+#: src/Meta/MetaBoxManager.php
+msgid "Status"
+msgstr ""
+
+#: src/Automation/RulesAdmin.php
+msgid "Subject template"
+msgstr ""
+
+#: src/Payments/Subscriptions.php
+msgid "Subscription charge"
+msgstr ""
+
+#: src/Calendar/CalendarView.php
+msgid "Sun"
+msgstr ""
+
+#: src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/ScheduleWidget.php
+msgid "Table"
+msgstr ""
+
+#: src/Elementor/Widgets/TeamRosterWidget.php src/Membership/RegistrationAdmin.php src/Meta/MetaBoxManager.php src/Payments/FinancialReport.php src/PostTypes/PostTypes.php src/Search/Directory.php src/Search/Search.php templates/standings.php
+msgid "Team"
+msgstr ""
+
+#: src/Meta/MetaBoxManager.php
+msgid "Team Color"
+msgstr ""
+
+#: src/Membership/Registration.php
+msgid "Team Name"
+msgstr ""
+
+#: src/Elementor/Widgets/TeamRosterWidget.php
+msgid "Team Roster"
+msgstr ""
+
+#: src/Automation/RuleManager.php
+msgid "Team registered"
+msgstr ""
+
+#: src/Dashboard/DashboardPage.php src/Dashboard/Widgets.php src/ImportExport/ImportExport.php src/PostTypes/PostTypes.php src/Search/Directory.php
+msgid "Teams"
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgid "Teams CSV: one column \"name\". Players CSV: columns \"name\",\"team_id\",\"position\",\"number\"."
+msgstr ""
+
+#: src/Membership/Registration.php
+msgid "Thanks! Your team has been submitted for review."
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "That league needs at least two teams."
+msgstr ""
+
+#: src/Elementor/Widgets/StatisticsWidget.php
+msgid "The stat slug to rank by, e.g. goals or assists."
+msgstr ""
+
+#: src/Rest/MatchController.php
+msgid "This match has no teams assigned yet."
+msgstr ""
+
+#: src/Calendar/CalendarView.php
+msgid "Thu"
+msgstr ""
+
+#: src/Elementor/Widgets/StatisticsWidget.php src/Reports/ReportBuilder.php
+msgid "Top Scorers"
+msgstr ""
+
+#: src/Payments/Invoice.php
+msgid "Total"
+msgstr ""
+
+#: src/Payments/FinancialReport.php
+msgid "Total collected"
+msgstr ""
+
+#: src/Payments/PaymentsAdmin.php
+msgid "Total paid:"
+msgstr ""
+
+#: src/Calendar/CalendarView.php
+msgid "Tue"
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgid "Type"
+msgstr ""
+
+#: src/Meta/MatchStatsMetaBox.php
+msgid "Value"
+msgstr ""
+
+#: src/Elementor/Widgets/StatisticsWidget.php
+msgid "Value Color"
+msgstr ""
+
+#: src/PostTypes/PostTypes.php
+msgid "View %s"
+msgstr ""
+
+#: templates/standings.php
+msgid "W"
+msgstr ""
+
+#: src/Membership/Eligibility.php
+msgid "Waiver not accepted"
+msgstr ""
+
+#: src/Calendar/CalendarView.php
+msgid "Wed"
+msgstr ""
+
+#: src/Elementor/Tags/PlayerFieldTag.php src/Meta/MetaBoxManager.php templates/player.php
+msgid "Weight"
+msgstr ""
+
+#: src/Automation/RulesAdmin.php
+msgid "When"
+msgstr ""
+
+#: templates/standings.php
+msgid "Won"
+msgstr ""
+
+#: src/Automation/RuleManager.php
+msgid "Write to activity log"
+msgstr ""
+
+#: src/Automation/RulesAdmin.php src/Competition/CompetitionAdmin.php src/ImportExport/Backup.php src/ImportExport/ImportExport.php src/Membership/RegistrationAdmin.php src/Payments/PaymentsAdmin.php
+msgid "You are not allowed to do this."
+msgstr ""
+
+#: src/Membership/Registration.php
+msgid "You must accept the waiver to register."
+msgstr ""
+
+#: src/Automation/Scheduler.php
+msgid "[Athletix] Matches tomorrow"
+msgstr ""
+
+#: src/Notifications/Notifier.php
+msgid "[Athletix] Result: %1$s vs %2$s"
+msgstr ""
+
+#: templates/match-card.php templates/schedule.php
+msgid "vs"
+msgstr ""
+
+#: src/Meta/MatchStatsMetaBox.php
+msgid "—"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgid "— None —"
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgid "— Select league —"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php src/Elementor/Widgets/BaseWidget.php src/Meta/MetaBoxManager.php
+msgid "— Select —"
+msgstr ""
+
+#: src/Notifications/Announcements.php
+msgctxt "Announcement"
+msgid "post type singular name"
+msgstr ""
+
+#: src/Notifications/Announcements.php
+msgctxt "Announcements"
+msgid "post type general name"
+msgstr ""
+
+#: src/Competition/CompetitionAdmin.php
+msgctxt "Created %d matches."
+msgid "Created %d match."
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgctxt "Imported %d rows."
+msgid "Imported %d row."
+msgstr ""
+
+#: src/ImportExport/ImportExport.php
+msgctxt "Restored %d records."
+msgid "Restored %d record."
+msgstr ""
+
+#: src/Taxonomies/Taxonomies.php
+msgctxt "Sport"
+msgid "taxonomy singular name"
+msgstr ""
+
+#: src/Taxonomies/Taxonomies.php
+msgctxt "Sports"
+msgid "taxonomy general name"
+msgstr ""
+
+#: src/Calendar/Venues.php
+msgctxt "Venue"
+msgid "taxonomy singular name"
+msgstr ""
+
+#: src/Calendar/Venues.php
+msgctxt "Venues"
+msgid "taxonomy general name"
+msgstr ""
+

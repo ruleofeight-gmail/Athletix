@@ -151,7 +151,10 @@ class StandingsEngine {
 		return $this->cache->remember(
 			$this->cache_key( $league_id, $season_id ),
 			function () use ( $league_id, $season_id ) {
-				return $this->standings->table( $league_id, $season_id );
+				$rows   = $this->standings->table( $league_id, $season_id );
+				$sorter = new StandingsSorter( $this->sport->tiebreakers() );
+
+				return $sorter->sort( $rows );
 			}
 		);
 	}

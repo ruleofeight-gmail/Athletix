@@ -68,4 +68,28 @@ class SportEngine {
 		 */
 		return apply_filters( 'athletix/sport_points', $points, $sport );
 	}
+
+	/**
+	 * Ordered tie-break chain for a sport's standings.
+	 *
+	 * @param string $sport Sport slug; empty uses the active sport.
+	 * @return string[] Field names in priority order.
+	 */
+	public function tiebreakers( $sport = '' ) {
+		$sport = $sport ? $sport : $this->active();
+
+		$chain = $this->config->get( 'tiebreakers', StandingsSorter::DEFAULT_CHAIN );
+
+		if ( ! is_array( $chain ) || ! $chain ) {
+			$chain = StandingsSorter::DEFAULT_CHAIN;
+		}
+
+		/**
+		 * Filter the standings tie-break chain for a sport.
+		 *
+		 * @param string[] $chain Ordered field names.
+		 * @param string   $sport Sport slug.
+		 */
+		return (array) apply_filters( 'athletix/sport_tiebreakers', $chain, $sport );
+	}
 }
