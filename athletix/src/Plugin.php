@@ -203,6 +203,9 @@ final class Plugin {
 			\Athletix\ImportExport\ImportExportModule::class,
 			\Athletix\Calendar\CalendarModule::class,
 			\Athletix\Notifications\NotificationsModule::class,
+			\Athletix\Analytics\AnalyticsModule::class,
+			\Athletix\Media\MediaModule::class,
+			\Athletix\Reports\ReportsModule::class,
 		);
 	}
 
