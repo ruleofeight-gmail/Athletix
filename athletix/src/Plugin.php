@@ -193,6 +193,7 @@ final class Plugin {
 			\Athletix\Data\DataModule::class,
 			\Athletix\PostTypes\PostTypesModule::class,
 			\Athletix\Engine\EngineModule::class,
+			\Athletix\Competition\CompetitionModule::class,
 		);
 	}
 
