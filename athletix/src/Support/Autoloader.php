@@ -35,7 +35,7 @@ final class Autoloader {
 	 * @return void
 	 */
 	public static function register( $prefix, $base_dir ) {
-		self::$prefixes[ $prefix ] = trailingslashit( $base_dir );
+		self::$prefixes[ $prefix ] = rtrim( $base_dir, '/\\' ) . '/';
 
 		spl_autoload_register( array( __CLASS__, 'load' ) );
 	}

@@ -192,6 +192,7 @@ final class Plugin {
 		return array(
 			\Athletix\Data\DataModule::class,
 			\Athletix\PostTypes\PostTypesModule::class,
+			\Athletix\Engine\EngineModule::class,
 		);
 	}
 
