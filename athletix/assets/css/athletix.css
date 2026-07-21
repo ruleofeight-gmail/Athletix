@@ -471,3 +471,49 @@
 	background: #1a73e8;
 	border-radius: 2px 2px 0 0;
 }
+
+/* Single / archive layouts */
+.athletix-single__inner,
+.athletix-archive {
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 1.5rem 1rem;
+}
+
+.athletix-single__header {
+	text-align: center;
+	margin-bottom: 1.5rem;
+}
+
+.athletix-single__logo img {
+	max-width: 160px;
+	height: auto;
+}
+
+.athletix-single__title {
+	margin: 0.5rem 0 0.25rem;
+}
+
+.athletix-single__meta a {
+	text-decoration: none;
+	color: inherit;
+	opacity: 0.75;
+}
+
+.athletix-single__section {
+	margin: 2rem 0;
+}
+
+.athletix-single__section h2 {
+	border-bottom: 2px solid rgba( 0, 0, 0, 0.08 );
+	padding-bottom: 0.35rem;
+	margin-bottom: 1rem;
+}
+
+.athletix-archive__header {
+	margin-bottom: 1.5rem;
+}
+
+.athletix-archive__nav {
+	margin-top: 1.5rem;
+}
