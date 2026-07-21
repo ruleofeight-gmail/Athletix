@@ -190,6 +190,7 @@ final class Plugin {
 	 */
 	private function module_classes() {
 		return array(
+			\Athletix\Security\SecurityModule::class,
 			\Athletix\Data\DataModule::class,
 			\Athletix\PostTypes\PostTypesModule::class,
 			\Athletix\Engine\EngineModule::class,
@@ -197,6 +198,8 @@ final class Plugin {
 			\Athletix\Rest\RestModule::class,
 			\Athletix\Frontend\FrontendModule::class,
 			\Athletix\Elementor\ElementorModule::class,
+			\Athletix\Dashboard\DashboardModule::class,
+			\Athletix\Search\SearchModule::class,
 		);
 	}
 

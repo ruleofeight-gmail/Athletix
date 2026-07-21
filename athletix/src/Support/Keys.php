@@ -80,9 +80,12 @@ final class Keys {
 	/**
 	 * Capability required to manage Athletix data.
 	 *
+	 * Granted to administrators (and the League Manager role) by the Security
+	 * module; falls back gracefully because administrators also hold it.
+	 *
 	 * @return string
 	 */
 	public static function capability() {
-		return 'manage_options';
+		return 'manage_athletix';
 	}
 }
