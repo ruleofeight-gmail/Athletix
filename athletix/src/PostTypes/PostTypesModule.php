@@ -52,5 +52,9 @@ class PostTypesModule implements Module {
 		add_action( 'athletix/activate', $register );
 
 		$meta_boxes->register();
+
+		if ( is_admin() ) {
+			( new \Athletix\Meta\MatchStatsMetaBox( $plugin ) )->register();
+		}
 	}
 }

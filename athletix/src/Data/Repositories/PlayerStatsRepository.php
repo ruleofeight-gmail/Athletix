@@ -165,6 +165,24 @@ class PlayerStatsRepository {
 	}
 
 	/**
+	 * All recorded stat rows for a match.
+	 *
+	 * @param int $match_id Match id.
+	 * @return array[] Rows of player_id, metric, value.
+	 */
+	public function for_match( $match_id ) {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		return $this->db->get_results(
+			$this->db->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT player_id, metric, value FROM {$this->table} WHERE match_id = %d ORDER BY id ASC",
+				absint( $match_id )
+			),
+			ARRAY_A
+		);
+	}
+
+	/**
 	 * Delete all stats for a match (used before re-recording on edit).
 	 *
 	 * @param int $match_id Match id.
