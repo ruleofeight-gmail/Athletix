@@ -82,6 +82,18 @@ class ImportExport {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Import / Export', 'athletix' ); ?></h1>
+			<?php if ( isset( $_GET['ax_restored'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+				<div class="notice notice-success is-dismissible"><p>
+				<?php
+				$restored = absint( $_GET['ax_restored'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				printf(
+					/* translators: %d: number of records restored. */
+					esc_html( _n( 'Restored %d record.', 'Restored %d records.', $restored, 'athletix' ) ),
+					absint( $restored )
+				);
+				?>
+				</p></div>
+			<?php endif; ?>
 			<?php if ( isset( $_GET['ax_imported'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
 				<div class="notice notice-success is-dismissible"><p>
 				<?php
@@ -131,6 +143,22 @@ class ImportExport {
 					<?php endforeach; ?>
 				</select>
 				<?php submit_button( __( 'Download CSV', 'athletix' ), 'secondary', 'submit', false ); ?>
+			</form>
+
+			<hr />
+
+			<h2><?php esc_html_e( 'Full Backup', 'athletix' ); ?></h2>
+			<p class="description"><?php esc_html_e( 'Export or restore all leagues, teams, players, matches, relationships and statistics as a JSON file.', 'athletix' ); ?></p>
+			<form method="post" action="<?php echo esc_url( $action ); ?>" style="margin-bottom:1em;">
+				<input type="hidden" name="action" value="<?php echo esc_attr( Backup::ACTION_EXPORT ); ?>" />
+				<?php wp_nonce_field( Backup::ACTION_EXPORT ); ?>
+				<?php submit_button( __( 'Download Backup (JSON)', 'athletix' ), 'secondary', 'submit', false ); ?>
+			</form>
+			<form method="post" action="<?php echo esc_url( $action ); ?>" enctype="multipart/form-data">
+				<input type="hidden" name="action" value="<?php echo esc_attr( Backup::ACTION_IMPORT ); ?>" />
+				<?php wp_nonce_field( Backup::ACTION_IMPORT ); ?>
+				<input type="file" name="backup" accept=".json,application/json" required />
+				<?php submit_button( __( 'Restore Backup', 'athletix' ), 'secondary', 'submit', false ); ?>
 			</form>
 		</div>
 		<?php

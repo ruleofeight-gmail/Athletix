@@ -35,6 +35,9 @@ class ImportExportModule implements Module {
 	 * @return void
 	 */
 	public function register( Plugin $plugin ) {
+		$backup = new Backup( $plugin );
+		$backup->register();
+
 		if ( is_admin() ) {
 			( new ImportExport( $plugin ) )->register();
 		}
