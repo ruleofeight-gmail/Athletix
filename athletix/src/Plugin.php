@@ -206,6 +206,9 @@ final class Plugin {
 			\Athletix\Analytics\AnalyticsModule::class,
 			\Athletix\Media\MediaModule::class,
 			\Athletix\Reports\ReportsModule::class,
+			\Athletix\Automation\AutomationModule::class,
+			\Athletix\Membership\MembershipModule::class,
+			\Athletix\Payments\PaymentsModule::class,
 		);
 	}
 
