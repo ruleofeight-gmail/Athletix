@@ -1,0 +1,157 @@
+/**
+ * Athletix front-end styles.
+ * Scoped under widget wrappers so themes rarely need to override.
+ */
+
+/* Athlete Card */
+.athletix-card {
+	padding: 1.5rem;
+	border-radius: 8px;
+	background: #ffffff;
+	box-shadow: 0 1px 4px rgba( 0, 0, 0, 0.08 );
+}
+
+.athletix-card__photo img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 6px;
+}
+
+.athletix-card__name {
+	margin: 1rem 0 0.75rem;
+	font-size: 1.35rem;
+	line-height: 1.2;
+}
+
+.athletix-card__name a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.athletix-card__stats {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.athletix-card__stat {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.4rem 0;
+	border-bottom: 1px solid rgba( 0, 0, 0, 0.06 );
+}
+
+.athletix-card__stat:last-child {
+	border-bottom: 0;
+}
+
+.athletix-card__stat-label {
+	font-weight: 600;
+	opacity: 0.7;
+}
+
+.athletix-card--empty {
+	text-align: center;
+	color: #888;
+	border: 1px dashed #ccc;
+	background: transparent;
+	box-shadow: none;
+}
+
+/* Team Roster */
+.athletix-roster {
+	display: grid;
+	gap: 20px;
+}
+
+.athletix-roster--cols-2 { grid-template-columns: repeat( 2, 1fr ); }
+.athletix-roster--cols-3 { grid-template-columns: repeat( 3, 1fr ); }
+.athletix-roster--cols-4 { grid-template-columns: repeat( 4, 1fr ); }
+.athletix-roster--cols-5 { grid-template-columns: repeat( 5, 1fr ); }
+
+@media ( max-width: 767px ) {
+	.athletix-roster[class*="athletix-roster--cols"] {
+		grid-template-columns: repeat( 2, 1fr );
+	}
+}
+
+.athletix-roster__link {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	color: inherit;
+}
+
+.athletix-roster__photo img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 6px;
+}
+
+.athletix-roster__name {
+	display: block;
+	margin-top: 0.6rem;
+	font-weight: 700;
+}
+
+.athletix-roster__number {
+	opacity: 0.55;
+	margin-right: 0.25rem;
+}
+
+.athletix-roster__position {
+	display: block;
+	font-size: 0.85rem;
+	opacity: 0.65;
+}
+
+/* Event Schedule */
+.athletix-schedule {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.athletix-schedule thead th {
+	text-align: left;
+	padding: 0.75rem 1rem;
+	background: #f4f4f5;
+	font-weight: 700;
+}
+
+.athletix-schedule tbody td {
+	padding: 0.75rem 1rem;
+}
+
+.athletix-schedule tbody tr {
+	border-bottom: 1px solid rgba( 0, 0, 0, 0.08 );
+}
+
+.athletix-schedule__event a {
+	text-decoration: none;
+	color: inherit;
+	font-weight: 600;
+}
+
+.athletix-schedule__result {
+	font-variant-numeric: tabular-nums;
+	font-weight: 700;
+}
+
+@media ( max-width: 600px ) {
+	.athletix-schedule thead {
+		display: none;
+	}
+
+	.athletix-schedule,
+	.athletix-schedule tbody,
+	.athletix-schedule tr,
+	.athletix-schedule td {
+		display: block;
+		width: 100%;
+	}
+
+	.athletix-schedule td {
+		padding: 0.35rem 0;
+	}
+}
