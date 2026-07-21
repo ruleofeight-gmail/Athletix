@@ -2,39 +2,60 @@
 /**
  * Uninstall routine.
  *
- * Runs when the plugin is deleted from the WordPress admin. Removes the
- * custom posts and their meta. Guarded so it never runs outside of the
- * uninstall context.
+ * Only removes data when the administrator explicitly opted in via the
+ * "delete data on uninstall" setting. Guarded to the uninstall context.
  *
  * @package Athletix
  */
 
-// Exit if not called by WordPress during uninstall.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-/**
- * Delete all Athletix content. Kept intentionally simple; on very large sites
- * this should be batched, but it is safe for typical installs.
- */
-$athletix_post_types = array( 'athletix_athlete', 'athletix_team', 'athletix_event' );
+$athletix_settings = get_option( 'athletix_settings', array() );
+
+if ( empty( $athletix_settings['delete_data'] ) ) {
+	// Preserve content; just drop bookkeeping options.
+	delete_option( 'athletix_version' );
+	delete_option( 'athletix_installed_at' );
+	return;
+}
+
+global $wpdb;
+
+// Delete plugin post types and their meta.
+$athletix_post_types = array( 'ax_league', 'ax_season', 'ax_team', 'ax_player', 'ax_match', 'ax_division' );
 
 foreach ( $athletix_post_types as $athletix_type ) {
-	$athletix_posts = get_posts(
+	$athletix_ids = get_posts(
 		array(
-			'post_type'      => $athletix_type,
-			'post_status'    => 'any',
-			'numberposts'    => -1,
-			'fields'         => 'ids',
+			'post_type'        => $athletix_type,
+			'post_status'      => 'any',
+			'numberposts'      => -1,
+			'fields'           => 'ids',
 			'suppress_filters' => true,
 		)
 	);
 
-	foreach ( $athletix_posts as $athletix_post_id ) {
-		wp_delete_post( $athletix_post_id, true );
+	foreach ( $athletix_ids as $athletix_id ) {
+		wp_delete_post( $athletix_id, true );
 	}
 }
 
-// Clear any lingering rewrite rules.
-flush_rewrite_rules();
+// Drop custom tables created by the data layer.
+$athletix_tables = array(
+	$wpdb->prefix . 'athletix_standings',
+	$wpdb->prefix . 'athletix_player_stats',
+	$wpdb->prefix . 'athletix_relationships',
+);
+
+foreach ( $athletix_tables as $athletix_table ) {
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.DirectDatabaseQuery.NoCaching
+	$wpdb->query( "DROP TABLE IF EXISTS {$athletix_table}" );
+}
+
+// Remove options.
+delete_option( 'athletix_settings' );
+delete_option( 'athletix_version' );
+delete_option( 'athletix_installed_at' );
+delete_option( 'athletix_db_version' );

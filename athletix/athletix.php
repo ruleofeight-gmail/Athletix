@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       Athletix
  * Plugin URI:        https://github.com/ruleofeight-gmail/athletix
- * Description:       Sports & fitness toolkit for WordPress — athlete, team and event management with a full Elementor integration (widgets, dynamic tags and Theme Builder support).
- * Version:           1.0.0
+ * Description:       Modular sports-league management for WordPress — teams, players, matches, standings, competitions and a full Elementor integration.
+ * Version:           2.0.0
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            Athletix
@@ -15,39 +15,58 @@
  * @package Athletix
  */
 
+namespace Athletix;
+
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // No direct access.
+	exit;
 }
 
-/**
- * Core plugin constants.
- */
-define( 'ATHLETIX_VERSION', '1.0.0' );
+/*
+|--------------------------------------------------------------------------
+| Constants
+|--------------------------------------------------------------------------
+*/
+define( 'ATHLETIX_VERSION', '2.0.0' );
 define( 'ATHLETIX_FILE', __FILE__ );
 define( 'ATHLETIX_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ATHLETIX_URL', plugin_dir_url( __FILE__ ) );
 define( 'ATHLETIX_BASENAME', plugin_basename( __FILE__ ) );
-
-/**
- * Minimum required Elementor version for the integration to load.
- */
 define( 'ATHLETIX_MINIMUM_ELEMENTOR_VERSION', '3.5.0' );
 
-require_once ATHLETIX_PATH . 'includes/class-athletix.php';
-
-/**
- * Activation / deactivation lifecycle.
- */
-register_activation_hook( __FILE__, array( 'Athletix\\Athletix', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'Athletix\\Athletix', 'deactivate' ) );
-
-/**
- * Bootstrap the plugin.
- *
- * @return \Athletix\Athletix
- */
-function athletix() {
-	return \Athletix\Athletix::instance();
+/*
+|--------------------------------------------------------------------------
+| Autoloader
+|--------------------------------------------------------------------------
+| Prefer Composer's autoloader when the package has been installed; otherwise
+| fall back to a lightweight PSR-4 loader mapping `Athletix\<Ns>` => src/<Ns>.php.
+*/
+if ( is_readable( ATHLETIX_PATH . 'vendor/autoload.php' ) ) {
+	require ATHLETIX_PATH . 'vendor/autoload.php';
+} else {
+	require ATHLETIX_PATH . 'src/Support/Autoloader.php';
+	Support\Autoloader::register( 'Athletix\\', ATHLETIX_PATH . 'src/' );
 }
 
-athletix();
+/*
+|--------------------------------------------------------------------------
+| Lifecycle hooks
+|--------------------------------------------------------------------------
+*/
+register_activation_hook( __FILE__, array( Core\Activator::class, 'activate' ) );
+register_deactivation_hook( __FILE__, array( Core\Deactivator::class, 'deactivate' ) );
+
+/*
+|--------------------------------------------------------------------------
+| Boot
+|--------------------------------------------------------------------------
+*/
+/**
+ * Shared plugin instance.
+ *
+ * @return Plugin
+ */
+function plugin() {
+	return Plugin::instance();
+}
+
+add_action( 'plugins_loaded', __NAMESPACE__ . '\\plugin', 5 );
