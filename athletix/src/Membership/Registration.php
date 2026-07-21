@@ -66,9 +66,15 @@ class Registration {
 
 		$name    = isset( $_POST['team_name'] ) ? sanitize_text_field( wp_unslash( $_POST['team_name'] ) ) : '';
 		$contact = isset( $_POST['contact_email'] ) ? sanitize_email( wp_unslash( $_POST['contact_email'] ) ) : '';
+		$waiver  = ! empty( $_POST['waiver'] );
 
 		if ( '' === $name ) {
 			$this->flash = __( 'Please enter a team name.', 'athletix' );
+			return;
+		}
+
+		if ( ! $waiver ) {
+			$this->flash = __( 'You must accept the waiver to register.', 'athletix' );
 			return;
 		}
 
@@ -89,6 +95,7 @@ class Registration {
 			update_post_meta( $team_id, '_ax_registration_contact', $contact );
 		}
 		update_post_meta( $team_id, '_ax_registration_status', 'pending' );
+		update_post_meta( $team_id, '_ax_waiver_accepted', 1 );
 
 		$this->plugin->events()->fire(
 			'team_registered',
@@ -148,10 +155,16 @@ class Registration {
 					<label for="ax-contact"><?php esc_html_e( 'Contact Email', 'athletix' ); ?></label><br />
 					<input type="email" id="ax-contact" name="contact_email" />
 				</p>
+				<p>
+					<label>
+						<input type="checkbox" name="waiver" value="1" required />
+						<?php esc_html_e( 'I accept the participation waiver and terms.', 'athletix' ); ?>
+					</label>
+				</p>
 				<p><button type="submit"><?php esc_html_e( 'Register Team', 'athletix' ); ?></button></p>
 			</form>
 			<?php
-		}
+		}//end if
 
 		return (string) ob_get_clean();
 	}

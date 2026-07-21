@@ -36,5 +36,16 @@ class MembershipModule implements Module {
 	 */
 	public function register( Plugin $plugin ) {
 		( new Registration( $plugin ) )->register();
+
+		$plugin->container()->bind(
+			'membership.eligibility',
+			static function () use ( $plugin ) {
+				return new Eligibility( $plugin );
+			}
+		);
+
+		if ( is_admin() ) {
+			( new RegistrationAdmin( $plugin ) )->register();
+		}
 	}
 }
