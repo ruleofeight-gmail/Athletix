@@ -382,3 +382,39 @@
 .athletix-directory select {
 	padding: 0.4rem 0.6rem;
 }
+
+/* Calendar */
+.athletix-calendar__grid {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+.athletix-calendar__grid th {
+	background: #f4f4f5;
+	padding: 0.4rem;
+	font-size: 0.8rem;
+}
+
+.athletix-calendar__day {
+	border: 1px solid rgba( 0, 0, 0, 0.08 );
+	vertical-align: top;
+	height: 5rem;
+	padding: 0.25rem;
+	font-size: 0.8rem;
+}
+
+.athletix-calendar__num {
+	color: #888;
+}
+
+.athletix-calendar__day ul {
+	list-style: none;
+	margin: 0.25rem 0 0;
+	padding: 0;
+}
+
+.athletix-calendar__empty {
+	background: #fafafa;
+	border: 1px solid rgba( 0, 0, 0, 0.04 );
+}
