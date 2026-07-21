@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<ruleset name="Athletix Theme">
+	<description>Coding standards for the Athletix companion theme.</description>
+
+	<file>.</file>
+	<arg name="extensions" value="php"/>
+	<arg value="ps"/>
+
+	<config name="ignore_warnings_on_exit" value="1"/>
+
+	<rule ref="WordPress">
+		<!--
+			CPT templates must be named after the post-type slug
+			(single-ax_team.php, archive-ax_player.php), which the WordPress
+			template hierarchy mandates and this sniff misreads.
+		-->
+		<exclude name="WordPress.Files.FileName"/>
+	</rule>
+
+	<config name="minimum_wp_version" value="5.8"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="athletix-theme"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="athletix_theme"/>
+				<element value="athletix"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>
