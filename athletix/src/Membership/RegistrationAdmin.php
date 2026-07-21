@@ -58,7 +58,7 @@ class RegistrationAdmin {
 	 */
 	public function menu() {
 		add_submenu_page(
-			'edit.php?post_type=' . Keys::TEAM,
+			Keys::MENU,
 			__( 'Registrations', 'athletix' ),
 			__( 'Registrations', 'athletix' ),
 			Keys::capability(),

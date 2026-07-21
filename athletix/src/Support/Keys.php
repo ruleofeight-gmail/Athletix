@@ -19,6 +19,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 final class Keys {
 
+	/* Top-level admin menu slug (parent of every Athletix screen). */
+	const MENU = 'athletix';
+
 	/* Post types. */
 	const LEAGUE   = 'ax_league';
 	const SEASON   = 'ax_season';

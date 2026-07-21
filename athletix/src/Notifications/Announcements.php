@@ -11,6 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Athletix\Support\Keys;
+
 /**
  * A lightweight announcements post type with a shortcode to list the latest
  * entries, for club/league news.
@@ -48,7 +50,7 @@ class Announcements {
 				),
 				'public'       => true,
 				'has_archive'  => true,
-				'show_in_menu' => 'edit.php?post_type=ax_team',
+				'show_in_menu' => Keys::MENU,
 				'show_in_rest' => true,
 				'menu_icon'    => 'dashicons-megaphone',
 				'supports'     => array( 'title', 'editor', 'thumbnail', 'author' ),

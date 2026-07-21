@@ -40,7 +40,7 @@ class SettingsPage {
 	 */
 	public function menu() {
 		add_submenu_page(
-			'edit.php?post_type=' . Keys::TEAM,
+			Keys::MENU,
 			__( 'Athletix Settings', 'athletix' ),
 			__( 'Settings', 'athletix' ),
 			Keys::capability(),

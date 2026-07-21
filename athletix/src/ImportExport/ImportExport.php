@@ -58,7 +58,7 @@ class ImportExport {
 	 */
 	public function menu() {
 		add_submenu_page(
-			'edit.php?post_type=' . Keys::TEAM,
+			Keys::MENU,
 			__( 'Import / Export', 'athletix' ),
 			__( 'Import / Export', 'athletix' ),
 			Keys::capability(),

@@ -1,11 +1,11 @@
 <?php
 /**
- * Dashboard module.
+ * Admin module.
  *
  * @package Athletix
  */
 
-namespace Athletix\Dashboard;
+namespace Athletix\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -15,9 +15,9 @@ use Athletix\Contracts\Module;
 use Athletix\Plugin;
 
 /**
- * Registers the admin overview dashboard.
+ * Wires the unified top-level Athletix admin menu.
  */
-class DashboardModule implements Module {
+class AdminModule implements Module {
 
 	/**
 	 * Module id.
@@ -25,7 +25,7 @@ class DashboardModule implements Module {
 	 * @return string
 	 */
 	public function id() {
-		return 'dashboard';
+		return 'admin';
 	}
 
 	/**
@@ -35,10 +35,8 @@ class DashboardModule implements Module {
 	 * @return void
 	 */
 	public function register( Plugin $plugin ) {
-		// The dashboard page itself is registered as the Athletix menu's landing
-		// page by Admin\AdminMenu; here we only add the wp-admin dashboard widgets.
 		if ( is_admin() ) {
-			( new Widgets( $plugin ) )->register();
+			( new AdminMenu( $plugin ) )->register();
 		}
 	}
 }

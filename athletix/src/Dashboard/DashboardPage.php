@@ -20,8 +20,6 @@ use Athletix\Support\Keys;
  */
 class DashboardPage {
 
-	const PAGE = 'athletix-dashboard';
-
 	/**
 	 * Plugin.
 	 *
@@ -39,37 +37,15 @@ class DashboardPage {
 	}
 
 	/**
-	 * Register hooks.
-	 *
-	 * @return void
-	 */
-	public function register() {
-		add_action( 'admin_menu', array( $this, 'menu' ) );
-	}
-
-	/**
-	 * Add the dashboard as the first Athletix submenu.
-	 *
-	 * @return void
-	 */
-	public function menu() {
-		add_submenu_page(
-			'edit.php?post_type=' . Keys::TEAM,
-			__( 'Athletix Dashboard', 'athletix' ),
-			__( 'Dashboard', 'athletix' ),
-			Keys::capability(),
-			self::PAGE,
-			array( $this, 'render' )
-		);
-	}
-
-	/**
 	 * Render the page.
+	 *
+	 * The menu (and its capability) is owned by Admin\AdminMenu; this method is
+	 * the landing-page callback.
 	 *
 	 * @return void
 	 */
 	public function render() {
-		if ( ! current_user_can( Keys::capability() ) ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
 			return;
 		}
 
@@ -137,6 +113,11 @@ class DashboardPage {
 	 * @return void
 	 */
 	private function recent_activity() {
+		if ( ! current_user_can( Keys::capability() ) ) {
+			echo '<p>' . esc_html__( 'Activity is visible to managers only.', 'athletix' ) . '</p>';
+			return;
+		}
+
 		if ( ! $this->plugin->container()->has( 'security.audit' ) ) {
 			echo '<p>' . esc_html__( 'Activity logging is not available.', 'athletix' ) . '</p>';
 			return;

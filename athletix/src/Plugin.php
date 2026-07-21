@@ -191,6 +191,7 @@ final class Plugin {
 	private function module_classes() {
 		return array(
 			\Athletix\Security\SecurityModule::class,
+			\Athletix\Admin\AdminModule::class,
 			\Athletix\Data\DataModule::class,
 			\Athletix\PostTypes\PostTypesModule::class,
 			\Athletix\Engine\EngineModule::class,

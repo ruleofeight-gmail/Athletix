@@ -20,28 +20,23 @@ use Athletix\Support\Keys;
 class PostTypes {
 
 	/**
-	 * Admin menu icon (shared parent).
-	 */
-	const MENU_ICON = 'dashicons-awards';
-
-	/**
 	 * Register all post types.
 	 *
 	 * @return void
 	 */
 	public function register() {
-		$parent = 'edit.php?post_type=' . Keys::TEAM;
+		// Every post type lives under the single top-level Athletix menu.
+		$parent = Keys::MENU;
 
 		$this->register_type(
 			Keys::TEAM,
 			__( 'Teams', 'athletix' ),
 			__( 'Team', 'athletix' ),
 			array(
-				'menu_icon'     => self::MENU_ICON,
-				'menu_position' => 26,
-				'has_archive'   => true,
-				'rewrite'       => array( 'slug' => 'teams' ),
-				'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+				'show_in_menu' => $parent,
+				'has_archive'  => true,
+				'rewrite'      => array( 'slug' => 'teams' ),
+				'supports'     => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
 			)
 		);
 

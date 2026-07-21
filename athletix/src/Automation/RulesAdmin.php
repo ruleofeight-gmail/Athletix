@@ -56,7 +56,7 @@ class RulesAdmin {
 	 */
 	public function menu() {
 		add_submenu_page(
-			'edit.php?post_type=' . Keys::TEAM,
+			Keys::MENU,
 			__( 'Automation Rules', 'athletix' ),
 			__( 'Automation', 'athletix' ),
 			Keys::capability(),

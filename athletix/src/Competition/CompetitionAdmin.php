@@ -97,7 +97,7 @@ class CompetitionAdmin {
 	 */
 	public function menu() {
 		add_submenu_page(
-			'edit.php?post_type=' . Keys::TEAM,
+			Keys::MENU,
 			__( 'Competitions', 'athletix' ),
 			__( 'Competitions', 'athletix' ),
 			Keys::capability(),

@@ -63,7 +63,7 @@ class FinancialReport {
 	 */
 	public function menu() {
 		add_submenu_page(
-			'edit.php?post_type=' . Keys::TEAM,
+			Keys::MENU,
 			__( 'Financials', 'athletix' ),
 			__( 'Financials', 'athletix' ),
 			Capabilities::MANAGE_PAYMENTS,
