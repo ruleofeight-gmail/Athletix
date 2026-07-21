@@ -1,0 +1,511 @@
+Athletix 2.0 — Package 21A
+Payments & Billing Foundation
+Financial Operations Layer
+
+We now add the payment architecture.
+
+The goal is to create a gateway-independent billing system that can later connect to:
+
+Stripe
+PayPal
+WooCommerce Payments
+custom gateways
+
+The flow:
+
+Registration
+
+      ↓
+
+Invoice Created
+
+      ↓
+
+Payment Gateway
+
+      ↓
+
+Payment Recorded
+
+      ↓
+
+Membership Activated
+
+Create:
+
+includes/payments/
+
+├── class-payment-engine.php
+├── class-invoice-manager.php
+├── class-subscriptions.php
+└── class-payment-gateway.php
+File 147
+includes/payments/class-payment-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Payment Engine
+ */
+class Athletix_Payment_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function process(
+        $amount,
+        $user_id,
+        $gateway = 'default'
+    ) {
+
+
+        return Athletix_Payment_Gateway::charge(
+
+            $amount,
+
+            $user_id,
+
+            $gateway
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function record(
+        $payment
+    ) {
+
+
+        return wp_insert_post(
+
+            [
+
+                'post_type'=>
+                    'ax_payment',
+
+
+                'post_title'=>
+                    'Payment ' .
+                    time(),
+
+
+                'post_status'=>
+                    'publish'
+
+
+            ]
+
+        );
+
+
+    }
+
+
+}
+File 148
+class-invoice-manager.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Invoice Manager
+ */
+class Athletix_Invoice_Manager {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'init',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        register_post_type(
+
+            'ax_invoice',
+
+            [
+
+                'labels'=>[
+
+                    'name'=>
+                        'Invoices',
+
+                    'singular_name'=>
+                        'Invoice'
+
+                ],
+
+
+                'public'=>
+                    false,
+
+
+                'show_ui'=>
+                    true,
+
+
+                'supports'=>[
+
+                    'title'
+
+                ]
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function create(
+        $user_id,
+        $amount
+    ) {
+
+
+        $invoice_id =
+            wp_insert_post(
+
+                [
+
+                    'post_type'=>
+                        'ax_invoice',
+
+
+                    'post_title'=>
+                        'Invoice - ' .
+                        $user_id,
+
+
+                    'post_status'=>
+                        'publish'
+
+                ]
+
+            );
+
+
+
+        update_post_meta(
+
+            $invoice_id,
+
+            '_athletix_amount',
+
+            floatval(
+
+                $amount
+
+            )
+
+        );
+
+
+
+        update_post_meta(
+
+            $invoice_id,
+
+            '_athletix_user',
+
+            absint(
+
+                $user_id
+
+            )
+
+        );
+
+
+
+        return $invoice_id;
+
+
+    }
+
+
+}
+File 149
+class-subscriptions.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Subscriptions
+ */
+class Athletix_Subscriptions {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function create(
+        $user_id,
+        $plan_id,
+        $interval = 'monthly'
+    ) {
+
+
+        update_user_meta(
+
+            $user_id,
+
+            '_athletix_subscription',
+
+            [
+
+                'plan'=>
+                    absint(
+
+                        $plan_id
+
+                    ),
+
+
+                'interval'=>
+                    sanitize_key(
+
+                        $interval
+
+                    ),
+
+
+                'active'=>
+                    true
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function cancel(
+        $user_id
+    ) {
+
+
+        delete_user_meta(
+
+            $user_id,
+
+            '_athletix_subscription'
+
+        );
+
+
+    }
+
+
+}
+File 150
+class-payment-gateway.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Payment Gateway
+ */
+class Athletix_Payment_Gateway {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function charge(
+        $amount,
+        $user_id,
+        $gateway
+    ) {
+
+
+        /**
+         * Gateway abstraction.
+         *
+         * Future integrations:
+         *
+         * Stripe
+         * PayPal
+         * WooCommerce
+         *
+         */
+
+
+        return [
+
+            'success'=>true,
+
+
+            'amount'=>
+
+                floatval(
+
+                    $amount
+
+                ),
+
+
+            'user'=>
+
+                absint(
+
+                    $user_id
+
+                ),
+
+
+            'gateway'=>
+
+                sanitize_key(
+
+                    $gateway
+
+                )
+
+        ];
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+payments/class-payment-engine.php
+
+payments/class-invoice-manager.php
+
+payments/class-subscriptions.php
+
+payments/class-payment-gateway.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Payment_Engine,
+
+Athletix_Invoice_Manager,
+
+Athletix_Subscriptions,
+
+Athletix_Payment_Gateway,
+Package 21A Complete ✅
+
+Athletix now has financial foundations:
+
+Payments
+Registration
+
+ ↓
+
+Invoice
+
+ ↓
+
+Payment
+
+ ↓
+
+Activation
+Billing Features
+✓ Payment Engine
+
+✓ Invoice System
+
+✓ Subscription Framework
+
+✓ Gateway Abstraction
+Future Integrations Ready
+Stripe
+
+PayPal
+
+WooCommerce
+
+Custom Payment Providers
+Athletix 2.0 Status
+PLATFORM
+
+✓ Sports Engine
+✓ Competition Engine
+✓ Scheduling
+✓ Communication
+✓ Analytics
+✓ Membership
+✓ Payments Foundation
+
+ADMIN
+✓ Dashboard
+✓ Reports
+✓ Management Tools

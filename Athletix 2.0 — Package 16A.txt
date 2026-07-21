@@ -1,0 +1,450 @@
+Athletix 2.0 — Package 16A
+Competition Structure Engine
+Divisions & Competition Framework
+
+We now add support for advanced league structures.
+
+The goal:
+
+League
+
+ ├── Division A
+ │     ├── Team 1
+ │     ├── Team 2
+ │
+ ├── Division B
+ │     ├── Team 3
+ │     └── Team 4
+ │
+ └── Playoffs
+
+This prepares Athletix for:
+
+multi-division leagues
+conferences
+tournaments
+playoffs
+bracket systems
+
+Create:
+
+includes/competition/
+
+├── class-competition-engine.php
+├── class-divisions.php
+├── class-brackets.php
+└── class-playoffs.php
+File 107
+includes/competition/class-competition-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Competition Engine
+ */
+class Athletix_Competition_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function get_structure(
+        $league_id
+    ) {
+
+
+        return [
+
+            'league'=>
+
+                $league_id,
+
+
+            'divisions'=>
+
+                Athletix_Divisions::get(
+
+                    $league_id
+
+                ),
+
+
+            'playoffs'=>
+
+                Athletix_Playoffs::get(
+
+                    $league_id
+
+                )
+
+        ];
+
+
+    }
+
+
+}
+File 108
+class-divisions.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Divisions
+ */
+class Athletix_Divisions {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'init',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        register_post_type(
+
+            'ax_division',
+
+            [
+
+                'labels'=>[
+
+                    'name'=>
+                        'Divisions',
+
+                    'singular_name'=>
+                        'Division'
+
+                ],
+
+
+                'public'=>
+                    false,
+
+
+                'show_ui'=>
+                    true,
+
+
+                'supports'=>[
+
+                    'title'
+
+                ]
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function get(
+        $league_id
+    ) {
+
+
+        return get_posts(
+
+            [
+
+                'post_type'=>
+                    'ax_division',
+
+
+                'meta_query'=>[
+
+                    [
+
+                        'key'=>
+                            '_athletix_league',
+
+                        'value'=>
+                            $league_id
+
+                    ]
+
+                ]
+
+            ]
+
+        );
+
+
+    }
+
+
+}
+File 109
+class-brackets.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Tournament Brackets
+ */
+class Athletix_Brackets {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function create(
+        $teams
+    ) {
+
+
+        $rounds = [];
+
+
+
+        while(
+            count(
+                $teams
+            ) > 1
+        ) {
+
+
+            $rounds[] =
+                array_chunk(
+
+                    $teams,
+
+                    2
+
+                );
+
+
+            $teams =
+                array_slice(
+
+                    $teams,
+
+                    0,
+
+                    ceil(
+
+                        count(
+                            $teams
+                        ) / 2
+
+                    )
+
+                );
+
+
+        }
+
+
+
+        return $rounds;
+
+
+    }
+
+
+}
+File 110
+class-playoffs.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Playoffs
+ */
+class Athletix_Playoffs {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function get(
+        $league_id
+    ) {
+
+
+        return get_post_meta(
+
+            $league_id,
+
+            '_athletix_playoffs',
+
+            true
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function save(
+        $league_id,
+        $data
+    ) {
+
+
+        update_post_meta(
+
+            $league_id,
+
+            '_athletix_playoffs',
+
+            $data
+
+        );
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+competition/class-competition-engine.php
+
+competition/class-divisions.php
+
+competition/class-brackets.php
+
+competition/class-playoffs.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Competition_Engine,
+
+Athletix_Divisions,
+
+Athletix_Brackets,
+
+Athletix_Playoffs,
+Package 16A Complete ✅
+
+Athletix now supports:
+
+Competition Hierarchy
+League
+
+ ↓
+
+Division
+
+ ↓
+
+Teams
+
+ ↓
+
+Season
+
+ ↓
+
+Playoffs
+New Features Added
+✓ Divisions
+
+✓ Conferences Ready
+
+✓ Tournament Brackets
+
+✓ Playoff Storage
+
+✓ Competition Structure API
+Athletix 2.0 Platform Map
+SPORTS PLATFORM
+
+✓ Teams
+✓ Players
+✓ Matches
+✓ Statistics
+✓ Standings
+✓ Rankings
+
+COMPETITION
+
+✓ Divisions
+✓ Brackets
+✓ Playoffs
+
+OPERATIONS
+
+✓ Automation
+✓ Reports
+✓ Dashboard
+
+SECURITY
+
+✓ Roles
+✓ Audit
+
+MEDIA
+
+✓ Branding
+
+DISCOVERY
+
+✓ Search

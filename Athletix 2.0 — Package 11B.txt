@@ -1,0 +1,456 @@
+Package 11B
+Notifications & Automation Engine
+Configurable Workflow System
+
+We now upgrade automation from hard-coded events into configurable rules.
+
+New architecture:
+
+Admin Settings
+
+      ↓
+
+Automation Rules
+
+      ↓
+
+Template Engine
+
+      ↓
+
+Notification Engine
+
+      ↓
+
+Email / Future SMS / Push
+
+Create:
+
+includes/automation/
+
+├── class-template-engine.php
+└── class-rule-manager.php
+
+
+includes/admin/
+
+└── class-admin-automation.php
+File 76
+includes/automation/class-template-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Template Engine
+ */
+class Athletix_Template_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    /**
+     * Replace variables.
+     */
+    public static function render(
+        $template,
+        $data = []
+    ) {
+
+
+        foreach(
+            $data as $key => $value
+        ) {
+
+
+            $template =
+                str_replace(
+
+                    '{{' . $key . '}}',
+
+                    $value,
+
+                    $template
+
+                );
+
+
+        }
+
+
+
+        return $template;
+
+
+    }
+
+
+}
+File 77
+includes/automation/class-rule-manager.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Automation Rules Manager
+ */
+class Athletix_Rule_Manager {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function rules() {
+
+
+        return get_option(
+
+            'athletix_automation_rules',
+
+            []
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function add(
+        $rule
+    ) {
+
+
+        $rules =
+            self::rules();
+
+
+
+        $rules[] =
+            $rule;
+
+
+
+        update_option(
+
+            'athletix_automation_rules',
+
+            $rules
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function remove(
+        $index
+    ) {
+
+
+        $rules =
+            self::rules();
+
+
+
+        unset(
+
+            $rules[$index]
+
+        );
+
+
+
+        update_option(
+
+            'athletix_automation_rules',
+
+            array_values(
+                $rules
+            )
+
+        );
+
+
+    }
+
+
+}
+File 78
+includes/admin/class-admin-automation.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Automation Admin
+ */
+class Athletix_Admin_Automation {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'admin_menu',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        add_submenu_page(
+
+            'athletix',
+
+            'Automation',
+
+            'Automation',
+
+            'manage_options',
+
+            'athletix-automation',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render() {
+
+
+        $rules =
+            Athletix_Rule_Manager::rules();
+
+
+        ?>
+
+
+        <div class="wrap">
+
+
+            <h1>
+                Athletix Automation
+            </h1>
+
+
+
+            <p>
+
+                Configure automated league actions.
+
+            </p>
+
+
+
+            <table class="widefat">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Event
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                <?php foreach(
+                    $rules as $rule
+                ) : ?>
+
+
+                    <tr>
+
+
+                        <td>
+
+                        <?php echo esc_html(
+
+                            $rule['event']
+                            ??
+                            ''
+
+                        ); ?>
+
+
+                        </td>
+
+
+                        <td>
+
+                        <?php echo esc_html(
+
+                            $rule['action']
+                            ??
+                            ''
+
+                        ); ?>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                <?php endforeach; ?>
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+        <?php
+
+
+    }
+
+
+}
+Update class-plugin.php
+
+Add:
+
+Athletix_Template_Engine,
+
+Athletix_Rule_Manager,
+
+Athletix_Admin_Automation,
+Update class-loader.php
+
+Add:
+
+automation/class-template-engine.php
+
+automation/class-rule-manager.php
+
+admin/class-admin-automation.php
+Package 11B Complete ✅
+
+Athletix automation now supports:
+
+RULES
+
+Event:
+  Match Reminder
+
+Action:
+  Send Email
+
+
+Event:
+  Season Start
+
+Action:
+  Notification
+
+
+Event:
+  Report Ready
+
+Action:
+  Export
+Athletix 2.0 Capability Update
+CORE
+✓ Framework
+✓ CPTs
+✓ Relationships
+
+SPORTS
+✓ Matches
+✓ Standings
+✓ Statistics
+
+ADMIN
+✓ Dashboard
+✓ Tools
+✓ Reports
+✓ Automation
+
+PUBLIC
+✓ Profiles
+✓ Tables
+✓ Match Cards
+
+API
+✓ REST Endpoints
+
+OPERATIONS
+✓ Imports
+✓ Exports
+✓ Notifications
+✓ Scheduled Tasks

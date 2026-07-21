@@ -1,0 +1,513 @@
+Athletix 2.0 — Package 18A
+Communication & Notification Engine
+Notification Foundation Layer
+
+We now add the communication system.
+
+Purpose:
+
+League Event
+
+      ↓
+
+Notification Engine
+
+      ↓
+
+Email
+Alerts
+Messages
+Team Updates
+
+This will support:
+
+match reminders
+roster updates
+score announcements
+administrator alerts
+future SMS/push integrations
+
+Create:
+
+includes/notifications/
+
+├── class-notification-engine.php
+├── class-email-notifications.php
+├── class-alert-manager.php
+└── class-message-center.php
+File 123
+includes/notifications/class-notification-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Notification Engine
+ */
+class Athletix_Notification_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function send(
+        $type,
+        $recipient,
+        $message
+    ) {
+
+
+        switch(
+            $type
+        ) {
+
+
+            case 'email':
+
+                return Athletix_Email_Notifications::send(
+
+                    $recipient,
+
+                    $message
+
+                );
+
+
+
+            case 'alert':
+
+                return Athletix_Alert_Manager::create(
+
+                    $recipient,
+
+                    $message
+
+                );
+
+
+        }
+
+
+
+        return false;
+
+
+    }
+
+
+
+
+
+    public static function broadcast(
+        $users,
+        $message
+    ) {
+
+
+        foreach(
+            $users as $user
+        ) {
+
+
+            self::send(
+
+                'email',
+
+                $user,
+
+                $message
+
+            );
+
+
+        }
+
+
+    }
+
+
+}
+File 124
+class-email-notifications.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Email Notifications
+ */
+class Athletix_Email_Notifications {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function send(
+        $email,
+        $message
+    ) {
+
+
+        if(
+            ! is_email(
+                $email
+            )
+        ) {
+
+            return false;
+
+        }
+
+
+
+        return wp_mail(
+
+            $email,
+
+            'Athletix Notification',
+
+            wp_strip_all_tags(
+
+                $message
+
+            )
+
+        );
+
+
+    }
+
+
+}
+File 125
+class-alert-manager.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Alert Manager
+ */
+class Athletix_Alert_Manager {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function create(
+        $user_id,
+        $message
+    ) {
+
+
+        $alerts =
+            get_user_meta(
+
+                $user_id,
+
+                '_athletix_alerts',
+
+                true
+
+            );
+
+
+
+        if(
+            ! is_array(
+                $alerts
+            )
+        ) {
+
+            $alerts = [];
+
+        }
+
+
+
+        $alerts[] = [
+
+            'message'=>
+                sanitize_text_field(
+                    $message
+                ),
+
+
+            'time'=>
+                current_time(
+                    'mysql'
+                )
+
+        ];
+
+
+
+        update_user_meta(
+
+            $user_id,
+
+            '_athletix_alerts',
+
+            $alerts
+
+        );
+
+
+
+        return true;
+
+
+    }
+
+
+
+
+
+    public static function get(
+        $user_id
+    ) {
+
+
+        return get_user_meta(
+
+            $user_id,
+
+            '_athletix_alerts',
+
+            true
+
+        );
+
+
+    }
+
+
+}
+File 126
+class-message-center.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Message Center
+ */
+class Athletix_Message_Center {
+
+
+    public static function init() {
+
+
+        add_shortcode(
+
+            'athletix_messages',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render() {
+
+
+        if(
+            ! is_user_logged_in()
+        ) {
+
+            return '';
+
+        }
+
+
+
+        $alerts =
+            Athletix_Alert_Manager::get(
+
+                get_current_user_id()
+
+            );
+
+
+
+        if(
+            empty(
+                $alerts
+            )
+        ) {
+
+            return 'No messages.';
+
+        }
+
+
+
+        ob_start();
+
+
+        ?>
+
+
+        <div class="athletix-message-center">
+
+
+        <?php foreach(
+            $alerts as $alert
+        ) : ?>
+
+
+            <div class="message">
+
+
+                <?php echo esc_html(
+
+                    $alert['message']
+
+                ); ?>
+
+
+            </div>
+
+
+        <?php endforeach; ?>
+
+
+        </div>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+notifications/class-notification-engine.php
+
+notifications/class-email-notifications.php
+
+notifications/class-alert-manager.php
+
+notifications/class-message-center.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Notification_Engine,
+
+Athletix_Email_Notifications,
+
+Athletix_Alert_Manager,
+
+Athletix_Message_Center,
+Package 18A Complete ✅
+
+Athletix now has:
+
+Notification Services
+Event
+
+ ↓
+
+Notification Engine
+
+ ├── Email
+
+ ├── User Alerts
+
+ └── Message Center
+Supported Messages
+
+Examples:
+
+"Your match starts tomorrow"
+
+"Roster updated"
+
+"Game result posted"
+
+"League announcement"
+User Message Center
+
+Shortcode:
+
+[athletix_messages]
+
+Displays logged-in user alerts.
+
+Athletix 2.0 Status Update
+CORE
+✓ Framework
+✓ Loader
+
+SPORTS
+✓ Teams
+✓ Players
+✓ Matches
+✓ Statistics
+
+COMPETITION
+✓ Divisions
+✓ Playoffs
+
+SCHEDULING
+✓ Calendar
+✓ Venues
+
+COMMUNICATION
+✓ Notifications
+✓ Email
+✓ Alerts
+✓ Messages
+
+ADMIN
+✓ Dashboard
+✓ Reports

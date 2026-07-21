@@ -1,0 +1,472 @@
+Athletix 2.0 — Package 19A
+Analytics & Reporting Engine
+Data Intelligence Foundation
+
+We now add the analytics layer.
+
+Purpose:
+
+Game Data
+
+ ↓
+
+Analytics Engine
+
+ ↓
+
+Team Insights
+
+ ↓
+
+Player Insights
+
+ ↓
+
+Reports
+
+This provides the foundation for:
+
+team performance tracking
+player trends
+league metrics
+reporting dashboards
+
+Create:
+
+includes/analytics/
+
+├── class-analytics-engine.php
+├── class-team-analytics.php
+├── class-player-analytics.php
+└── class-report-generator.php
+File 131
+includes/analytics/class-analytics-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Analytics Engine
+ */
+class Athletix_Analytics_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function calculate(
+        $type,
+        $id
+    ) {
+
+
+        switch(
+            $type
+        ) {
+
+
+            case 'team':
+
+                return Athletix_Team_Analytics::get(
+
+                    $id
+
+                );
+
+
+
+            case 'player':
+
+                return Athletix_Player_Analytics::get(
+
+                    $id
+
+                );
+
+
+        }
+
+
+
+        return [];
+
+
+    }
+
+
+}
+File 132
+class-team-analytics.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Team Analytics
+ */
+class Athletix_Team_Analytics {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function get(
+        $team_id
+    ) {
+
+
+        return [
+
+            'wins'=>
+
+                self::metric(
+
+                    $team_id,
+
+                    'wins'
+
+                ),
+
+
+            'losses'=>
+
+                self::metric(
+
+                    $team_id,
+
+                    'losses'
+
+                ),
+
+
+            'points'=>
+
+                self::metric(
+
+                    $team_id,
+
+                    'points'
+
+                )
+
+        ];
+
+
+    }
+
+
+
+
+
+    private static function metric(
+        $id,
+        $key
+    ) {
+
+
+        return absint(
+
+            get_post_meta(
+
+                $id,
+
+                '_athletix_' . $key,
+
+                true
+
+            )
+
+        );
+
+
+    }
+
+
+}
+File 133
+class-player-analytics.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Player Analytics
+ */
+class Athletix_Player_Analytics {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function get(
+        $player_id
+    ) {
+
+
+        return [
+
+            'appearances'=>
+
+                self::value(
+
+                    $player_id,
+
+                    'appearances'
+
+                ),
+
+
+            'goals'=>
+
+                self::value(
+
+                    $player_id,
+
+                    'goals'
+
+                ),
+
+
+            'assists'=>
+
+                self::value(
+
+                    $player_id,
+
+                    'assists'
+
+                )
+
+        ];
+
+
+    }
+
+
+
+
+
+    private static function value(
+        $id,
+        $key
+    ) {
+
+
+        return absint(
+
+            get_post_meta(
+
+                $id,
+
+                '_athletix_' . $key,
+
+                true
+
+            )
+
+        );
+
+
+    }
+
+
+}
+File 134
+class-report-generator.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Report Generator
+ */
+class Athletix_Report_Generator {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function create(
+        $title,
+        $data
+    ) {
+
+
+        $report_id =
+            wp_insert_post(
+
+                [
+
+                    'post_type'=>
+                        'ax_report',
+
+
+                    'post_title'=>
+                        sanitize_text_field(
+
+                            $title
+
+                        ),
+
+
+                    'post_status'=>
+                        'publish'
+
+                ]
+
+            );
+
+
+
+        if(
+            $report_id
+        ) {
+
+
+            update_post_meta(
+
+                $report_id,
+
+                '_athletix_report_data',
+
+                $data
+
+            );
+
+
+        }
+
+
+
+        return $report_id;
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+analytics/class-analytics-engine.php
+
+analytics/class-team-analytics.php
+
+analytics/class-player-analytics.php
+
+analytics/class-report-generator.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Analytics_Engine,
+
+Athletix_Team_Analytics,
+
+Athletix_Player_Analytics,
+
+Athletix_Report_Generator,
+Package 19A Complete ✅
+
+Athletix now has:
+
+Analytics Architecture
+Match Data
+
+ ↓
+
+Statistics
+
+ ↓
+
+Analytics
+
+ ↓
+
+Reports
+Supported Analytics
+
+Teams:
+
+✓ Wins
+
+✓ Losses
+
+✓ Points
+
+✓ Performance Metrics
+
+Players:
+
+✓ Appearances
+
+✓ Goals
+
+✓ Assists
+
+✓ Individual Trends
+Athletix 2.0 Platform Status
+SPORTS
+✓ Teams
+✓ Players
+✓ Matches
+✓ Statistics
+
+COMPETITION
+✓ Divisions
+✓ Playoffs
+
+SCHEDULING
+✓ Calendar
+✓ Venues
+
+COMMUNICATION
+✓ Notifications
+✓ Alerts
+
+ANALYTICS
+✓ Engine
+✓ Team Metrics
+✓ Player Metrics
+✓ Reports
+
+ADMIN
+✓ Dashboard
+✓ Tools

@@ -1,0 +1,522 @@
+Athletix 2.0 — Package 13B
+Media & Asset Management System
+Frontend Branding Components
+
+We now connect the media layer to public-facing pages.
+
+The flow:
+
+Media Engine
+
+      ↓
+
+Frontend Components
+
+      ↓
+
+Team Pages
+Player Pages
+Gallery Pages
+
+Create:
+
+includes/frontend/
+
+├── class-team-branding.php
+├── class-player-card.php
+└── class-media-gallery.php
+File 88
+includes/frontend/class-team-branding.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Team Branding
+ */
+class Athletix_Team_Branding {
+
+
+    public static function init() {
+
+
+        add_shortcode(
+
+            'athletix_team_branding',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render(
+        $atts
+    ) {
+
+
+        $atts =
+            shortcode_atts(
+
+                [
+
+                    'id'=>0
+
+                ],
+
+                $atts
+
+            );
+
+
+
+        $team_id =
+            absint(
+                $atts['id']
+            );
+
+
+
+        if(
+            ! $team_id
+        ) {
+
+            return '';
+
+        }
+
+
+
+        $logo =
+            Athletix_Logo_Manager::get(
+
+                $team_id
+
+            );
+
+
+
+        ob_start();
+
+        ?>
+
+        <div class="athletix-team-branding">
+
+
+            <?php if(
+                $logo
+            ) : ?>
+
+
+                <?php echo Athletix_Image_Handler::html(
+
+                    $logo,
+
+                    'medium'
+
+                ); ?>
+
+
+            <?php endif; ?>
+
+
+            <h2>
+
+                <?php echo esc_html(
+
+                    get_the_title(
+                        $team_id
+                    )
+
+                ); ?>
+
+
+            </h2>
+
+
+        </div>
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+File 89
+class-player-card.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Player Card
+ */
+class Athletix_Player_Card {
+
+
+    public static function init() {
+
+
+        add_shortcode(
+
+            'athletix_player_card',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render(
+        $atts
+    ) {
+
+
+        $atts =
+            shortcode_atts(
+
+                [
+
+                    'id'=>0
+
+                ],
+
+                $atts
+
+            );
+
+
+
+        $player_id =
+            absint(
+                $atts['id']
+            );
+
+
+
+        if(
+            ! $player_id
+        ) {
+
+            return '';
+
+        }
+
+
+
+        $image =
+            Athletix_Media_Manager::get(
+
+                $player_id
+
+            );
+
+
+
+        ob_start();
+
+        ?>
+
+
+        <div class="athletix-player-card">
+
+
+            <?php if(
+                $image
+            ) : ?>
+
+
+                <?php echo Athletix_Image_Handler::html(
+
+                    $image,
+
+                    'medium'
+
+                ); ?>
+
+
+            <?php endif; ?>
+
+
+            <h3>
+
+                <?php echo esc_html(
+
+                    get_the_title(
+                        $player_id
+                    )
+
+                ); ?>
+
+
+            </h3>
+
+
+        </div>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+File 90
+class-media-gallery.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Media Gallery
+ */
+class Athletix_Media_Gallery {
+
+
+    public static function init() {
+
+
+        add_shortcode(
+
+            'athletix_gallery',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render(
+        $atts
+    ) {
+
+
+        $atts =
+            shortcode_atts(
+
+                [
+
+                    'id'=>0
+
+                ],
+
+                $atts
+
+            );
+
+
+
+        $images =
+            Athletix_Gallery::get(
+
+                absint(
+
+                    $atts['id']
+
+                )
+
+            );
+
+
+
+        if(
+            empty(
+                $images
+            )
+        ) {
+
+            return '';
+
+        }
+
+
+
+        ob_start();
+
+
+        ?>
+
+
+        <div class="athletix-gallery">
+
+
+        <?php foreach(
+            $images as $image
+        ) : ?>
+
+
+            <?php echo Athletix_Image_Handler::html(
+
+                $image,
+
+                'thumbnail'
+
+            ); ?>
+
+
+        <?php endforeach; ?>
+
+
+        </div>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+frontend/class-team-branding.php
+
+frontend/class-player-card.php
+
+frontend/class-media-gallery.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Team_Branding,
+
+Athletix_Player_Card,
+
+Athletix_Media_Gallery,
+Package 13B Complete ✅
+
+Athletix frontend now supports:
+
+Team Branding
+[athletix_team_branding id="25"]
+
+Output:
+
+team logo
+team name
+branded header
+
+---
+
+## Player Cards
+
+```text id="h5x8m3"
+[athletix_player_card id="100"]
+
+Output:
+
+player image
+player identity card
+
+---
+
+## Galleries
+
+```text id="n4m7q9"
+[athletix_gallery id="25"]
+
+Output:
+
+photo collections
+event galleries
+team media
+
+---
+
+# Athletix 2.0 Status Update
+
+```text id="k8x3m5"
+CORE
+✓ Framework
+✓ Loader
+✓ Registry
+
+SPORTS ENGINE
+✓ Matches
+✓ Standings
+✓ Rankings
+✓ Statistics
+
+ADMIN
+✓ Tools
+✓ Reports
+✓ Automation
+
+SECURITY
+✓ Roles
+✓ Permissions
+✓ Audit
+
+OPERATIONS
+✓ Import/Export
+✓ Notifications
+
+MEDIA
+✓ Logos
+✓ Images
+✓ Galleries
+✓ Branding
+
+PUBLIC
+✓ Profiles
+✓ Tables
+✓ Match Cards
+✓ Media Components
+
+API
+✓ REST

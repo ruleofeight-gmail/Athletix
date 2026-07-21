@@ -1,0 +1,507 @@
+Athletix 2.0 — Package 9A
+Import / Export Framework
+Data Migration Layer
+
+We now add tools for moving league data in and out of Athletix.
+
+Architecture:
+
+CSV File
+
+   ↓
+
+Importer
+
+   ↓
+
+Repository Layer
+
+   ↓
+
+Athletix Database
+
+
+Athletix Database
+
+   ↓
+
+Exporter
+
+   ↓
+
+CSV Backup
+
+Create:
+
+includes/import/
+
+├── class-import-manager.php
+├── class-csv-importer.php
+├── class-export-manager.php
+└── class-backup-exporter.php
+File 59
+includes/import/class-import-manager.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Import Manager
+ */
+class Athletix_Import_Manager {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    /**
+     * Run importer.
+     */
+    public static function run(
+        $type,
+        $file
+    ) {
+
+
+        switch(
+            $type
+        ) {
+
+
+            case 'teams':
+
+                return Athletix_CSV_Importer::teams(
+                    $file
+                );
+
+
+            case 'players':
+
+                return Athletix_CSV_Importer::players(
+                    $file
+                );
+
+
+            case 'matches':
+
+                return Athletix_CSV_Importer::matches(
+                    $file
+                );
+
+
+        }
+
+
+
+        return false;
+
+
+    }
+
+
+}
+File 60
+class-csv-importer.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix CSV Importer
+ */
+class Athletix_CSV_Importer {
+
+
+    /**
+     * Import teams.
+     */
+    public static function teams(
+        $file
+    ) {
+
+
+        $rows =
+            self::read(
+                $file
+            );
+
+
+
+        $count = 0;
+
+
+
+        foreach(
+            $rows as $row
+        ) {
+
+
+            wp_insert_post(
+
+                [
+
+                    'post_type'=>
+                        'ax_team',
+
+                    'post_title'=>
+                        sanitize_text_field(
+
+                            $row['name']
+
+                        ),
+
+                    'post_status'=>
+                        'publish'
+
+                ]
+
+            );
+
+
+            $count++;
+
+
+        }
+
+
+
+        return $count;
+
+
+    }
+
+
+
+
+
+    /**
+     * Import players.
+     */
+    public static function players(
+        $file
+    ) {
+
+
+        $rows =
+            self::read(
+                $file
+            );
+
+
+
+        $count = 0;
+
+
+
+        foreach(
+            $rows as $row
+        ) {
+
+
+            wp_insert_post(
+
+                [
+
+                    'post_type'=>
+                        'ax_player',
+
+                    'post_title'=>
+                        sanitize_text_field(
+
+                            $row['name']
+
+                        ),
+
+                    'post_status'=>
+                        'publish'
+
+                ]
+
+            );
+
+
+            $count++;
+
+
+        }
+
+
+
+        return $count;
+
+
+    }
+
+
+
+
+
+    /**
+     * Import matches.
+     */
+    public static function matches(
+        $file
+    ) {
+
+
+        return count(
+
+            self::read(
+                $file
+            )
+
+        );
+
+
+    }
+
+
+
+
+
+    /**
+     * Read CSV.
+     */
+    private static function read(
+        $file
+    ) {
+
+
+        $rows = [];
+
+
+
+        if(
+            ! file_exists(
+                $file
+            )
+        ) {
+
+            return $rows;
+
+        }
+
+
+
+        $handle =
+            fopen(
+                $file,
+                'r'
+            );
+
+
+
+        $headers =
+            fgetcsv(
+                $handle
+            );
+
+
+
+        while(
+            $line =
+                fgetcsv(
+                    $handle
+                )
+        ) {
+
+
+            $rows[] =
+                array_combine(
+
+                    $headers,
+
+                    $line
+
+                );
+
+
+        }
+
+
+
+        fclose(
+            $handle
+        );
+
+
+
+        return $rows;
+
+
+    }
+
+
+}
+File 61
+class-export-manager.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Export Manager
+ */
+class Athletix_Export_Manager {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function teams() {
+
+
+        return Athletix_Backup_Exporter::export(
+
+            'ax_team'
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function players() {
+
+
+        return Athletix_Backup_Exporter::export(
+
+            'ax_player'
+
+        );
+
+
+    }
+
+
+}
+File 62
+class-backup-exporter.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Backup Exporter
+ */
+class Athletix_Backup_Exporter {
+
+
+    public static function export(
+        $type
+    ) {
+
+
+        $posts =
+            get_posts(
+
+                [
+
+                    'post_type'=>
+                        $type,
+
+                    'posts_per_page'=>
+                        -1
+
+                ]
+
+            );
+
+
+
+        $data = [];
+
+
+
+        foreach(
+            $posts as $post
+        ) {
+
+
+            $data[] = [
+
+                'id'=>
+                    $post->ID,
+
+                'name'=>
+                    $post->post_title
+
+            ];
+
+
+        }
+
+
+
+        return $data;
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+import/class-import-manager.php
+
+import/class-csv-importer.php
+
+import/class-export-manager.php
+
+import/class-backup-exporter.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Import_Manager,
+
+Athletix_CSV_Importer,
+
+Athletix_Export_Manager,
+
+Athletix_Backup_Exporter,
+Package 9A Complete ✅
+
+Athletix now supports:
+
+IMPORT
+
+✓ Teams
+✓ Players
+✓ Matches foundation
+
+
+EXPORT
+
+✓ Teams
+✓ Players
+✓ Backup data

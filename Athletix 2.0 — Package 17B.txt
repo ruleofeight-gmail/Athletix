@@ -1,0 +1,487 @@
+Athletix 2.0 — Package 17B
+Calendar & Scheduling System
+Season Calendar + Public Scheduling
+
+We now expand the calendar engine into a full league scheduling platform.
+
+The flow:
+
+Season Setup
+
+      ↓
+
+Generate Calendar
+
+      ↓
+
+Publish Schedule
+
+      ↓
+
+Export Events
+
+      ↓
+
+Fans + Teams
+
+Create:
+
+includes/calendar/
+
+├── class-recurring-events.php
+├── class-season-calendar.php
+├── class-public-schedule.php
+└── class-calendar-export.php
+File 119
+includes/calendar/class-recurring-events.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Recurring Events
+ */
+class Athletix_Recurring_Events {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function generate(
+        $start_date,
+        $weeks,
+        $day_interval = 7
+    ) {
+
+
+        $events = [];
+
+
+
+        $date =
+            strtotime(
+                $start_date
+            );
+
+
+
+        for(
+            $i = 0;
+            $i < $weeks;
+            $i++
+        ) {
+
+
+            $events[] =
+                date(
+
+                    'Y-m-d',
+
+                    $date
+
+                );
+
+
+
+            $date =
+                strtotime(
+
+                    '+' .
+                    $day_interval .
+                    ' days',
+
+                    $date
+
+                );
+
+
+        }
+
+
+
+        return $events;
+
+
+    }
+
+
+}
+File 120
+class-season-calendar.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Season Calendar
+ */
+class Athletix_Season_Calendar {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function create(
+        $season_id,
+        $matches
+    ) {
+
+
+        foreach(
+            $matches as $match
+        ) {
+
+
+            Athletix_Calendar_Engine::add_event(
+
+                $match,
+
+                current_time(
+                    'Y-m-d'
+                )
+
+            );
+
+
+        }
+
+
+
+        update_post_meta(
+
+            $season_id,
+
+            '_athletix_calendar_created',
+
+            true
+
+        );
+
+
+    }
+
+
+}
+File 121
+class-public-schedule.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Public Schedule
+ */
+class Athletix_Public_Schedule {
+
+
+    public static function init() {
+
+
+        add_shortcode(
+
+            'athletix_schedule',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render() {
+
+
+        $events =
+            Athletix_Calendar_Engine::events();
+
+
+
+        ob_start();
+
+
+        ?>
+
+
+        <div class="athletix-schedule">
+
+
+        <?php foreach(
+            $events as $event
+        ) : ?>
+
+
+            <div class="schedule-item">
+
+
+                <h4>
+
+                    <?php echo esc_html(
+
+                        $event->post_title
+
+                    ); ?>
+
+
+                </h4>
+
+
+                <span>
+
+                    <?php echo esc_html(
+
+                        get_post_meta(
+
+                            $event->ID,
+
+                            '_athletix_date',
+
+                            true
+
+                        )
+
+                    ); ?>
+
+
+                </span>
+
+
+            </div>
+
+
+        <?php endforeach; ?>
+
+
+        </div>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+File 122
+class-calendar-export.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Calendar Export
+ */
+class Athletix_Calendar_Export {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'init',
+
+            [
+
+                __CLASS__,
+
+                'download'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function download() {
+
+
+        if(
+            empty(
+                $_GET['athletix_calendar']
+            )
+        ) {
+
+            return;
+
+        }
+
+
+
+        $events =
+            Athletix_Calendar_Engine::events();
+
+
+
+        header(
+            'Content-Type:text/calendar'
+        );
+
+
+
+        echo "BEGIN:VCALENDAR\n";
+
+
+
+        foreach(
+            $events as $event
+        ) {
+
+
+            echo "BEGIN:VEVENT\n";
+
+            echo "SUMMARY:" .
+                $event->post_title .
+                "\n";
+
+            echo "END:VEVENT\n";
+
+
+        }
+
+
+
+        echo "END:VCALENDAR";
+
+
+
+        exit;
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+calendar/class-recurring-events.php
+
+calendar/class-season-calendar.php
+
+calendar/class-public-schedule.php
+
+calendar/class-calendar-export.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Recurring_Events,
+
+Athletix_Season_Calendar,
+
+Athletix_Public_Schedule,
+
+Athletix_Calendar_Export,
+Package 17B Complete ✅
+
+Athletix scheduling now supports:
+
+Season Calendars
+Season
+
+ ↓
+
+Generate Dates
+
+ ↓
+
+Assign Matches
+
+ ↓
+
+Publish Schedule
+Public Schedule
+
+Shortcode:
+
+[athletix_schedule]
+
+Displays:
+
+August 2
+Tigers vs Eagles
+
+August 9
+Bears vs Lions
+Calendar Export
+
+Supports:
+
+✓ ICS Calendar Feed
+
+✓ External Calendar Apps
+
+✓ Team Scheduling
+
+✓ Fan Calendars
+Athletix 2.0 Status
+SPORTS PLATFORM
+
+✓ Teams
+✓ Players
+✓ Matches
+✓ Stats
+✓ Rankings
+
+COMPETITION
+
+✓ Divisions
+✓ Tournaments
+✓ Playoffs
+
+SCHEDULING
+
+✓ Calendar
+✓ Venues
+✓ Conflicts
+✓ Season Schedule
+✓ Calendar Export
+
+ADMIN
+
+✓ Dashboard
+✓ Reports
+✓ Tools

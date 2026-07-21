@@ -1,0 +1,391 @@
+Athletix 2.0 — Package 8A
+Frontend Display Framework
+Public-Facing Components
+
+Now we build the fan-facing side of Athletix.
+
+The architecture:
+
+Visitor
+
+ ↓
+
+Shortcodes / Templates
+
+ ↓
+
+Frontend Components
+
+ ↓
+
+Repositories + Engines
+
+ ↓
+
+Athletix Data
+
+Create:
+
+includes/frontend/
+
+├── class-shortcodes.php
+├── class-team-profile.php
+├── class-player-profile.php
+├── class-league-table.php
+└── class-match-display.php
+File 54
+includes/frontend/class-shortcodes.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Shortcodes
+ */
+class Athletix_Shortcodes {
+
+
+    public static function init() {
+
+
+        add_shortcode(
+
+            'athletix_team',
+
+            [
+
+                'Athletix_Team_Profile',
+
+                'render'
+
+            ]
+
+        );
+
+
+        add_shortcode(
+
+            'athletix_player',
+
+            [
+
+                'Athletix_Player_Profile',
+
+                'render'
+
+            ]
+
+        );
+
+
+        add_shortcode(
+
+            'athletix_table',
+
+            [
+
+                'Athletix_League_Table',
+
+                'render'
+
+            ]
+
+        );
+
+
+        add_shortcode(
+
+            'athletix_match',
+
+            [
+
+                'Athletix_Match_Display',
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+}
+File 55
+class-team-profile.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Team Profile Display
+ */
+class Athletix_Team_Profile {
+
+
+    public static function render(
+        $atts
+    ) {
+
+
+        $atts =
+            shortcode_atts(
+
+                [
+
+                    'id'=>0
+
+                ],
+
+                $atts
+
+            );
+
+
+
+        $team =
+            get_post(
+
+                absint(
+
+                    $atts['id']
+
+                )
+
+            );
+
+
+
+        if (
+            ! $team
+        ) {
+
+            return '';
+
+        }
+
+
+
+        $repo =
+            Athletix_Registry::get(
+
+                'team.repository'
+
+            );
+
+
+
+        $stats =
+            $repo->standings(
+
+                $team->ID
+
+            );
+
+
+
+        ob_start();
+
+
+        ?>
+
+
+        <div class="athletix-team-profile">
+
+
+            <h2>
+
+                <?php echo esc_html(
+                    $team->post_title
+                ); ?>
+
+            </h2>
+
+
+            <div>
+
+                Played:
+                <?php echo esc_html(
+                    $stats['played'] ?? 0
+                ); ?>
+
+            </div>
+
+
+            <div>
+
+                Points:
+                <?php echo esc_html(
+                    $stats['points'] ?? 0
+                ); ?>
+
+            </div>
+
+
+        </div>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+File 56
+class-player-profile.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Player Profile Display
+ */
+class Athletix_Player_Profile {
+
+
+    public static function render(
+        $atts
+    ) {
+
+
+        $atts =
+            shortcode_atts(
+
+                [
+
+                    'id'=>0
+
+                ],
+
+                $atts
+
+            );
+
+
+
+        $player =
+            get_post(
+
+                absint(
+
+                    $atts['id']
+
+                )
+
+            );
+
+
+
+        if (
+            ! $player
+        ) {
+
+            return '';
+
+        }
+
+
+
+        $repo =
+            Athletix_Registry::get(
+
+                'player.repository'
+
+            );
+
+
+
+        $stats =
+            $repo->statistics(
+
+                $player->ID
+
+            );
+
+
+
+        ob_start();
+
+        ?>
+
+        <div class="athletix-player-profile">
+
+            <h2>
+
+            <?php echo esc_html(
+                $player->post_title
+            ); ?>
+
+            </h2>
+
+
+            <pre>
+
+            <?php echo esc_html(
+                wp_json_encode(
+                    $stats,
+                    JSON_PRETTY_PRINT
+                )
+            ); ?>
+
+            </pre>
+
+
+        </div>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+frontend/class-shortcodes.php
+
+frontend/class-team-profile.php
+
+frontend/class-player-profile.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Shortcodes,
+
+Athletix_Team_Profile,
+
+Athletix_Player_Profile,
+Package 8A Complete ✅
+
+Athletix now has frontend components:
+
+Shortcodes
+
+[athletix_team]
+
+[athletix_player]
+
+[athletix_table]
+
+[athletix_match]

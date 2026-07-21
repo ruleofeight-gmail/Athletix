@@ -1,0 +1,297 @@
+Athletix 2.0 — Package 1A
+Foundation Bootstrap Files
+
+Install these two files first.
+
+File 1
+athletix.php
+
+Location:
+
+wp-content/plugins/athletix/athletix.php
+<?php
+/**
+ * Plugin Name: Athletix
+ * Plugin URI: https://athletixsports.com
+ * Description: Professional modular sports management framework for WordPress.
+ * Version: 2.0.0
+ * Author: Athletix
+ * Text Domain: athletix
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Constants
+|--------------------------------------------------------------------------
+*/
+
+define(
+    'ATHLETIX_VERSION',
+    '2.0.0'
+);
+
+define(
+    'ATHLETIX_FILE',
+    __FILE__
+);
+
+define(
+    'ATHLETIX_PATH',
+    plugin_dir_path( __FILE__ )
+);
+
+define(
+    'ATHLETIX_URL',
+    plugin_dir_url( __FILE__ )
+);
+
+define(
+    'ATHLETIX_BASENAME',
+    plugin_basename( __FILE__ )
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| Bootstrap Files
+|--------------------------------------------------------------------------
+*/
+
+require_once ATHLETIX_PATH . 'includes/class-loader.php';
+
+
+/*
+|--------------------------------------------------------------------------
+| Initialize Loader
+|--------------------------------------------------------------------------
+*/
+
+Athletix_Loader::init();
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Load Core Classes
+|--------------------------------------------------------------------------
+*/
+
+require_once ATHLETIX_PATH . 'includes/class-plugin.php';
+require_once ATHLETIX_PATH . 'includes/class-activator.php';
+require_once ATHLETIX_PATH . 'includes/class-deactivator.php';
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Activation
+|--------------------------------------------------------------------------
+*/
+
+register_activation_hook(
+    ATHLETIX_FILE,
+    [
+        'Athletix_Activator',
+        'activate'
+    ]
+);
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Deactivation
+|--------------------------------------------------------------------------
+*/
+
+register_deactivation_hook(
+    ATHLETIX_FILE,
+    [
+        'Athletix_Deactivator',
+        'deactivate'
+    ]
+);
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Start Application
+|--------------------------------------------------------------------------
+*/
+
+add_action(
+    'plugins_loaded',
+    [
+        'Athletix_Plugin',
+        'boot'
+    ]
+);
+File 2
+includes/class-loader.php
+
+Location:
+
+athletix/includes/class-loader.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Autoloader
+ *
+ * Loads Athletix classes automatically.
+ */
+class Athletix_Loader {
+
+
+    /**
+     * Initialize loader.
+     */
+    public static function init() {
+
+
+        spl_autoload_register(
+            [
+                __CLASS__,
+                'autoload'
+            ]
+        );
+
+
+    }
+
+
+
+    /**
+     * Load classes.
+     *
+     * Example:
+     *
+     * Athletix_Config
+     *
+     * becomes:
+     *
+     * includes/core/class-config.php
+     */
+    public static function autoload(
+        $class
+    ) {
+
+
+        if (
+            strpos(
+                $class,
+                'Athletix_'
+            ) !== 0
+        ) {
+
+            return;
+
+        }
+
+
+        $class_name =
+            str_replace(
+                'Athletix_',
+                '',
+                $class
+            );
+
+
+        $parts =
+            explode(
+                '_',
+                $class_name
+            );
+
+
+        $filename =
+            'class-' .
+            strtolower(
+                implode(
+                    '-',
+                    $parts
+                )
+            ) .
+            '.php';
+
+
+
+        /*
+         * Search locations
+         */
+
+        $locations = [
+
+            ATHLETIX_PATH . 'includes/',
+            ATHLETIX_PATH . 'includes/core/',
+            ATHLETIX_PATH . 'includes/admin/',
+            ATHLETIX_PATH . 'includes/api/',
+            ATHLETIX_PATH . 'includes/engine/',
+            ATHLETIX_PATH . 'includes/repositories/',
+            ATHLETIX_PATH . 'includes/services/',
+
+        ];
+
+
+
+        foreach (
+            $locations as $location
+        ) {
+
+
+            $file =
+                $location .
+                $filename;
+
+
+
+            if (
+                file_exists(
+                    $file
+                )
+            ) {
+
+                require_once $file;
+
+                return;
+
+            }
+
+
+        }
+
+
+    }
+
+
+}
+Current status after installing these:
+
+Your plugin structure should now be:
+
+athletix/
+
+├── athletix.php
+
+└── includes/
+
+    ├── class-loader.php
+    ├── class-plugin.php   (next)
+    ├── class-activator.php
+    └── class-deactivator.php
+
+At this point do not activate yet unless the next two files exist, because WordPress will still need:
+
+class-plugin.php
+class-activator.php
+class-deactivator.php

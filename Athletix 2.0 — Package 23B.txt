@@ -1,0 +1,19 @@
+Package 23B
+
+We expand media into:
+
+includes/media/
+
+├── class-player-media.php
+├── class-video-library.php
+├── class-news-system.php
+└── class-social-sharing.php
+
+Features:
+
+player profiles with media
+video highlights
+league news articles
+social distribution
+
+This builds the public-facing fan experience.

@@ -1,0 +1,381 @@
+Athletix 2.0 — Package 14A
+Search & Discovery Engine
+Query Foundation Layer
+
+We now add the discovery system.
+
+Purpose:
+
+Visitor
+
+ ↓
+
+Search Engine
+
+ ↓
+
+Filters
+
+ ↓
+
+Teams
+Players
+Leagues
+Matches
+
+Create:
+
+includes/search/
+
+├── class-search-engine.php
+├── class-team-search.php
+├── class-player-search.php
+└── class-filter-engine.php
+File 91
+includes/search/class-search-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Search Engine
+ */
+class Athletix_Search_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function search(
+        $type,
+        $query,
+        $args = []
+    ) {
+
+
+        switch(
+            $type
+        ) {
+
+
+            case 'team':
+
+                return Athletix_Team_Search::find(
+
+                    $query,
+
+                    $args
+
+                );
+
+
+
+            case 'player':
+
+                return Athletix_Player_Search::find(
+
+                    $query,
+
+                    $args
+
+                );
+
+
+        }
+
+
+
+        return [];
+
+
+    }
+
+
+}
+File 92
+class-team-search.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Team Search
+ */
+class Athletix_Team_Search {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function find(
+        $query,
+        $args = []
+    ) {
+
+
+        return get_posts(
+
+            [
+
+                'post_type'=>
+                    'ax_team',
+
+
+                'posts_per_page'=>
+                    $args['limit']
+                    ??
+                    20,
+
+
+                's'=>
+                    sanitize_text_field(
+
+                        $query
+
+                    )
+
+
+            ]
+
+        );
+
+
+    }
+
+
+}
+File 93
+class-player-search.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Player Search
+ */
+class Athletix_Player_Search {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function find(
+        $query,
+        $args = []
+    ) {
+
+
+        return get_posts(
+
+            [
+
+                'post_type'=>
+                    'ax_player',
+
+
+                'posts_per_page'=>
+                    $args['limit']
+                    ??
+                    20,
+
+
+                's'=>
+                    sanitize_text_field(
+
+                        $query
+
+                    )
+
+
+            ]
+
+        );
+
+
+    }
+
+
+}
+File 94
+class-filter-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Filter Engine
+ */
+class Athletix_Filter_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function apply(
+        $query,
+        $filters = []
+    ) {
+
+
+        if(
+            empty(
+                $filters
+            )
+        ) {
+
+            return $query;
+
+        }
+
+
+
+        foreach(
+            $filters as $key=>$value
+        ) {
+
+
+            $query->set(
+
+                'meta_query',
+
+                [
+
+                    [
+
+                        'key'=>
+                            sanitize_key(
+                                $key
+                            ),
+
+                        'value'=>
+                            sanitize_text_field(
+                                $value
+                            )
+
+                    ]
+
+                ]
+
+            );
+
+
+        }
+
+
+
+        return $query;
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+search/class-search-engine.php
+
+search/class-team-search.php
+
+search/class-player-search.php
+
+search/class-filter-engine.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Search_Engine,
+
+Athletix_Team_Search,
+
+Athletix_Player_Search,
+
+Athletix_Filter_Engine,
+Package 14A Complete ✅
+
+Athletix now has:
+
+Search Services
+Search Teams
+
+     ↓
+
+Search Players
+
+     ↓
+
+Apply Filters
+
+     ↓
+
+Return Results
+Supported Queries
+
+Teams:
+
+Athletix_Search_Engine::search(
+    'team',
+    'Eagles'
+);
+
+Players:
+
+Athletix_Search_Engine::search(
+    'player',
+    'Smith'
+);
+
+Filters:
+
+[
+    'position'=>'Forward',
+    'season'=>'2026'
+]
+Current Platform Expansion
+Athletix 2.0
+
+✓ Sports Engine
+✓ Admin Platform
+✓ Frontend System
+✓ API
+✓ Automation
+✓ Security
+✓ Media
+✓ Search

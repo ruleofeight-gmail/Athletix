@@ -1,0 +1,366 @@
+Athletix 2.0 — Package 3C
+Rankings + Scheduling Engine
+
+This completes the first version of the Sports Engine.
+
+We add:
+
+League ranking calculations
+Schedule management
+Fixture retrieval
+
+Create/update:
+
+includes/engine/
+
+├── class-ranking-engine.php
+└── class-schedule-engine.php
+File 29
+includes/engine/class-ranking-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Ranking Engine
+ *
+ * Sorts teams and generates league rankings.
+ */
+class Athletix_Ranking_Engine {
+
+
+    public static function init() {
+
+    }
+
+
+
+
+
+    /**
+     * Get ranked teams.
+     *
+     * @param array $teams
+     *
+     * @return array
+     */
+    public static function rank(
+        $teams = []
+    ) {
+
+
+        $rankings = [];
+
+
+
+        foreach (
+            $teams as $team
+        ) {
+
+
+            $stats =
+                get_post_meta(
+                    $team,
+                    '_athletix_standings',
+                    true
+                );
+
+
+
+            if (
+                ! is_array($stats)
+            ) {
+
+                continue;
+
+            }
+
+
+
+            $rankings[$team] =
+                $stats;
+
+
+        }
+
+
+
+        uasort(
+            $rankings,
+            [
+
+                __CLASS__,
+                'sort'
+
+            ]
+        );
+
+
+
+        return $rankings;
+
+
+    }
+
+
+
+
+
+    /**
+     * Ranking comparison.
+     */
+    private static function sort(
+        $a,
+        $b
+    ) {
+
+
+        /*
+         * Points first
+         */
+        if (
+            $a['points']
+            !==
+            $b['points']
+        ) {
+
+
+            return
+                $b['points']
+                <=>
+                $a['points'];
+
+
+        }
+
+
+
+        /*
+         * Goal difference second
+         */
+        $a_diff =
+            $a['goals_for']
+            -
+            $a['goals_against'];
+
+
+
+        $b_diff =
+            $b['goals_for']
+            -
+            $b['goals_against'];
+
+
+
+        return
+            $b_diff
+            <=>
+            $a_diff;
+
+
+    }
+
+
+
+}
+File 30
+includes/engine/class-schedule-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Schedule Engine
+ *
+ * Handles fixtures and calendars.
+ */
+class Athletix_Schedule_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    /**
+     * Create fixture.
+     */
+    public static function create(
+        $season,
+        $home,
+        $away,
+        $date
+    ) {
+
+
+        $match_id =
+            wp_insert_post(
+
+                [
+
+                    'post_type' =>
+                        'ax_match',
+
+                    'post_title' =>
+                        get_the_title($home)
+                        .
+                        ' vs '
+                        .
+                        get_the_title($away),
+
+                    'post_status' =>
+                        'publish'
+
+                ]
+
+            );
+
+
+
+        if (
+            $match_id
+        ) {
+
+
+            update_post_meta(
+
+                $match_id,
+
+                '_athletix_season',
+
+                absint(
+                    $season
+                )
+
+            );
+
+
+            update_post_meta(
+
+                $match_id,
+
+                '_athletix_match_date',
+
+                sanitize_text_field(
+                    $date
+                )
+
+            );
+
+
+            Athletix_Match_Participants::set_home_team(
+                $match_id,
+                $home
+            );
+
+
+            Athletix_Match_Participants::set_away_team(
+                $match_id,
+                $away
+            );
+
+
+        }
+
+
+
+        return $match_id;
+
+
+    }
+
+
+
+
+
+    /**
+     * Get season schedule.
+     */
+    public static function fixtures(
+        $season
+    ) {
+
+
+        return get_posts(
+
+            [
+
+                'post_type' =>
+                    'ax_match',
+
+                'posts_per_page' =>
+                    -1,
+
+                'meta_query' => [
+
+                    [
+
+                        'key' =>
+                            '_athletix_season',
+
+                        'value' =>
+                            absint($season)
+
+                    ]
+
+                ]
+
+            ]
+
+        );
+
+
+    }
+
+
+
+}
+Update class-plugin.php
+
+Add the final Sports Engine modules:
+
+Athletix_Ranking_Engine,
+Athletix_Schedule_Engine,
+
+Your engine module list now contains:
+
+Athletix_Sport_Engine,
+Athletix_Match_Engine,
+Athletix_Standings_Engine,
+Athletix_Statistics_Engine,
+Athletix_Ranking_Engine,
+Athletix_Schedule_Engine,
+Package 3 Complete ✅
+
+Athletix now has a complete processing foundation:
+
+SPORTS ENGINE
+
+Sport Rules
+     |
+     ↓
+Match Processing
+     |
+     ↓
+Statistics
+     |
+     ↓
+Standings
+     |
+     ↓
+Rankings
+     |
+     ↓
+Schedules
+
+At this point Athletix is no longer just registering WordPress content. It is now a sports management framework.

@@ -1,0 +1,470 @@
+Athletix 2.0 — Package 23A
+Media & Content Management System
+Fan Engagement Foundation
+
+We now add the content layer.
+
+The purpose:
+
+League Activity
+
+      ↓
+
+Content System
+
+      ↓
+
+Photos
+News
+Updates
+Media
+
+      ↓
+
+Fans + Players
+
+This creates the foundation for:
+
+team galleries
+player media
+league announcements
+content feeds
+future social sharing
+
+Create:
+
+includes/media/
+
+├── class-media-manager.php
+├── class-gallery.php
+├── class-team-media.php
+└── class-content-feed.php
+File 163
+includes/media/class-media-manager.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Media Manager
+ */
+class Athletix_Media_Manager {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function attach(
+        $post_id,
+        $media_id
+    ) {
+
+
+        add_post_meta(
+
+            $post_id,
+
+            '_athletix_media',
+
+            absint(
+
+                $media_id
+
+            )
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function get(
+        $post_id
+    ) {
+
+
+        return get_post_meta(
+
+            $post_id,
+
+            '_athletix_media'
+
+        );
+
+
+    }
+
+
+}
+File 164
+class-gallery.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Gallery System
+ */
+class Athletix_Gallery {
+
+
+    public static function init() {
+
+
+        add_shortcode(
+
+            'athletix_gallery',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render(
+        $atts
+    ) {
+
+
+        $post_id =
+            $atts['id']
+            ??
+            get_the_ID();
+
+
+
+        $media =
+            Athletix_Media_Manager::get(
+
+                $post_id
+
+            );
+
+
+
+        if(
+            empty(
+                $media
+            )
+        ) {
+
+            return 'No media available.';
+
+        }
+
+
+
+        ob_start();
+
+
+        ?>
+
+
+        <div class="athletix-gallery">
+
+
+        <?php foreach(
+            $media as $image
+        ) : ?>
+
+
+            <div class="gallery-item">
+
+
+                <?php echo wp_get_attachment_image(
+
+                    $image,
+
+                    'medium'
+
+                ); ?>
+
+
+            </div>
+
+
+        <?php endforeach; ?>
+
+
+        </div>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+File 165
+class-team-media.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Team Media
+ */
+class Athletix_Team_Media {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function add(
+        $team_id,
+        $media_id
+    ) {
+
+
+        Athletix_Media_Manager::attach(
+
+            $team_id,
+
+            $media_id
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function images(
+        $team_id
+    ) {
+
+
+        return Athletix_Media_Manager::get(
+
+            $team_id
+
+        );
+
+
+    }
+
+
+}
+File 166
+class-content-feed.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Content Feed
+ */
+class Athletix_Content_Feed {
+
+
+    public static function init() {
+
+
+        add_shortcode(
+
+            'athletix_feed',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render() {
+
+
+        $posts =
+            get_posts(
+
+                [
+
+                    'post_type'=>
+                        [
+
+                            'post',
+
+                            'ax_team'
+
+                        ],
+
+
+                    'posts_per_page'=>
+                        10
+
+                ]
+
+            );
+
+
+
+        ob_start();
+
+
+        foreach(
+            $posts as $post
+        ) {
+
+
+            echo '<div class="athletix-feed-item">';
+
+
+            echo esc_html(
+
+                $post->post_title
+
+            );
+
+
+            echo '</div>';
+
+
+        }
+
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+media/class-media-manager.php
+
+media/class-gallery.php
+
+media/class-team-media.php
+
+media/class-content-feed.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Media_Manager,
+
+Athletix_Gallery,
+
+Athletix_Team_Media,
+
+Athletix_Content_Feed,
+Package 23A Complete ✅
+
+Athletix now supports:
+
+Media Attachments
+Team
+
+ ↓
+
+Photos
+
+ ↓
+
+Gallery
+Galleries
+
+Shortcode:
+
+[athletix_gallery]
+Team Media
+
+Supports:
+
+✓ Team Photos
+
+✓ Logos
+
+✓ Event Images
+
+✓ Player Media
+Content Feed
+
+Shortcode:
+
+[athletix_feed]
+
+Displays:
+
+League News
+
+Team Updates
+
+Announcements
+Athletix 2.0 Status
+MEDIA PLATFORM
+
+✓ Media Manager
+✓ Galleries
+✓ Team Media
+✓ Content Feed
+
+
+CORE PLATFORM
+
+✓ Sports Engine
+✓ Competition
+✓ Scheduling
+✓ Communication
+✓ Analytics
+✓ Membership
+✓ Payments
+✓ API

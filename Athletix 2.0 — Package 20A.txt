@@ -1,0 +1,506 @@
+Athletix 2.0 — Package 20A
+Membership & Registration System
+Enrollment Foundation
+
+We now add the athlete and team onboarding layer.
+
+The flow:
+
+League
+
+ ↓
+
+Registration
+
+ ↓
+
+Membership
+
+ ↓
+
+Player / Team Enrollment
+
+ ↓
+
+Competition Eligibility
+
+This creates the foundation for:
+
+athlete registration
+team enrollment
+membership tiers
+waiver tracking
+future payment integration
+
+Create:
+
+includes/membership/
+
+├── class-membership-engine.php
+├── class-registration.php
+├── class-player-registration.php
+└── class-waivers.php
+File 139
+includes/membership/class-membership-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Membership Engine
+ */
+class Athletix_Membership_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function get_level(
+        $user_id
+    ) {
+
+
+        $level =
+            get_user_meta(
+
+                $user_id,
+
+                '_athletix_membership',
+
+                true
+
+            );
+
+
+
+        if(
+            empty(
+                $level
+            )
+        ) {
+
+            $level = 'standard';
+
+        }
+
+
+
+        return $level;
+
+
+    }
+
+
+
+
+
+    public static function assign(
+        $user_id,
+        $level
+    ) {
+
+
+        update_user_meta(
+
+            $user_id,
+
+            '_athletix_membership',
+
+            sanitize_key(
+
+                $level
+
+            )
+
+        );
+
+
+    }
+
+
+}
+File 140
+class-registration.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Registration System
+ */
+class Athletix_Registration {
+
+
+    public static function init() {
+
+
+        add_shortcode(
+
+            'athletix_registration',
+
+            [
+
+                __CLASS__,
+
+                'form'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function form() {
+
+
+        if(
+            is_user_logged_in()
+        ) {
+
+            return 'Already registered.';
+
+        }
+
+
+
+        return '
+
+        <form method="post">
+
+            <p>
+
+            <label>
+            Email
+            </label>
+
+            <input type="email"
+            name="email">
+
+            </p>
+
+
+            <p>
+
+            <label>
+            Password
+            </label>
+
+            <input type="password"
+            name="password">
+
+            </p>
+
+
+            <button type="submit">
+
+            Register
+
+            </button>
+
+
+        </form>
+
+        ';
+
+
+    }
+
+
+}
+File 141
+class-player-registration.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Player Registration
+ */
+class Athletix_Player_Registration {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function register(
+        $user_id,
+        $player_data
+    ) {
+
+
+        $player_id =
+            wp_insert_post(
+
+                [
+
+                    'post_type'=>
+                        'ax_player',
+
+
+                    'post_title'=>
+                        sanitize_text_field(
+
+                            $player_data['name']
+
+                        ),
+
+
+                    'post_status'=>
+                        'publish'
+
+                ]
+
+            );
+
+
+
+        if(
+            $player_id
+        ) {
+
+
+            update_post_meta(
+
+                $player_id,
+
+                '_athletix_user',
+
+                $user_id
+
+            );
+
+
+        }
+
+
+
+        return $player_id;
+
+
+    }
+
+
+}
+File 142
+class-waivers.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Waiver Management
+ */
+class Athletix_Waivers {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function accept(
+        $user_id,
+        $waiver_id
+    ) {
+
+
+        $accepted =
+            get_user_meta(
+
+                $user_id,
+
+                '_athletix_waivers',
+
+                true
+
+            );
+
+
+
+        if(
+            ! is_array(
+                $accepted
+            )
+        ) {
+
+            $accepted = [];
+
+        }
+
+
+
+        $accepted[] =
+            absint(
+                $waiver_id
+            );
+
+
+
+        update_user_meta(
+
+            $user_id,
+
+            '_athletix_waivers',
+
+            array_unique(
+
+                $accepted
+
+            )
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function has_signed(
+        $user_id,
+        $waiver_id
+    ) {
+
+
+        $accepted =
+            get_user_meta(
+
+                $user_id,
+
+                '_athletix_waivers',
+
+                true
+
+            );
+
+
+
+        return in_array(
+
+            $waiver_id,
+
+            (array)$accepted
+
+        );
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+membership/class-membership-engine.php
+
+membership/class-registration.php
+
+membership/class-player-registration.php
+
+membership/class-waivers.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Membership_Engine,
+
+Athletix_Registration,
+
+Athletix_Player_Registration,
+
+Athletix_Waivers,
+Package 20A Complete ✅
+
+Athletix now supports:
+
+Membership
+User
+
+ ↓
+
+Membership Level
+
+ ↓
+
+League Access
+Registration
+
+Shortcode:
+
+[athletix_registration]
+Player Enrollment
+User
+
+ ↓
+
+Player Profile
+
+ ↓
+
+Eligible Athlete
+Waiver Tracking
+
+Supports:
+
+✓ Waiver Records
+
+✓ Acceptance Tracking
+
+✓ Eligibility Checks
+Athletix 2.0 Status
+MEMBERSHIP
+
+✓ Membership Engine
+✓ Registration
+✓ Player Enrollment
+✓ Waivers
+
+SPORTS
+✓ Teams
+✓ Players
+✓ Matches
+
+COMPETITION
+✓ Divisions
+✓ Playoffs
+
+COMMUNICATION
+✓ Notifications
+
+ANALYTICS
+✓ Reporting

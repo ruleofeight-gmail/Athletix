@@ -1,0 +1,495 @@
+Athletix 2.0 — Package 14B
+Search & Discovery Engine
+Public Directory Interface
+
+We now connect the search engine to the frontend.
+
+The goal:
+
+Fan Website
+
+ ↓
+
+Search Form
+
+ ↓
+
+Search Engine
+
+ ↓
+
+Results
+
+ ↓
+
+Profiles
+
+Create:
+
+includes/frontend/
+
+├── class-search-form.php
+├── class-search-results.php
+└── class-directory.php
+File 95
+includes/frontend/class-search-form.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Search Form
+ */
+class Athletix_Search_Form {
+
+
+    public static function init() {
+
+
+        add_shortcode(
+
+            'athletix_search',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render(
+        $atts
+    ) {
+
+
+        $atts =
+            shortcode_atts(
+
+                [
+
+                    'type'=>'player'
+
+                ],
+
+                $atts
+
+            );
+
+
+
+        ob_start();
+
+
+        ?>
+
+
+        <form class="athletix-search"
+            method="get">
+
+
+            <input type="hidden"
+                name="athletix_search_type"
+                value="<?php echo esc_attr(
+
+                    $atts['type']
+
+                ); ?>">
+
+
+
+            <input type="text"
+                name="athletix_query"
+                placeholder="Search...">
+
+
+
+            <button type="submit">
+
+                Search
+
+            </button>
+
+
+        </form>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+File 96
+class-search-results.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Search Results
+ */
+class Athletix_Search_Results {
+
+
+    public static function init() {
+
+
+        add_shortcode(
+
+            'athletix_search_results',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render() {
+
+
+        if(
+            empty(
+                $_GET['athletix_query']
+            )
+        ) {
+
+            return '';
+
+        }
+
+
+
+        $type =
+            sanitize_key(
+
+                $_GET['athletix_search_type']
+
+            );
+
+
+
+        $query =
+            sanitize_text_field(
+
+                $_GET['athletix_query']
+
+            );
+
+
+
+        $results =
+            Athletix_Search_Engine::search(
+
+                $type,
+
+                $query
+
+            );
+
+
+
+        ob_start();
+
+
+        ?>
+
+
+        <div class="athletix-search-results">
+
+
+        <?php foreach(
+            $results as $item
+        ) : ?>
+
+
+            <div class="result">
+
+
+                <a href="<?php echo esc_url(
+
+                    get_permalink(
+                        $item->ID
+                    )
+
+                ); ?>">
+
+
+                    <?php echo esc_html(
+
+                        $item->post_title
+
+                    ); ?>
+
+
+                </a>
+
+
+            </div>
+
+
+        <?php endforeach; ?>
+
+
+        </div>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+File 97
+class-directory.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Directory
+ */
+class Athletix_Directory {
+
+
+    public static function init() {
+
+
+        add_shortcode(
+
+            'athletix_directory',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render(
+        $atts
+    ) {
+
+
+        $atts =
+            shortcode_atts(
+
+                [
+
+                    'type'=>'player'
+
+                ],
+
+                $atts
+
+            );
+
+
+
+        $posts =
+            get_posts(
+
+                [
+
+                    'post_type'=>
+
+                        'ax_' .
+                        sanitize_key(
+
+                            $atts['type']
+
+                        ),
+
+
+                    'posts_per_page'=>
+                        -1
+
+                ]
+
+            );
+
+
+
+        ob_start();
+
+
+        ?>
+
+
+        <div class="athletix-directory">
+
+
+        <?php foreach(
+            $posts as $post
+        ) : ?>
+
+
+            <div class="directory-item">
+
+
+                <a href="<?php echo esc_url(
+
+                    get_permalink(
+                        $post->ID
+                    )
+
+                ); ?>">
+
+
+                    <?php echo esc_html(
+
+                        $post->post_title
+
+                    ); ?>
+
+
+                </a>
+
+
+            </div>
+
+
+        <?php endforeach; ?>
+
+
+        </div>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+frontend/class-search-form.php
+
+frontend/class-search-results.php
+
+frontend/class-directory.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Search_Form,
+
+Athletix_Search_Results,
+
+Athletix_Directory,
+Package 14B Complete ✅
+
+Athletix now has public discovery:
+
+Search
+[athletix_search type="player"]
+
+Example:
+
+Search:
+"John"
+
+Returns:
+
+John Smith
+John Brown
+Results
+[athletix_search_results]
+Directories
+
+Players:
+
+[athletix_directory type="player"]
+
+Teams:
+
+[athletix_directory type="team"]
+Athletix 2.0 Expansion Status
+CORE
+✓ Framework
+✓ Loader
+✓ Registry
+
+SPORTS
+✓ Matches
+✓ Standings
+✓ Rankings
+✓ Statistics
+
+OPERATIONS
+✓ Import
+✓ Export
+✓ Automation
+
+SECURITY
+✓ Roles
+✓ Permissions
+✓ Audit
+
+MEDIA
+✓ Branding
+✓ Images
+✓ Galleries
+
+DISCOVERY
+✓ Search Engine
+✓ Filters
+✓ Directories
+
+FRONTEND
+✓ Profiles
+✓ Tables
+✓ Cards

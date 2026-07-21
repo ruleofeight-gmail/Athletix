@@ -1,0 +1,601 @@
+Package 2A
+WordPress Integration Layer
+Custom Post Types Foundation
+
+Now we start rebuilding the actual Athletix data model.
+
+The old system had:
+
+ax_league
+ax_season
+ax_match
+ax_team
+
+We are expanding this into the professional model:
+
+League
+   |
+   └── Seasons
+          |
+          ├── Teams
+          |
+          ├── Players
+          |
+          └── Matches
+                  |
+                  └── Statistics
+
+Create this folder:
+
+includes/post-types/
+
+Add:
+
+post-types/
+
+├── class-league-post-type.php
+├── class-season-post-type.php
+├── class-team-post-type.php
+├── class-player-post-type.php
+└── class-match-post-type.php
+File 13
+includes/post-types/class-league-post-type.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix League Post Type
+ */
+class Athletix_League_Post_Type {
+
+
+    public static function init() {
+
+
+        add_action(
+            'init',
+            [
+                __CLASS__,
+                'register'
+            ]
+        );
+
+
+    }
+
+
+
+    public static function register() {
+
+
+        register_post_type(
+            'ax_league',
+            [
+
+                'labels' => [
+
+                    'name' =>
+                        'Leagues',
+
+                    'singular_name' =>
+                        'League'
+
+                ],
+
+
+                'public' =>
+                    true,
+
+
+                'show_in_rest' =>
+                    true,
+
+
+                'menu_icon' =>
+                    'dashicons-awards',
+
+
+                'supports' => [
+
+                    'title',
+                    'thumbnail',
+                    'editor'
+
+                ],
+
+
+                'rewrite' => [
+
+                    'slug' =>
+                        'leagues'
+
+                ]
+
+            ]
+        );
+
+
+    }
+
+
+}
+File 14
+includes/post-types/class-season-post-type.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Season Post Type
+ */
+class Athletix_Season_Post_Type {
+
+
+    public static function init() {
+
+
+        add_action(
+            'init',
+            [
+                __CLASS__,
+                'register'
+            ]
+        );
+
+
+    }
+
+
+
+    public static function register() {
+
+
+        register_post_type(
+            'ax_season',
+            [
+
+                'labels' => [
+
+                    'name' =>
+                        'Seasons',
+
+                    'singular_name' =>
+                        'Season'
+
+                ],
+
+
+                'public' =>
+                    true,
+
+
+                'show_in_rest' =>
+                    true,
+
+
+                'supports' => [
+
+                    'title'
+
+                ],
+
+
+                'rewrite' => [
+
+                    'slug' =>
+                        'seasons'
+
+                ]
+
+            ]
+        );
+
+
+    }
+
+
+}
+File 15
+includes/post-types/class-team-post-type.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Team Post Type
+ */
+class Athletix_Team_Post_Type {
+
+
+    public static function init() {
+
+
+        add_action(
+            'init',
+            [
+                __CLASS__,
+                'register'
+            ]
+        );
+
+
+    }
+
+
+
+    public static function register() {
+
+
+        register_post_type(
+            'ax_team',
+            [
+
+                'labels' => [
+
+                    'name' =>
+                        'Teams',
+
+                    'singular_name' =>
+                        'Team'
+
+                ],
+
+
+                'public' =>
+                    true,
+
+
+                'show_in_rest' =>
+                    true,
+
+
+                'menu_icon' =>
+                    'dashicons-groups',
+
+
+                'supports' => [
+
+                    'title',
+                    'thumbnail',
+                    'editor'
+
+                ],
+
+
+                'rewrite' => [
+
+                    'slug' =>
+                        'teams'
+
+                ]
+
+            ]
+        );
+
+
+    }
+
+
+}
+
+This is the first half of the new CPT layer.
+
+Next continuation will add:
+
+class-player-post-type.php
+class-match-post-type.php
+
+Then we will connect them into Athletix_Plugin so WordPress actually registers them.
+
+After CPTs are complete, we move to:
+
+Package 2B — Taxonomies + Relationships.
+
+Athletix 2.0 — Package 2A (continued)
+WordPress Integration Layer
+Remaining Custom Post Types
+
+Continue adding files inside:
+
+wp-content/plugins/athletix/includes/post-types/
+File 16
+class-player-post-type.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Player Post Type
+ */
+class Athletix_Player_Post_Type {
+
+
+    public static function init() {
+
+
+        add_action(
+            'init',
+            [
+                __CLASS__,
+                'register'
+            ]
+        );
+
+
+    }
+
+
+
+    public static function register() {
+
+
+        register_post_type(
+            'ax_player',
+            [
+
+                'labels' => [
+
+                    'name' =>
+                        'Players',
+
+                    'singular_name' =>
+                        'Player'
+
+                ],
+
+
+                'public' =>
+                    true,
+
+
+                'show_in_rest' =>
+                    true,
+
+
+                'menu_icon' =>
+                    'dashicons-businessperson',
+
+
+                'supports' => [
+
+                    'title',
+                    'thumbnail',
+                    'editor'
+
+                ],
+
+
+                'rewrite' => [
+
+                    'slug' =>
+                        'players'
+
+                ]
+
+            ]
+        );
+
+
+    }
+
+
+}
+File 17
+class-match-post-type.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Match Post Type
+ */
+class Athletix_Match_Post_Type {
+
+
+    public static function init() {
+
+
+        add_action(
+            'init',
+            [
+                __CLASS__,
+                'register'
+            ]
+        );
+
+
+    }
+
+
+
+    public static function register() {
+
+
+        register_post_type(
+            'ax_match',
+            [
+
+                'labels' => [
+
+                    'name' =>
+                        'Matches',
+
+                    'singular_name' =>
+                        'Match'
+
+                ],
+
+
+                'public' =>
+                    true,
+
+
+                'show_in_rest' =>
+                    true,
+
+
+                'menu_icon' =>
+                    'dashicons-calendar-alt',
+
+
+                'supports' => [
+
+                    'title'
+
+                ],
+
+
+                'rewrite' => [
+
+                    'slug' =>
+                        'matches'
+
+                ]
+
+            ]
+        );
+
+
+    }
+
+
+}
+Now update class-plugin.php
+
+We need to tell the framework that these modules exist.
+
+Replace the load_core() method section with this expanded version.
+
+File:
+
+includes/class-plugin.php
+
+Replace:
+
+private static function load_core()
+
+with:
+
+private static function load_core() {
+
+
+    $modules = [
+
+        /*
+         * Core Framework
+         */
+        'Athletix_Hooks',
+        'Athletix_Events',
+        'Athletix_Config',
+        'Athletix_Registry',
+        'Athletix_Cache',
+        'Athletix_Logger',
+        'Athletix_Validator',
+
+
+        /*
+         * Post Types
+         */
+        'Athletix_League_Post_Type',
+        'Athletix_Season_Post_Type',
+        'Athletix_Team_Post_Type',
+        'Athletix_Player_Post_Type',
+        'Athletix_Match_Post_Type',
+
+    ];
+
+
+
+    foreach (
+        $modules as $module
+    ) {
+
+
+        if (
+            class_exists(
+                $module
+            )
+        ) {
+
+
+            if (
+                method_exists(
+                    $module,
+                    'init'
+                )
+            ) {
+
+
+                $module::init();
+
+
+            }
+
+
+        }
+
+
+    }
+
+
+}
+Package 2A Complete ✅
+
+Your framework now supports:
+
+Athletix
+│
+├── League
+│
+├── Season
+│
+├── Team
+│
+├── Player
+│
+└── Match
+
+WordPress admin will now gain:
+
+Leagues menu
+Seasons menu
+Teams menu
+Players menu
+Matches menu
+Important test
+
+Deactivate/reactivate Athletix:
+
+WordPress Admin
+→ Plugins
+→ Deactivate Athletix
+→ Activate Athletix
+
+Then check:
+
+Dashboard
+ └── Athletix content types
+
+Expected:
+
+✅ League CPT exists
+✅ Season CPT exists
+✅ Team CPT exists
+✅ Player CPT exists
+✅ Match CPT exists

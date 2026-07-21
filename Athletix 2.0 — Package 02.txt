@@ -1,0 +1,35 @@
+Package 2 — WordPress Integration Layer
+
+Now we start adding actual Athletix functionality.
+
+Package 2 will include:
+
+includes/
+
+├── post-types/
+
+│   ├── class-league-post-type.php
+│   ├── class-season-post-type.php
+│   ├── class-team-post-type.php
+│   ├── class-player-post-type.php
+│   └── class-match-post-type.php
+
+
+├── taxonomies/
+
+│   └── class-taxonomies.php
+
+
+└── admin/
+
+    ├── class-admin-menu.php
+    ├── class-admin-assets.php
+    └── class-admin-pages.php
+
+This replaces and upgrades your current:
+
+class-post-types.php
+class-taxonomies.php
+class-settings.php
+
+Next we'll build the WordPress data foundation.

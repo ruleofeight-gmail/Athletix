@@ -1,0 +1,389 @@
+Athletix 2.0 — Package 5A
+Professional Admin Framework
+Admin Menu + Dashboard Foundation
+
+We now build the WordPress administration layer.
+
+The structure:
+
+WordPress Admin
+
+        ↓
+
+Athletix Dashboard
+
+        ↓
+
+Settings
+Sports
+Teams
+Players
+Matches
+Reports
+
+Create:
+
+includes/admin/
+
+├── class-admin-menu.php
+├── class-admin-dashboard.php
+├── class-admin-settings.php
+├── class-admin-assets.php
+└── class-admin-notices.php
+File 37
+includes/admin/class-admin-menu.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Admin Menu
+ */
+class Athletix_Admin_Menu {
+
+
+    public static function init() {
+
+
+        add_action(
+            'admin_menu',
+            [
+                __CLASS__,
+                'register'
+            ]
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        add_menu_page(
+
+            'Athletix',
+
+            'Athletix',
+
+            'manage_options',
+
+            'athletix',
+
+            [
+
+                'Athletix_Admin_Dashboard',
+
+                'render'
+
+            ],
+
+            'dashicons-awards',
+
+            25
+
+        );
+
+
+
+
+        add_submenu_page(
+
+            'athletix',
+
+            'Settings',
+
+            'Settings',
+
+            'manage_options',
+
+            'athletix-settings',
+
+            [
+
+                'Athletix_Admin_Settings',
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+}
+File 38
+includes/admin/class-admin-dashboard.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Dashboard
+ */
+class Athletix_Admin_Dashboard {
+
+
+    public static function init() {
+
+    }
+
+
+
+
+
+    public static function render() {
+
+        ?>
+
+        <div class="wrap">
+
+            <h1>
+                Athletix Dashboard
+            </h1>
+
+
+            <p>
+                Welcome to Athletix 2.0.
+            </p>
+
+
+
+            <div class="card">
+
+                <h2>
+                    System Status
+                </h2>
+
+
+                <p>
+                    Version:
+                    <?php echo esc_html(
+                        ATHLETIX_VERSION
+                    ); ?>
+                </p>
+
+
+                <p>
+                    Framework:
+                    Active
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+        <?php
+
+    }
+
+
+}
+File 39
+includes/admin/class-admin-settings.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Settings Page
+ */
+class Athletix_Admin_Settings {
+
+
+    public static function init() {
+
+
+        add_action(
+            'admin_init',
+            [
+                __CLASS__,
+                'register'
+            ]
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        register_setting(
+
+            'athletix_settings',
+
+            'ax_active_sport'
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render() {
+
+
+        ?>
+
+        <div class="wrap">
+
+            <h1>
+                Athletix Settings
+            </h1>
+
+
+            <form method="post"
+                action="options.php">
+
+
+                <?php
+
+                settings_fields(
+                    'athletix_settings'
+                );
+
+
+                ?>
+
+
+                <table class="form-table">
+
+
+                    <tr>
+
+                        <th>
+                            Active Sport
+                        </th>
+
+
+                        <td>
+
+
+                            <select name="ax_active_sport">
+
+
+                                <option value="soccer">
+
+                                    Soccer
+
+                                </option>
+
+
+                                <option value="basketball">
+
+                                    Basketball
+
+                                </option>
+
+
+                            </select>
+
+
+                        </td>
+
+                    </tr>
+
+
+                </table>
+
+
+                <?php
+
+                submit_button();
+
+                ?>
+
+
+            </form>
+
+
+        </div>
+
+
+        <?php
+
+
+    }
+
+
+}
+Update class-plugin.php
+
+Add these modules:
+
+Athletix_Admin_Menu,
+
+Athletix_Admin_Dashboard,
+
+Athletix_Admin_Settings,
+Update class-loader.php
+
+Add:
+
+admin/class-admin-menu.php
+
+admin/class-admin-dashboard.php
+
+admin/class-admin-settings.php
+Package 5A Complete ✅
+
+Athletix now has:
+
+Admin
+
+├── Dashboard
+
+└── Settings
+
+      └── Active Sport
+Next: Package 5B
+
+We add:
+
+class-admin-assets.php
+
+class-admin-notices.php
+
+Then:
+
+Athletix admin CSS
+admin JavaScript
+setup notices
+version upgrade notices
+
+After that:
+
+Package 6 — Meta Box Framework
+
+We'll build:
+
+Team editor
+Player editor
+Match editor
+Statistics entry screens
+
+This will make the plugin usable by real league managers.

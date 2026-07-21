@@ -1,0 +1,299 @@
+Athletix 2.0 — Package 3A
+Sports Engine Foundation
+
+Now we begin the intelligence layer.
+
+This replaces the older:
+
+class-standings.php
+shortcode calculations
+scattered score logic
+
+with dedicated engines.
+
+The architecture:
+
+Match Saved
+     |
+     ↓
+Match Engine
+     |
+     ├── Standings Engine
+     |
+     ├── Statistics Engine
+     |
+     └── Ranking Engine
+
+Create:
+
+includes/engine/
+
+├── class-sport-engine.php
+├── class-match-engine.php
+├── class-standings-engine.php
+├── class-statistics-engine.php
+├── class-ranking-engine.php
+└── class-schedule-engine.php
+File 25
+includes/engine/class-sport-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Sport Engine
+ *
+ * Provides sport-specific rules.
+ */
+class Athletix_Sport_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+    /**
+     * Get active sport.
+     */
+    public static function active() {
+
+
+        return get_option(
+            'ax_active_sport',
+            'soccer'
+        );
+
+
+    }
+
+
+
+    /**
+     * Get sport rules.
+     */
+    public static function rules(
+        $sport = ''
+    ) {
+
+
+        if (
+            empty($sport)
+        ) {
+
+            $sport =
+                self::active();
+
+        }
+
+
+
+        $profile =
+            Athletix_Sport_Profiles::get(
+                $sport
+            );
+
+
+
+        return
+            $profile['rules']
+            ??
+            [
+
+                'win_pts' => 3,
+                'draw_pts' => 1,
+                'loss_pts' => 0
+
+            ];
+
+
+    }
+
+
+
+    /**
+     * Get metrics.
+     */
+    public static function metrics(
+        $sport = ''
+    ) {
+
+
+        if (
+            empty($sport)
+        ) {
+
+            $sport =
+                self::active();
+
+        }
+
+
+
+        $profile =
+            Athletix_Sport_Profiles::get(
+                $sport
+            );
+
+
+        return
+            $profile['metrics']
+            ??
+            [];
+
+
+    }
+
+
+}
+File 26
+includes/engine/class-match-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Match Engine
+ *
+ * Processes completed matches.
+ */
+class Athletix_Match_Engine {
+
+
+    public static function init() {
+
+
+        add_action(
+            'save_post_ax_match',
+            [
+                __CLASS__,
+                'process'
+            ],
+            20,
+            2
+        );
+
+
+    }
+
+
+
+
+    public static function process(
+        $post_id,
+        $post
+    ) {
+
+
+        if (
+            wp_is_post_revision(
+                $post_id
+            )
+        ) {
+
+            return;
+
+        }
+
+
+
+        $home =
+            get_post_meta(
+                $post_id,
+                '_athletix_home_team',
+                true
+            );
+
+
+
+        $away =
+            get_post_meta(
+                $post_id,
+                '_athletix_away_team',
+                true
+            );
+
+
+
+        $scores =
+            get_post_meta(
+                $post_id,
+                '_athletix_scores',
+                true
+            );
+
+
+
+        if (
+            ! $home ||
+            ! $away ||
+            ! is_array($scores)
+        ) {
+
+            return;
+
+        }
+
+
+
+        Athletix_Events::fire(
+            'match_processed',
+            [
+
+                'match_id' =>
+                    $post_id,
+
+                'home' =>
+                    $home,
+
+                'away' =>
+                    $away,
+
+                'scores' =>
+                    $scores
+
+            ]
+        );
+
+
+    }
+
+
+}
+Update class-plugin.php
+
+Add:
+
+Athletix_Sport_Engine,
+Athletix_Match_Engine,
+What this gives us
+
+Athletix now has:
+
+Match
+ |
+ ↓
+Match Engine
+ |
+ ↓
+Event System
+
+The match engine no longer directly modifies standings.
+
+That means:
+
+soccer can calculate one way
+basketball another way
+future sports can have their own rules
+
+without rewriting the system.
+
+Next continuation:

@@ -1,0 +1,444 @@
+Athletix 2.0 — Package 8B
+Frontend Display Framework
+League Tables + Match Cards
+
+We complete the public-facing display layer.
+
+New frontend components:
+
+League Table
+
+Match Display
+
+Create:
+
+includes/frontend/
+
+├── class-league-table.php
+└── class-match-display.php
+File 57
+class-league-table.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix League Table Display
+ */
+class Athletix_League_Table {
+
+
+    public static function render(
+        $atts
+    ) {
+
+
+        $atts =
+            shortcode_atts(
+
+                [
+
+                    'league'=>0
+
+                ],
+
+                $atts
+
+            );
+
+
+
+        $league =
+            absint(
+                $atts['league']
+            );
+
+
+
+        if (
+            ! $league
+        ) {
+
+            return '';
+
+        }
+
+
+
+        $repository =
+            Athletix_Registry::get(
+
+                'league.repository'
+
+            );
+
+
+
+        $teams =
+            $repository->teams(
+
+                $league
+
+            );
+
+
+
+        $table =
+            Athletix_Ranking_Engine::rank(
+
+                $teams
+
+            );
+
+
+
+        ob_start();
+
+
+        ?>
+
+
+        <table class="athletix-table">
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Team
+                    </th>
+
+                    <th>
+                        Played
+                    </th>
+
+                    <th>
+                        Points
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+            <?php foreach (
+                $table as $team_id => $stats
+            ) : ?>
+
+
+                <tr>
+
+
+                    <td>
+
+                        <?php echo esc_html(
+
+                            get_the_title(
+
+                                $team_id
+
+                            )
+
+                        ); ?>
+
+
+                    </td>
+
+
+                    <td>
+
+                        <?php echo esc_html(
+
+                            $stats['played']
+
+                        ); ?>
+
+
+                    </td>
+
+
+                    <td>
+
+                        <?php echo esc_html(
+
+                            $stats['points']
+
+                        ); ?>
+
+
+                    </td>
+
+
+                </tr>
+
+
+            <?php endforeach; ?>
+
+
+            </tbody>
+
+
+        </table>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+File 58
+class-match-display.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Match Display
+ */
+class Athletix_Match_Display {
+
+
+    public static function render(
+        $atts
+    ) {
+
+
+        $atts =
+            shortcode_atts(
+
+                [
+
+                    'id'=>0
+
+                ],
+
+                $atts
+
+            );
+
+
+
+        $match =
+            absint(
+
+                $atts['id']
+
+            );
+
+
+
+        if (
+            ! $match
+        ) {
+
+            return '';
+
+        }
+
+
+
+        $repo =
+            Athletix_Registry::get(
+
+                'match.repository'
+
+            );
+
+
+
+        $home =
+            $repo->home_team(
+
+                $match
+
+            );
+
+
+
+        $away =
+            $repo->away_team(
+
+                $match
+
+            );
+
+
+
+        $score =
+            $repo->score(
+
+                $match
+
+            );
+
+
+
+        ob_start();
+
+
+        ?>
+
+
+        <div class="athletix-match-card">
+
+
+            <div class="teams">
+
+
+                <strong>
+
+                    <?php echo esc_html(
+
+                        get_the_title(
+                            $home
+                        )
+
+                    ); ?>
+
+
+                </strong>
+
+
+                <span>
+
+                    <?php echo esc_html(
+
+                        $score['home']
+
+                    ); ?>
+
+
+                    -
+
+                    <?php echo esc_html(
+
+                        $score['away']
+
+                    ); ?>
+
+
+                </span>
+
+
+
+                <strong>
+
+                    <?php echo esc_html(
+
+                        get_the_title(
+                            $away
+                        )
+
+                    ); ?>
+
+
+                </strong>
+
+
+            </div>
+
+
+        </div>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+frontend/class-league-table.php
+
+frontend/class-match-display.php
+Update class-plugin.php
+
+Add:
+
+Athletix_League_Table,
+
+Athletix_Match_Display,
+Package 8 Complete ✅
+
+Athletix now has:
+
+Public Shortcodes
+[athletix_team]
+
+[athletix_player]
+
+[athletix_table]
+
+[athletix_match]
+Frontend Flow
+Fan Website
+
+ ↓
+
+Shortcode
+
+ ↓
+
+Frontend Component
+
+ ↓
+
+Repository
+
+ ↓
+
+Athletix Engine
+
+ ↓
+
+Database
+Current Athletix 2.0 Build Status
+✓ Core Framework
+
+✓ CPT System
+
+✓ Relationship Engine
+
+✓ Sports Engine
+
+✓ Match Processing
+
+✓ Standings
+
+✓ Rankings
+
+✓ Statistics
+
+✓ Repository Layer
+
+✓ Admin Framework
+
+✓ Meta Boxes
+
+✓ Match Center
+
+✓ REST API
+
+✓ Frontend Display

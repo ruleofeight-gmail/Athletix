@@ -1,0 +1,416 @@
+Athletix 2.0 — Package 12B
+Security & Permissions
+Audit Trail + Access Control
+
+Now we add enterprise-level accountability.
+
+The purpose:
+
+User Action
+
+(create match)
+(change score)
+(import players)
+(update roster)
+
+        ↓
+
+Access Check
+
+        ↓
+
+Audit Logger
+
+        ↓
+
+Activity History
+
+Create:
+
+includes/security/
+
+├── class-access-control.php
+└── class-audit-log.php
+File 82
+includes/security/class-access-control.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Access Control
+ */
+class Athletix_Access_Control {
+
+
+    public static function init() {
+
+
+        add_filter(
+
+            'map_meta_cap',
+
+            [
+
+                __CLASS__,
+
+                'filter'
+
+            ],
+
+            10,
+
+            4
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function filter(
+        $caps,
+        $cap,
+        $user_id,
+        $args
+    ) {
+
+
+        if (
+            $cap !== 'manage_athletix'
+        ) {
+
+            return $caps;
+
+        }
+
+
+
+        $user =
+            get_userdata(
+                $user_id
+            );
+
+
+
+        if(
+            ! $user
+        ) {
+
+            return [
+
+                'do_not_allow'
+
+            ];
+
+        }
+
+
+
+        if(
+            in_array(
+
+                'athletix_manager',
+
+                $user->roles
+
+            )
+        ) {
+
+
+            return [
+
+                'exist'
+
+            ];
+
+
+        }
+
+
+
+        return [
+
+            'do_not_allow'
+
+        ];
+
+
+    }
+
+
+}
+File 83
+includes/security/class-audit-log.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Audit Log
+ */
+class Athletix_Audit_Log {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'save_post',
+
+            [
+
+                __CLASS__,
+
+                'record'
+
+            ],
+
+            20,
+
+            3
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function record(
+        $post_id,
+        $post,
+        $update
+    ) {
+
+
+        if(
+            wp_is_post_revision(
+                $post_id
+            )
+        ) {
+
+            return;
+
+        }
+
+
+
+        if(
+            strpos(
+
+                $post->post_type,
+
+                'ax_'
+
+            ) !== 0
+
+        ) {
+
+            return;
+
+        }
+
+
+
+        self::write(
+
+            [
+
+                'user'=>
+
+                    get_current_user_id(),
+
+
+                'action'=>
+
+                    $update
+                    ?
+                    'updated'
+                    :
+                    'created',
+
+
+                'object'=>
+
+                    $post->post_type,
+
+
+                'id'=>
+
+                    $post_id
+
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function write(
+        $data
+    ) {
+
+
+        $logs =
+            get_option(
+
+                'athletix_audit_logs',
+
+                []
+
+            );
+
+
+
+        $logs[] = [
+
+            'time'=>
+                current_time(
+                    'mysql'
+                ),
+
+            'data'=>
+                $data
+
+        ];
+
+
+
+        update_option(
+
+            'athletix_audit_logs',
+
+            $logs
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function all() {
+
+
+        return get_option(
+
+            'athletix_audit_logs',
+
+            []
+
+        );
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+security/class-access-control.php
+
+security/class-audit-log.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Access_Control,
+
+Athletix_Audit_Log,
+Package 12B Complete ✅
+
+Athletix now has:
+
+Access Control
+Role
+
+ ↓
+
+Capability
+
+ ↓
+
+Permission Check
+
+ ↓
+
+Action Allowed
+Audit Logging
+
+Tracks:
+
+✓ Match changes
+
+✓ Player updates
+
+✓ Team edits
+
+✓ Imports
+
+✓ Administrative changes
+
+Example log:
+
+{
+ "time":"2026-07-20 15:30:00",
+ "user":12,
+ "action":"updated",
+ "object":"ax_match",
+ "id":455
+}
+Athletix 2.0 Platform Status
+CORE
+✓ Framework
+✓ Loader
+✓ Registry
+
+SPORTS ENGINE
+✓ Matches
+✓ Standings
+✓ Rankings
+✓ Statistics
+
+ADMIN
+✓ Dashboard
+✓ Tools
+✓ Reports
+✓ Automation
+
+FRONTEND
+✓ Profiles
+✓ Tables
+✓ Match Cards
+
+API
+✓ REST Layer
+
+OPERATIONS
+✓ Import/Export
+✓ Notifications
+
+SECURITY
+✓ Roles
+✓ Permissions
+✓ Audit Logs

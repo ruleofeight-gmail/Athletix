@@ -1,0 +1,227 @@
+Package 4C
+Repository Registration + Service Container Upgrade
+
+Now we connect the repositories into the framework.
+
+This finishes the data abstraction layer.
+
+Update File
+includes/core/class-registry.php
+
+Replace the existing file with:
+
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Service Registry
+ *
+ * Lightweight dependency container.
+ */
+class Athletix_Registry {
+
+
+    private static $items = [];
+
+
+
+
+    /**
+     * Initialize services.
+     */
+    public static function init() {
+
+
+        self::register_defaults();
+
+
+    }
+
+
+
+
+
+    /**
+     * Register default services.
+     */
+    private static function register_defaults() {
+
+
+        self::register(
+
+            'team.repository',
+
+            new Athletix_Team_Repository()
+
+        );
+
+
+        self::register(
+
+            'player.repository',
+
+            new Athletix_Player_Repository()
+
+        );
+
+
+        self::register(
+
+            'match.repository',
+
+            new Athletix_Match_Repository()
+
+        );
+
+
+        self::register(
+
+            'league.repository',
+
+            new Athletix_League_Repository()
+
+        );
+
+
+        self::register(
+
+            'season.repository',
+
+            new Athletix_Season_Repository()
+
+        );
+
+
+    }
+
+
+
+
+
+    /**
+     * Add service.
+     */
+    public static function register(
+        $name,
+        $service
+    ) {
+
+
+        self::$items[$name] =
+            $service;
+
+
+    }
+
+
+
+
+
+    /**
+     * Retrieve service.
+     */
+    public static function get(
+        $name
+    ) {
+
+
+        return
+            self::$items[$name]
+            ??
+            null;
+
+
+    }
+
+
+
+
+
+    /**
+     * Check service.
+     */
+    public static function has(
+        $name
+    ) {
+
+
+        return isset(
+            self::$items[$name]
+        );
+
+
+    }
+
+
+
+}
+Update Loader Dependencies
+
+Because repositories require their classes loaded first, update:
+
+includes/class-loader.php
+
+Add:
+
+'repositories/class-base-repository.php',
+
+'repositories/class-team-repository.php',
+
+'repositories/class-player-repository.php',
+
+'repositories/class-match-repository.php',
+
+'repositories/class-league-repository.php',
+
+'repositories/class-season-repository.php',
+
+before:
+
+core/class-registry.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Registry,
+
+(if not already present)
+
+The load order should now be:
+
+Core
+ |
+ ├── Registry
+ |
+Repositories
+ |
+ ├── Team Repository
+ ├── Player Repository
+ ├── Match Repository
+ ├── League Repository
+ └── Season Repository
+ |
+Engines
+Package 4 Complete ✅
+
+Athletix now has:
+
+Data Layer
+WordPress Database
+
+        ↑
+
+Repositories
+
+        ↑
+
+Engines
+
+        ↑
+
+Admin / API / Frontend
+
+This is the same pattern used in larger applications.

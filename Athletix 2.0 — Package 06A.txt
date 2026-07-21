@@ -1,0 +1,498 @@
+Athletix 2.0 — Package 6A (continued)
+Meta Box Framework
+Match + Season Administration
+
+Continue inside:
+
+includes/meta/
+File 45
+class-match-meta-box.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Match Meta Box
+ *
+ * Handles:
+ * - home team
+ * - away team
+ * - scores
+ * - match status
+ */
+class Athletix_Match_Meta_Box {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'athletix_register_meta_boxes',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+        add_action(
+
+            'save_post_ax_match',
+
+            [
+
+                __CLASS__,
+
+                'save'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        add_meta_box(
+
+            'athletix_match_details',
+
+            'Match Details',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ],
+
+            'ax_match',
+
+            'normal',
+
+            'high'
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render(
+        $post
+    ) {
+
+
+        $home =
+            get_post_meta(
+
+                $post->ID,
+
+                '_athletix_home_team',
+
+                true
+
+            );
+
+
+        $away =
+            get_post_meta(
+
+                $post->ID,
+
+                '_athletix_away_team',
+
+                true
+
+            );
+
+
+        $scores =
+            get_post_meta(
+
+                $post->ID,
+
+                '_athletix_scores',
+
+                true
+
+            );
+
+
+
+        $home_score =
+            $scores['home']
+            ??
+            0;
+
+
+
+        $away_score =
+            $scores['away']
+            ??
+            0;
+
+
+
+        ?>
+
+
+        <p>
+
+            <label>
+                Home Team ID
+            </label>
+
+            <input
+                type="number"
+                name="athletix_home_team"
+                value="<?php echo esc_attr($home); ?>"
+                class="widefat"
+            >
+
+        </p>
+
+
+
+        <p>
+
+            <label>
+                Away Team ID
+            </label>
+
+            <input
+                type="number"
+                name="athletix_away_team"
+                value="<?php echo esc_attr($away); ?>"
+                class="widefat"
+            >
+
+        </p>
+
+
+
+        <p>
+
+            <label>
+                Home Score
+            </label>
+
+
+            <input
+                type="number"
+                name="athletix_home_score"
+                value="<?php echo esc_attr($home_score); ?>"
+            >
+
+        </p>
+
+
+
+
+        <p>
+
+            <label>
+                Away Score
+            </label>
+
+
+            <input
+                type="number"
+                name="athletix_away_score"
+                value="<?php echo esc_attr($away_score); ?>"
+            >
+
+        </p>
+
+
+        <?php
+
+
+    }
+
+
+
+
+
+    public static function save(
+        $post_id
+    ) {
+
+
+        if (
+            isset(
+                $_POST['athletix_home_team']
+            )
+        ) {
+
+
+            update_post_meta(
+
+                $post_id,
+
+                '_athletix_home_team',
+
+                absint(
+
+                    $_POST['athletix_home_team']
+
+                )
+
+            );
+
+
+        }
+
+
+
+        if (
+            isset(
+                $_POST['athletix_away_team']
+            )
+        ) {
+
+
+            update_post_meta(
+
+                $post_id,
+
+                '_athletix_away_team',
+
+                absint(
+
+                    $_POST['athletix_away_team']
+
+                )
+
+            );
+
+
+        }
+
+
+
+        if (
+
+            isset(
+
+                $_POST['athletix_home_score'],
+
+                $_POST['athletix_away_score']
+
+            )
+
+        ) {
+
+
+            update_post_meta(
+
+                $post_id,
+
+                '_athletix_scores',
+
+                [
+
+                    'home' =>
+                        absint(
+
+                            $_POST['athletix_home_score']
+
+                        ),
+
+                    'away' =>
+                        absint(
+
+                            $_POST['athletix_away_score']
+
+                        )
+
+                ]
+
+            );
+
+
+        }
+
+
+    }
+
+
+}
+File 46
+class-season-meta-box.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Season Meta Box
+ */
+class Athletix_Season_Meta_Box {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'athletix_register_meta_boxes',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        add_meta_box(
+
+            'athletix_season_details',
+
+            'Season Details',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ],
+
+            'ax_season'
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render(
+        $post
+    ) {
+
+
+        $year =
+            get_post_meta(
+
+                $post->ID,
+
+                '_athletix_year',
+
+                true
+
+            );
+
+
+        ?>
+
+        <p>
+
+            <label>
+                Season Year
+            </label>
+
+
+            <input
+
+                type="number"
+
+                name="athletix_year"
+
+                value="<?php echo esc_attr($year); ?>"
+
+                class="widefat"
+
+            >
+
+        </p>
+
+
+        <?php
+
+
+    }
+
+
+}
+Update class-plugin.php
+
+Add:
+
+Athletix_Meta_Box_Manager,
+
+Athletix_Team_Meta_Box,
+
+Athletix_Player_Meta_Box,
+
+Athletix_Match_Meta_Box,
+
+Athletix_Season_Meta_Box,
+Update class-loader.php
+
+Add:
+
+meta/class-meta-box-manager.php
+
+meta/class-team-meta-box.php
+
+meta/class-player-meta-box.php
+
+meta/class-match-meta-box.php
+
+meta/class-season-meta-box.php
+Package 6A Complete ✅
+
+Athletix editors now support:
+
+Team
+Name
+Logo
+Location
+Player
+Name
+Position
+Stats (next)
+Match
+Home Team
+Away Team
+Score
+Season
+Year

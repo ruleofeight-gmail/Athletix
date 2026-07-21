@@ -1,0 +1,194 @@
+athletix/
+│
+├── athletix.php
+├── uninstall.php
+├── readme.txt
+│
+├── includes/
+│   │
+│   ├── class-loader.php
+│   ├── class-plugin.php
+│   ├── class-activator.php
+│   ├── class-deactivator.php
+│   │
+│   ├── core/
+│   │   ├── class-hooks.php
+│   │   ├── class-events.php
+│   │   ├── class-cache.php
+│   │   ├── class-config.php
+│   │   ├── class-logger.php
+│   │   ├── class-validator.php
+│   │   └── class-registry.php
+│   │
+│   ├── admin/
+│   │   ├── class-admin-menu.php
+│   │   ├── class-admin-assets.php
+│   │   └── class-admin-pages.php
+│   │
+│   ├── engine/
+│   │   ├── class-sport-engine.php
+│   │   ├── class-league-engine.php
+│   │   ├── class-season-engine.php
+│   │   ├── class-match-engine.php
+│   │   ├── class-standings-engine.php
+│   │   └── class-statistics-engine.php
+│   │
+│   ├── repositories/
+│   │   ├── class-team-repository.php
+│   │   ├── class-player-repository.php
+│   │   ├── class-match-repository.php
+│   │   └── class-league-repository.php
+│   │
+│   ├── services/
+│   │   ├── class-import-service.php
+│   │   ├── class-export-service.php
+│   │   └── class-ranking-service.php
+│   │
+│   ├── api/
+│   │   ├── class-rest.php
+│   │   ├── class-rest-teams.php
+│   │   ├── class-rest-players.php
+│   │   └── class-rest-matches.php
+│   │
+│   ├── post-types/
+│   │   ├── class-team-post-type.php
+│   │   ├── class-player-post-type.php
+│   │   ├── class-match-post-type.php
+│   │   └── class-league-post-type.php
+│   │
+│   └── elementor/
+│       ├── class-elementor.php
+│       └── widgets/
+│
+├── assets/
+│   ├── css/
+│   ├── js/
+│   └── images/
+│
+├── templates/
+│   ├── team/
+│   ├── player/
+│   ├── league/
+│   └── match/
+│
+└── languages/
+
+
+Foundation + Core Runtime:
+
+athletix/
+│
+├── athletix.php
+├── uninstall.php
+│
+└── includes/
+    │
+    ├── class-loader.php
+    ├── class-plugin.php
+    ├── class-activator.php
+    ├── class-deactivator.php
+    │
+    └── core/
+        ├── class-hooks.php
+        ├── class-events.php
+        ├── class-config.php
+        ├── class-registry.php
+        ├── class-cache.php
+        ├── class-logger.php
+        └── class-validator.php
+
+WordPress Integration Layer:
+
+includes/
+
+admin/
+    class-admin-menu.php
+    class-admin-assets.php
+    class-admin-pages.php
+
+post-types/
+    class-league-post-type.php
+    class-season-post-type.php
+    class-team-post-type.php
+    class-player-post-type.php
+    class-match-post-type.php
+
+taxonomies/
+    class-taxonomies.php
+
+Sports Engine:
+
+engine/
+
+class-sport-engine.php
+class-rule-engine.php
+class-match-engine.php
+class-standings-engine.php
+class-statistics-engine.php
+class-ranking-engine.php
+class-schedule-engine.php
+
+Data Layer:
+
+repositories/
+
+Team Repository
+Player Repository
+Match Repository
+League Repository
+Season Repository
+
+
+Admin Experience:
+
+professional settings
+sport profiles
+metric builder
+relationship selectors
+match entry interface
+statistics panels
+
+
+API + Frontend:
+
+	REST:
+	/athletix/v1/teams
+	/athletix/v1/players
+	/athletix/v1/matches
+	/athletix/v1/standings
+
+templates/
+
+team/
+player/
+league/
+season/
+match/
+
+Elementor:
+
+Team Profile
+Player Profile
+League Table
+Match Card
+Schedule
+Statistics
+
+Final Production Layer:
+
+migration system
+uninstall cleanup
+logging tools
+diagnostics
+developer hooks
+documentation
+
+Finally a full zip file called Athletix-1.0.0.zip
+
+Installable directly:
+
+WordPress Admin
+→ Plugins
+→ Add New
+→ Upload Plugin
+→ Athletix-2.0.0.zip

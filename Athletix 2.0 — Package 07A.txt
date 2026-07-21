@@ -1,0 +1,403 @@
+Athletix 2.0 — Package 7A
+REST API Foundation
+External Data Access Layer
+
+We now expose Athletix data through WordPress REST.
+
+Architecture:
+
+Mobile App
+Website
+Dashboard
+Elementor
+
+        ↓
+
+Athletix REST API
+
+        ↓
+
+Repositories
+
+        ↓
+
+Athletix Database
+
+Create:
+
+includes/api/
+
+├── class-rest-api.php
+├── class-rest-teams.php
+├── class-rest-players.php
+├── class-rest-matches.php
+└── class-rest-standings.php
+File 49
+includes/api/class-rest-api.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix REST API Bootstrap
+ */
+class Athletix_REST_API {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'rest_api_init',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        do_action(
+            'athletix_register_rest_routes'
+        );
+
+
+    }
+
+
+}
+File 50
+includes/api/class-rest-teams.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Team REST Controller
+ */
+class Athletix_REST_Teams {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'athletix_register_rest_routes',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        register_rest_route(
+
+            'athletix/v1',
+
+            '/teams',
+
+            [
+
+                'methods' =>
+                    'GET',
+
+
+                'callback' =>
+                    [
+
+                        __CLASS__,
+
+                        'index'
+
+                    ],
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function index() {
+
+
+        $repository =
+            Athletix_Registry::get(
+
+                'team.repository'
+
+            );
+
+
+
+        $teams =
+            $repository->all();
+
+
+
+        $results = [];
+
+
+
+        foreach (
+            $teams as $team
+        ) {
+
+
+            $results[] = [
+
+                'id' =>
+                    $team->ID,
+
+
+                'name' =>
+                    $team->post_title,
+
+
+                'standings' =>
+                    $repository->standings(
+
+                        $team->ID
+
+                    )
+
+            ];
+
+
+        }
+
+
+
+        return $results;
+
+
+    }
+
+
+}
+File 51
+class-rest-players.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Player REST Controller
+ */
+class Athletix_REST_Players {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'athletix_register_rest_routes',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        register_rest_route(
+
+            'athletix/v1',
+
+            '/players',
+
+            [
+
+                'methods' =>
+                    'GET',
+
+
+                'callback' =>
+                    [
+
+                        __CLASS__,
+
+                        'index'
+
+                    ]
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function index() {
+
+
+        $repository =
+            Athletix_Registry::get(
+
+                'player.repository'
+
+            );
+
+
+
+        $players =
+            $repository->all();
+
+
+
+        $results = [];
+
+
+
+        foreach (
+            $players as $player
+        ) {
+
+
+            $results[] = [
+
+                'id' =>
+                    $player->ID,
+
+
+                'name' =>
+                    $player->post_title,
+
+
+                'stats' =>
+                    $repository->statistics(
+
+                        $player->ID
+
+                    )
+
+            ];
+
+
+        }
+
+
+
+        return $results;
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+api/class-rest-api.php
+
+api/class-rest-teams.php
+
+api/class-rest-players.php
+Update Plugin Modules
+
+Add:
+
+Athletix_REST_API,
+
+Athletix_REST_Teams,
+
+Athletix_REST_Players,
+Package 7A Complete ✅
+
+Available endpoints:
+
+GET
+
+/wp-json/athletix/v1/teams
+
+
+/wp-json/athletix/v1/players
+
+Example response:
+
+[
+ {
+   "id":12,
+   "name":"Tigers",
+   "standings":{
+      "wins":8,
+      "points":24
+   }
+ }
+]
+Next: Package 7B
+
+Add:
+
+class-rest-matches.php
+
+class-rest-standings.php
+
+Endpoints:
+
+GET /matches
+
+GET /standings/{league}
+
+Then Athletix will have a complete public data API.

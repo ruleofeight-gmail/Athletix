@@ -1,0 +1,407 @@
+Athletix 2.0 — Package 2C
+Taxonomies + Sport Profile System
+
+This package adds the flexible sports configuration layer.
+
+The goal is to move from hard-coded sports logic into a configurable engine.
+
+Example:
+
+Soccer
+ ├── Metrics
+ │    ├── Goals
+ │    ├── Assists
+ │    ├── Yellow Cards
+ │    └── Red Cards
+ │
+ ├── Periods
+ │    ├── First Half
+ │    └── Second Half
+ │
+ └── Rules
+      ├── Win = 3
+      ├── Draw = 1
+      └── Loss = 0
+
+
+Basketball
+ ├── Metrics
+ │    ├── Points
+ │    ├── Rebounds
+ │    ├── Assists
+ │    └── Steals
+ │
+ ├── Periods
+ │    ├── Q1
+ │    ├── Q2
+ │    ├── Q3
+ │    └── Q4
+
+Create:
+
+includes/
+│
+├── taxonomies/
+│   └── class-taxonomies.php
+│
+└── sports/
+    └── class-sport-profiles.php
+File 23
+includes/taxonomies/class-taxonomies.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Taxonomies
+ */
+class Athletix_Taxonomies {
+
+
+    public static function init() {
+
+
+        add_action(
+            'init',
+            [
+                __CLASS__,
+                'register'
+            ]
+        );
+
+
+    }
+
+
+
+    public static function register() {
+
+
+        /*
+         * Sport Type
+         */
+        register_taxonomy(
+
+            'ax_sport',
+
+            [
+
+                'ax_team',
+                'ax_player',
+                'ax_match',
+                'ax_league'
+
+            ],
+
+            [
+
+                'labels' => [
+
+                    'name' =>
+                        'Sports',
+
+                    'singular_name' =>
+                        'Sport'
+
+                ],
+
+
+                'public' =>
+                    true,
+
+
+                'show_in_rest' =>
+                    true,
+
+
+                'hierarchical' =>
+                    true,
+
+
+                'rewrite' => [
+
+                    'slug' =>
+                        'sports'
+
+                ]
+
+            ]
+
+        );
+
+
+
+
+        /*
+         * Competition Type
+         */
+        register_taxonomy(
+
+            'ax_competition',
+
+            [
+
+                'ax_league',
+                'ax_match'
+
+            ],
+
+            [
+
+                'labels' => [
+
+                    'name' =>
+                        'Competitions',
+
+                    'singular_name' =>
+                        'Competition'
+
+                ],
+
+
+                'public' =>
+                    true,
+
+
+                'show_in_rest' =>
+                    true,
+
+
+            ]
+
+        );
+
+
+    }
+
+
+}
+File 24
+includes/sports/class-sport-profiles.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Sport Profiles
+ *
+ * Defines sport behavior.
+ */
+class Athletix_Sport_Profiles {
+
+
+    public static function init() {
+
+
+        add_action(
+            'init',
+            [
+                __CLASS__,
+                'install_defaults'
+            ],
+            20
+        );
+
+
+    }
+
+
+
+
+
+    public static function install_defaults() {
+
+
+        if (
+            get_option(
+                'ax_sport_profiles'
+            )
+        ) {
+
+            return;
+
+        }
+
+
+
+        update_option(
+
+            'ax_sport_profiles',
+
+            [
+
+                'soccer' => [
+
+                    'name' =>
+                        'Soccer',
+
+
+                    'metrics' => [
+
+                        'goals',
+                        'assists',
+                        'yellow_cards',
+                        'red_cards'
+
+                    ],
+
+
+                    'periods' => [
+
+                        'first_half',
+                        'second_half'
+
+                    ],
+
+
+                    'rules' => [
+
+                        'win_pts' =>
+                            3,
+
+                        'draw_pts' =>
+                            1,
+
+                        'loss_pts' =>
+                            0
+
+                    ]
+
+                ],
+
+
+
+
+                'basketball' => [
+
+                    'name' =>
+                        'Basketball',
+
+
+                    'metrics' => [
+
+                        'points',
+                        'rebounds',
+                        'assists',
+                        'steals'
+
+                    ],
+
+
+                    'periods' => [
+
+                        'q1',
+                        'q2',
+                        'q3',
+                        'q4'
+
+                    ],
+
+
+                    'rules' => [
+
+                        'win_pts' =>
+                            2,
+
+                        'draw_pts' =>
+                            0,
+
+                        'loss_pts' =>
+                            0
+
+                    ]
+
+                ]
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function get(
+        $sport
+    ) {
+
+
+        $profiles =
+            get_option(
+                'ax_sport_profiles',
+                []
+            );
+
+
+        return
+            $profiles[$sport]
+            ??
+            null;
+
+
+    }
+
+
+
+
+
+    public static function all() {
+
+
+        return get_option(
+            'ax_sport_profiles',
+            []
+        );
+
+
+    }
+
+
+
+}
+Update class-plugin.php
+
+Add:
+
+Athletix_Taxonomies,
+Athletix_Sport_Profiles,
+
+to the modules list.
+
+Package 2C Complete ✅
+
+Athletix now has:
+
+Content Model
+League
+Season
+Team
+Player
+Match
+Relationships
+League → Season
+
+Season → Teams
+
+Team → Players
+
+Match → Teams
+Sports Configuration
+Soccer
+Basketball
+Future Sports
+
+with:
+
+metrics
+periods
+scoring rules

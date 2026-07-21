@@ -1,0 +1,468 @@
+Athletix 2.0 — Package 10A
+Reporting & Analytics Engine
+Foundation Layer
+
+We now add the reporting system.
+
+The purpose:
+
+Athletix Data
+
+     ↓
+
+Report Engine
+
+     ↓
+
+Analytics
+
+     ↓
+
+Admin Reports
+Public Dashboards
+Exports
+
+Create:
+
+includes/reports/
+
+├── class-report-engine.php
+├── class-team-reports.php
+├── class-player-reports.php
+├── class-league-reports.php
+└── class-export-reports.php
+File 64
+includes/reports/class-report-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Report Engine
+ *
+ * Central reporting service.
+ */
+class Athletix_Report_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    /**
+     * Generate report.
+     */
+    public static function generate(
+        $type,
+        $args = []
+    ) {
+
+
+        switch(
+            $type
+        ) {
+
+
+            case 'team':
+
+                return Athletix_Team_Reports::generate(
+                    $args
+                );
+
+
+
+            case 'player':
+
+                return Athletix_Player_Reports::generate(
+                    $args
+                );
+
+
+
+            case 'league':
+
+                return Athletix_League_Reports::generate(
+                    $args
+                );
+
+
+        }
+
+
+
+        return [];
+
+    }
+
+
+}
+File 65
+class-team-reports.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Team Reports
+ */
+class Athletix_Team_Reports {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function generate(
+        $args
+    ) {
+
+
+        $team =
+            absint(
+
+                $args['team']
+                ??
+                0
+
+            );
+
+
+
+        if(
+            ! $team
+        ) {
+
+            return [];
+
+        }
+
+
+
+        $repository =
+            Athletix_Registry::get(
+
+                'team.repository'
+
+            );
+
+
+
+        return [
+
+            'team' =>
+                get_the_title(
+                    $team
+                ),
+
+
+            'standings' =>
+                $repository->standings(
+                    $team
+                )
+
+
+        ];
+
+
+    }
+
+
+}
+File 66
+class-player-reports.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Player Reports
+ */
+class Athletix_Player_Reports {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function generate(
+        $args
+    ) {
+
+
+        $player =
+            absint(
+
+                $args['player']
+                ??
+                0
+
+            );
+
+
+
+        if(
+            ! $player
+        ) {
+
+            return [];
+
+        }
+
+
+
+        $repository =
+            Athletix_Registry::get(
+
+                'player.repository'
+
+            );
+
+
+
+        return [
+
+            'player' =>
+                get_the_title(
+                    $player
+                ),
+
+
+            'statistics' =>
+                $repository->statistics(
+                    $player
+                )
+
+        ];
+
+
+    }
+
+
+}
+File 67
+class-league-reports.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * League Reports
+ */
+class Athletix_League_Reports {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function generate(
+        $args
+    ) {
+
+
+        $league =
+            absint(
+
+                $args['league']
+                ??
+                0
+
+            );
+
+
+
+        if(
+            ! $league
+        ) {
+
+            return [];
+
+        }
+
+
+
+        $repository =
+            Athletix_Registry::get(
+
+                'league.repository'
+
+            );
+
+
+
+        $teams =
+            $repository->teams(
+                $league
+            );
+
+
+
+        return [
+
+            'league' =>
+                get_the_title(
+                    $league
+                ),
+
+
+            'standings' =>
+                Athletix_Ranking_Engine::rank(
+                    $teams
+                )
+
+        ];
+
+
+    }
+
+
+}
+File 68
+class-export-reports.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Report Exporter
+ */
+class Athletix_Export_Reports {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function json(
+        $data
+    ) {
+
+
+        return wp_json_encode(
+
+            $data,
+
+            JSON_PRETTY_PRINT
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function csv(
+        $data
+    ) {
+
+
+        return $data;
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+reports/class-report-engine.php
+
+reports/class-team-reports.php
+
+reports/class-player-reports.php
+
+reports/class-league-reports.php
+
+reports/class-export-reports.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Report_Engine,
+
+Athletix_Team_Reports,
+
+Athletix_Player_Reports,
+
+Athletix_League_Reports,
+
+Athletix_Export_Reports,
+Package 10A Complete ✅
+
+Athletix now has reporting foundations:
+
+Reports
+
+├── Team Performance
+
+├── Player Statistics
+
+├── League Summary
+
+└── Export Layer
+Next: Package 10B
+
+We add the actual admin reporting interface:
+
+Admin Reports
+
+├── League Overview
+├── Team Analytics
+├── Player Leaders
+├── Season Summary
+└── Export Buttons
+
+After that:
+
+Package 11 — Notifications & Automation Engine
+
+For:
+
+match reminders
+season events
+automated reports
+admin alerts.

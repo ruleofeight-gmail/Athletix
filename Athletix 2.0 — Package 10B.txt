@@ -1,0 +1,442 @@
+Athletix 2.0 — Package 11A
+Notifications & Automation Engine
+Event Framework Foundation
+
+We now add the automation layer.
+
+This allows Athletix to react to events:
+
+Event Happens
+
+(match created)
+(score entered)
+(season starts)
+(report generated)
+
+        ↓
+
+Automation Engine
+
+        ↓
+
+Actions
+
+(email)
+(notification)
+(reminder)
+
+Create:
+
+includes/automation/
+
+├── class-event-scheduler.php
+├── class-notification-engine.php
+├── class-email-notifications.php
+├── class-reminder-engine.php
+└── class-automation-rules.php
+File 71
+includes/automation/class-event-scheduler.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Event Scheduler
+ *
+ * WordPress cron integration.
+ */
+class Athletix_Event_Scheduler {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'athletix_daily_event_check',
+
+            [
+
+                __CLASS__,
+
+                'run'
+
+            ]
+
+        );
+
+
+        if (
+            ! wp_next_scheduled(
+                'athletix_daily_event_check'
+            )
+        ) {
+
+
+            wp_schedule_event(
+
+                time(),
+
+                'daily',
+
+                'athletix_daily_event_check'
+
+            );
+
+
+        }
+
+
+    }
+
+
+
+
+
+    public static function run() {
+
+
+        Athletix_Reminder_Engine::process();
+
+
+    }
+
+
+}
+File 72
+class-notification-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Notification Engine
+ */
+class Athletix_Notification_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function send(
+        $type,
+        $data = []
+    ) {
+
+
+        switch(
+            $type
+        ) {
+
+
+            case 'email':
+
+                return Athletix_Email_Notifications::send(
+
+                    $data
+
+                );
+
+
+        }
+
+
+
+        return false;
+
+
+    }
+
+
+}
+File 73
+class-email-notifications.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Email Notifications
+ */
+class Athletix_Email_Notifications {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function send(
+        $data
+    ) {
+
+
+        if(
+            empty(
+                $data['email']
+            )
+        ) {
+
+            return false;
+
+        }
+
+
+
+        return wp_mail(
+
+            $data['email'],
+
+            $data['subject']
+            ??
+            'Athletix Notification',
+
+            $data['message']
+            ??
+            ''
+
+        );
+
+
+    }
+
+
+}
+File 74
+class-reminder-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Reminder Engine
+ */
+class Athletix_Reminder_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function process() {
+
+
+        $matches =
+            get_posts(
+
+                [
+
+                    'post_type'=>
+                        'ax_match',
+
+                    'posts_per_page'=>
+                        -1,
+
+                    'meta_query'=>[
+
+                        [
+
+                            'key'=>
+                                '_athletix_match_status',
+
+                            'value'=>
+                                'scheduled'
+
+                        ]
+
+                    ]
+
+                ]
+
+            );
+
+
+
+        foreach(
+            $matches as $match
+        ) {
+
+
+            do_action(
+
+                'athletix_match_reminder',
+
+                $match->ID
+
+            );
+
+
+        }
+
+
+    }
+
+
+}
+File 75
+class-automation-rules.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Automation Rules
+ */
+class Athletix_Automation_Rules {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'athletix_match_reminder',
+
+            [
+
+                __CLASS__,
+
+                'match_reminder'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function match_reminder(
+        $match_id
+    ) {
+
+
+        Athletix_Notification_Engine::send(
+
+            'email',
+
+            [
+
+                'email'=>
+                    get_option(
+                        'admin_email'
+                    ),
+
+
+                'subject'=>
+                    'Upcoming Athletix Match',
+
+
+                'message'=>
+                    'Match #' .
+                    $match_id .
+                    ' is scheduled.'
+
+            ]
+
+        );
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+automation/class-event-scheduler.php
+
+automation/class-notification-engine.php
+
+automation/class-email-notifications.php
+
+automation/class-reminder-engine.php
+
+automation/class-automation-rules.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Event_Scheduler,
+
+Athletix_Notification_Engine,
+
+Athletix_Email_Notifications,
+
+Athletix_Reminder_Engine,
+
+Athletix_Automation_Rules,
+Package 11A Complete ✅
+
+Athletix now has:
+
+AUTOMATION ENGINE
+
+Cron Scheduler
+
+      ↓
+
+Reminder Processor
+
+      ↓
+
+Notification Engine
+
+      ↓
+
+Email Alerts
+Next: Package 11B
+
+We add:
+
+admin automation settings
+notification templates
+configurable rules
+SMS/push-ready architecture
+
+New files:
+
+includes/admin/
+
+class-admin-automation.php
+
+includes/automation/
+
+class-template-engine.php
+class-rule-manager.php
+
+This moves Athletix from fixed automation into configurable workflows.

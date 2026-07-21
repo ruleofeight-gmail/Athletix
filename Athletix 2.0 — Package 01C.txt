@@ -1,0 +1,275 @@
+Athletix 2.0 — Package 1C (continued)
+Core Framework Layer
+
+Install the remaining two core classes.
+
+File 11
+includes/core/class-logger.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Logger
+ *
+ * Lightweight internal logging system.
+ *
+ * Stores framework events for debugging
+ * and diagnostics.
+ */
+class Athletix_Logger {
+
+
+    /**
+     * Initialize logger.
+     */
+    public static function init() {
+
+    }
+
+
+
+    /**
+     * Add log entry.
+     *
+     * @param string $level
+     * @param string $message
+     * @param array  $context
+     */
+    public static function log(
+        $level,
+        $message,
+        $context = []
+    ) {
+
+
+        $logs = get_option(
+            'athletix_logs',
+            []
+        );
+
+
+        $logs[] = [
+
+            'time' =>
+                current_time(
+                    'mysql'
+                ),
+
+            'level' =>
+                sanitize_text_field(
+                    $level
+                ),
+
+            'message' =>
+                sanitize_text_field(
+                    $message
+                ),
+
+            'context' =>
+                $context
+
+        ];
+
+
+
+        /*
+         * Keep log size controlled.
+         */
+        if (
+            count($logs) > 250
+        ) {
+
+            $logs =
+                array_slice(
+                    $logs,
+                    -250
+                );
+
+        }
+
+
+
+        update_option(
+            'athletix_logs',
+            $logs
+        );
+
+
+    }
+
+
+
+    /**
+     * Information log.
+     */
+    public static function info(
+        $message,
+        $context = []
+    ) {
+
+
+        self::log(
+            'info',
+            $message,
+            $context
+        );
+
+
+    }
+
+
+
+    /**
+     * Error log.
+     */
+    public static function error(
+        $message,
+        $context = []
+    ) {
+
+
+        self::log(
+            'error',
+            $message,
+            $context
+        );
+
+
+    }
+
+
+
+}
+File 12
+includes/core/class-validator.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Validator
+ *
+ * Common validation utilities.
+ */
+class Athletix_Validator {
+
+
+    /**
+     * Initialize.
+     */
+    public static function init() {
+
+    }
+
+
+
+    /**
+     * Check required value.
+     */
+    public static function required(
+        $value
+    ) {
+
+
+        return ! empty(
+            $value
+        );
+
+
+    }
+
+
+
+    /**
+     * Validate post ID.
+     */
+    public static function post_id(
+        $id
+    ) {
+
+
+        return absint(
+            $id
+        ) > 0;
+
+
+    }
+
+
+
+    /**
+     * Validate array.
+     */
+    public static function array(
+        $value
+    ) {
+
+
+        return is_array(
+            $value
+        );
+
+
+    }
+
+
+
+    /**
+     * Sanitize text.
+     */
+    public static function text(
+        $value
+    ) {
+
+
+        return sanitize_text_field(
+            $value
+        );
+
+
+    }
+
+
+
+}
+Package 1 Complete ✅
+
+Your current Athletix 2.0 foundation now looks like:
+
+athletix/
+
+├── athletix.php
+
+└── includes/
+
+    ├── class-loader.php
+    ├── class-plugin.php
+    ├── class-activator.php
+    ├── class-deactivator.php
+
+    └── core/
+
+        ├── class-hooks.php
+        ├── class-events.php
+        ├── class-config.php
+        ├── class-registry.php
+        ├── class-cache.php
+        ├── class-logger.php
+        └── class-validator.php
+Phase 1 test
+
+Activate the plugin now.
+
+Expected:
+
+✅ Plugin activates
+✅ No missing class errors
+✅ No missing file errors
+✅ No fatal errors

@@ -1,0 +1,231 @@
+Athletix 2.0 — Package 1B
+Application Bootstrap Classes
+
+Install these three files.
+
+After these are installed, Phase 1 Foundation will boot cleanly.
+
+File 3
+includes/class-plugin.php
+
+Location:
+
+athletix/includes/class-plugin.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Plugin Core
+ *
+ * Main application controller.
+ */
+class Athletix_Plugin {
+
+
+    /**
+     * Boot application.
+     */
+    public static function boot() {
+
+
+        /*
+         * Load core services
+         */
+        self::load_core();
+
+
+
+        /*
+         * Fire framework event
+         */
+        do_action(
+            'athletix_loaded'
+        );
+
+
+    }
+
+
+
+
+
+    /**
+     * Load framework services.
+     */
+    private static function load_core() {
+
+
+        $services = [
+
+            'Athletix_Hooks',
+            'Athletix_Events',
+            'Athletix_Config',
+            'Athletix_Registry',
+            'Athletix_Cache',
+            'Athletix_Logger',
+            'Athletix_Validator',
+
+        ];
+
+
+
+        foreach (
+            $services as $service
+        ) {
+
+
+            if (
+                class_exists(
+                    $service
+                )
+            ) {
+
+
+                if (
+                    method_exists(
+                        $service,
+                        'init'
+                    )
+                ) {
+
+                    $service::init();
+
+                }
+
+
+            }
+
+
+        }
+
+
+    }
+
+
+
+}
+File 4
+includes/class-activator.php
+
+Location:
+
+athletix/includes/class-activator.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Activation Handler
+ */
+class Athletix_Activator {
+
+
+    /**
+     * Run activation tasks.
+     */
+    public static function activate() {
+
+
+        /*
+         * Store plugin version
+         */
+        update_option(
+            'athletix_version',
+            ATHLETIX_VERSION
+        );
+
+
+
+        /*
+         * Framework status
+         */
+        update_option(
+            'athletix_installed',
+            time()
+        );
+
+
+
+        /*
+         * Prepare rewrite rules
+         */
+        flush_rewrite_rules();
+
+
+    }
+
+
+}
+File 5
+includes/class-deactivator.php
+
+Location:
+
+athletix/includes/class-deactivator.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Deactivation Handler
+ */
+class Athletix_Deactivator {
+
+
+    /**
+     * Run deactivation tasks.
+     */
+    public static function deactivate() {
+
+
+        /*
+         * Flush rewrite rules.
+         *
+         * CPT modules will hook here later.
+         */
+        flush_rewrite_rules();
+
+
+    }
+
+
+}
+Phase 1 Foundation Status
+
+Your plugin should now have:
+
+athletix/
+
+├── athletix.php
+
+└── includes/
+
+    ├── class-loader.php
+    ├── class-plugin.php
+    ├── class-activator.php
+    └── class-deactivator.php
+Test now
+
+Go to:
+
+WordPress Admin
+→ Plugins
+→ Athletix
+→ Activate
+
+Expected:
+
+✅ No fatal errors
+✅ No missing class errors
+✅ Plugin activates
+✅ athletix_version option created

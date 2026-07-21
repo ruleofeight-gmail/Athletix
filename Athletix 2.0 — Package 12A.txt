@@ -1,0 +1,367 @@
+Athletix 2.0 — Package 12A
+User Roles & Permissions System
+Organization Access Layer
+
+We now add user management controls.
+
+The goal:
+
+WordPress User
+
+        ↓
+
+Athletix Role
+
+        ↓
+
+Capabilities
+
+        ↓
+
+Allowed Actions
+
+Example:
+
+League Manager
+ ├── Manage Teams
+ ├── Manage Players
+ ├── Publish Matches
+ └── View Reports
+
+
+Coach
+ ├── View Players
+ ├── Submit Stats
+ └── View Matches
+
+
+Statistician
+ ├── Enter Results
+ └── Manage Statistics
+
+Create:
+
+includes/security/
+
+├── class-roles.php
+├── class-capabilities.php
+└── class-permissions.php
+File 79
+includes/security/class-roles.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Roles
+ */
+class Athletix_Roles {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'init',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        add_role(
+
+            'athletix_manager',
+
+            'Athletix League Manager',
+
+            [
+
+                'read'=>true,
+
+                'manage_athletix'=>true,
+
+                'edit_athletix'=>true,
+
+                'publish_athletix'=>true
+
+            ]
+
+        );
+
+
+
+        add_role(
+
+            'athletix_coach',
+
+            'Athletix Coach',
+
+            [
+
+                'read'=>true,
+
+                'view_players'=>true,
+
+                'submit_statistics'=>true
+
+            ]
+
+        );
+
+
+
+        add_role(
+
+            'athletix_statistician',
+
+            'Athletix Statistician',
+
+            [
+
+                'read'=>true,
+
+                'edit_statistics'=>true,
+
+                'publish_statistics'=>true
+
+            ]
+
+        );
+
+
+    }
+
+
+}
+File 80
+class-capabilities.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Capabilities
+ */
+class Athletix_Capabilities {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'admin_init',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        $roles = [
+
+            'administrator',
+
+            'athletix_manager'
+
+        ];
+
+
+
+        foreach(
+            $roles as $role_name
+        ) {
+
+
+            $role =
+                get_role(
+                    $role_name
+                );
+
+
+
+            if(
+                $role
+            ) {
+
+
+                $role->add_cap(
+
+                    'manage_athletix'
+
+                );
+
+
+                $role->add_cap(
+
+                    'edit_athletix'
+
+                );
+
+
+            }
+
+
+        }
+
+
+    }
+
+
+}
+File 81
+class-permissions.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Permission Checker
+ */
+class Athletix_Permissions {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function can_manage() {
+
+
+        return current_user_can(
+
+            'manage_athletix'
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function can_edit_stats() {
+
+
+        return current_user_can(
+
+            'edit_statistics'
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function can_view_players() {
+
+
+        return current_user_can(
+
+            'view_players'
+
+        );
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+security/class-roles.php
+
+security/class-capabilities.php
+
+security/class-permissions.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Roles,
+
+Athletix_Capabilities,
+
+Athletix_Permissions,
+Package 12A Complete ✅
+
+Athletix now supports:
+
+USER MANAGEMENT
+
+Administrator
+
+    ↓
+
+League Manager
+
+    ↓
+
+Coach
+
+    ↓
+
+Statistician
+
+Security Foundation Added
+
+Future modules can now check:
+
+Athletix_Permissions::can_manage();
+
+or:
+
+Athletix_Permissions::can_edit_stats();
+
+instead of hard-coding WordPress roles.

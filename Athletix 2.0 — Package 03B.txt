@@ -1,0 +1,417 @@
+Athletix 2.0 — Package 3B
+Standings + Statistics Engine
+
+Now we add the systems that actually calculate league data.
+
+The flow becomes:
+
+Match Completed
+
+        ↓
+
+Match Engine
+
+        ↓
+
+Event:
+match_processed
+
+        ↓
+
+Standings Engine
+        |
+        └── League Table
+
+Statistics Engine
+        |
+        └── Player / Team Stats
+
+Create:
+
+includes/engine/
+
+├── class-standings-engine.php
+└── class-statistics-engine.php
+File 27
+includes/engine/class-standings-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Standings Engine
+ *
+ * Calculates league tables.
+ */
+class Athletix_Standings_Engine {
+
+
+    public static function init() {
+
+
+        Athletix_Events::listen(
+            'match_processed',
+            [
+                __CLASS__,
+                'update'
+            ]
+        );
+
+
+    }
+
+
+
+
+
+    /**
+     * Update standings after match.
+     */
+    public static function update(
+        $data
+    ) {
+
+
+        $home =
+            absint(
+                $data['home']
+            );
+
+
+        $away =
+            absint(
+                $data['away']
+            );
+
+
+        $scores =
+            $data['scores'];
+
+
+
+        if (
+            ! isset(
+                $scores['home'],
+                $scores['away']
+            )
+        ) {
+
+            return;
+
+        }
+
+
+
+        $home_score =
+            intval(
+                $scores['home']
+            );
+
+
+        $away_score =
+            intval(
+                $scores['away']
+            );
+
+
+
+        self::record(
+            $home,
+            $home_score,
+            $away_score
+        );
+
+
+        self::record(
+            $away,
+            $away_score,
+            $home_score
+        );
+
+
+    }
+
+
+
+
+
+    /**
+     * Update team record.
+     */
+    private static function record(
+        $team,
+        $goals_for,
+        $goals_against
+    ) {
+
+
+        $table =
+            get_post_meta(
+                $team,
+                '_athletix_standings',
+                true
+            );
+
+
+
+        if (
+            ! is_array($table)
+        ) {
+
+            $table = [
+
+                'played'=>0,
+                'wins'=>0,
+                'draws'=>0,
+                'losses'=>0,
+                'goals_for'=>0,
+                'goals_against'=>0,
+                'points'=>0
+
+            ];
+
+        }
+
+
+
+        $table['played']++;
+
+        $table['goals_for'] +=
+            $goals_for;
+
+
+        $table['goals_against'] +=
+            $goals_against;
+
+
+
+        if (
+            $goals_for > $goals_against
+        ) {
+
+
+            $table['wins']++;
+
+            $table['points'] += 3;
+
+
+        }
+        elseif (
+            $goals_for === $goals_against
+        ) {
+
+
+            $table['draws']++;
+
+            $table['points'] += 1;
+
+
+        }
+        else {
+
+
+            $table['losses']++;
+
+
+        }
+
+
+
+        update_post_meta(
+            $team,
+            '_athletix_standings',
+            $table
+        );
+
+
+    }
+
+
+
+}
+File 28
+includes/engine/class-statistics-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Statistics Engine
+ *
+ * Tracks player and team statistics.
+ */
+class Athletix_Statistics_Engine {
+
+
+    public static function init() {
+
+
+        Athletix_Events::listen(
+            'match_processed',
+            [
+                __CLASS__,
+                'process'
+            ]
+        );
+
+
+    }
+
+
+
+
+
+    /**
+     * Process match statistics.
+     */
+    public static function process(
+        $data
+    ) {
+
+
+        $match =
+            $data['match_id'];
+
+
+
+        $stats =
+            get_post_meta(
+                $match,
+                '_athletix_statistics',
+                true
+            );
+
+
+
+        if (
+            ! is_array($stats)
+        ) {
+
+            return;
+
+        }
+
+
+
+        foreach (
+            $stats as $player_id => $metrics
+        ) {
+
+
+            self::update_player(
+                $player_id,
+                $metrics
+            );
+
+
+        }
+
+
+    }
+
+
+
+
+
+    /**
+     * Update player totals.
+     */
+    private static function update_player(
+        $player,
+        $metrics
+    ) {
+
+
+        $current =
+            get_post_meta(
+                $player,
+                '_athletix_career_stats',
+                true
+            );
+
+
+
+        if (
+            ! is_array($current)
+        ) {
+
+            $current = [];
+
+        }
+
+
+
+        foreach (
+            $metrics as $key => $value
+        ) {
+
+
+            if (
+                ! isset(
+                    $current[$key]
+                )
+            ) {
+
+                $current[$key] = 0;
+
+            }
+
+
+
+            $current[$key] +=
+                intval($value);
+
+
+        }
+
+
+
+        update_post_meta(
+            $player,
+            '_athletix_career_stats',
+            $current
+        );
+
+
+    }
+
+
+
+}
+Update class-plugin.php
+
+Add:
+
+Athletix_Standings_Engine,
+Athletix_Statistics_Engine,
+Package 3B Complete ✅
+
+Athletix now has the first true sports processing loop:
+
+Match Entry
+
+↓
+
+Scores Saved
+
+↓
+
+Match Engine
+
+↓
+
+Event Dispatcher
+
+↓
+
+Standings Updated
+
+↓
+
+Player Statistics Updated

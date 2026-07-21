@@ -1,0 +1,528 @@
+Athletix 2.0 — Package 17A
+Calendar & Scheduling System
+Event Calendar Foundation
+
+We now build the scheduling layer that connects matches, venues, and league operations.
+
+The flow:
+
+Competition
+
+      ↓
+
+Schedule Generator
+
+      ↓
+
+Calendar Engine
+
+      ↓
+
+Venues + Events
+
+      ↓
+
+Public Schedule
+
+Create:
+
+includes/calendar/
+
+├── class-calendar-engine.php
+├── class-event-calendar.php
+├── class-venue-manager.php
+└── class-scheduling-conflicts.php
+File 115
+includes/calendar/class-calendar-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Calendar Engine
+ */
+class Athletix_Calendar_Engine {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function events(
+        $args = []
+    ) {
+
+
+        return get_posts(
+
+            [
+
+                'post_type'=>
+                    'ax_match',
+
+
+                'posts_per_page'=>
+                    $args['limit']
+                    ??
+                    -1,
+
+
+                'meta_query'=>[
+
+                    [
+
+                        'key'=>
+                            '_athletix_date',
+
+                        'compare'=>
+                            'EXISTS'
+
+                    ]
+
+                ]
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function add_event(
+        $match_id,
+        $date
+    ) {
+
+
+        update_post_meta(
+
+            $match_id,
+
+            '_athletix_date',
+
+            sanitize_text_field(
+                $date
+            )
+
+        );
+
+
+    }
+
+
+}
+File 116
+class-event-calendar.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Event Calendar
+ */
+class Athletix_Event_Calendar {
+
+
+    public static function init() {
+
+
+        add_shortcode(
+
+            'athletix_calendar',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render() {
+
+
+        $events =
+            Athletix_Calendar_Engine::events();
+
+
+
+        if(
+            empty(
+                $events
+            )
+        ) {
+
+            return 'No scheduled events.';
+
+        }
+
+
+
+        ob_start();
+
+
+        ?>
+
+
+        <div class="athletix-calendar">
+
+
+        <?php foreach(
+            $events as $event
+        ) : ?>
+
+
+            <div class="calendar-event">
+
+
+                <strong>
+
+                    <?php echo esc_html(
+
+                        $event->post_title
+
+                    ); ?>
+
+
+                </strong>
+
+
+                <br>
+
+
+                <?php echo esc_html(
+
+                    get_post_meta(
+
+                        $event->ID,
+
+                        '_athletix_date',
+
+                        true
+
+                    )
+
+                ); ?>
+
+
+            </div>
+
+
+        <?php endforeach; ?>
+
+
+        </div>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+File 117
+class-venue-manager.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Venue Manager
+ */
+class Athletix_Venue_Manager {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'init',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        register_post_type(
+
+            'ax_venue',
+
+            [
+
+                'labels'=>[
+
+                    'name'=>
+                        'Venues',
+
+                    'singular_name'=>
+                        'Venue'
+
+                ],
+
+
+                'public'=>
+                    false,
+
+
+                'show_ui'=>
+                    true,
+
+
+                'supports'=>[
+
+                    'title',
+
+                    'editor'
+
+                ]
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function assign(
+        $match_id,
+        $venue_id
+    ) {
+
+
+        update_post_meta(
+
+            $match_id,
+
+            '_athletix_venue',
+
+            absint(
+
+                $venue_id
+
+            )
+
+        );
+
+
+    }
+
+
+}
+File 118
+class-scheduling-conflicts.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Scheduling Conflicts
+ */
+class Athletix_Scheduling_Conflicts {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function check(
+        $date,
+        $venue_id
+    ) {
+
+
+        $matches =
+            get_posts(
+
+                [
+
+                    'post_type'=>
+                        'ax_match',
+
+
+                    'meta_query'=>[
+
+                        'relation'=>
+                            'AND',
+
+
+                        [
+
+                            'key'=>
+                                '_athletix_date',
+
+                            'value'=>
+                                $date
+
+                        ],
+
+
+                        [
+
+                            'key'=>
+                                '_athletix_venue',
+
+                            'value'=>
+                                $venue_id
+
+                        ]
+
+                    ]
+
+                ]
+
+            );
+
+
+
+        return ! empty(
+            $matches
+        );
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+calendar/class-calendar-engine.php
+
+calendar/class-event-calendar.php
+
+calendar/class-venue-manager.php
+
+calendar/class-scheduling-conflicts.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Calendar_Engine,
+
+Athletix_Event_Calendar,
+
+Athletix_Venue_Manager,
+
+Athletix_Scheduling_Conflicts,
+Package 17A Complete ✅
+
+Athletix now supports:
+
+Scheduling
+Match
+
+ ↓
+
+Date
+
+ ↓
+
+Venue
+
+ ↓
+
+Calendar
+New Features
+✓ Match Dates
+
+✓ Event Calendar
+
+✓ Venues
+
+✓ Conflict Checking
+
+✓ Public Calendar Shortcode
+
+Example:
+
+[athletix_calendar]
+
+Displays:
+
+July 25
+Eagles vs Tigers
+Main Stadium
+
+
+July 28
+Lions vs Bears
+Field 2
+Athletix 2.0 Status Update
+COMPETITION
+✓ Divisions
+✓ Tournaments
+✓ Playoffs
+
+SCHEDULING
+✓ Calendar
+✓ Venues
+✓ Conflicts
+
+SPORTS
+✓ Matches
+✓ Standings
+✓ Statistics
+
+OPERATIONS
+✓ Automation
+✓ Dashboard

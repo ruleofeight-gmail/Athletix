@@ -1,0 +1,386 @@
+Athletix 2.0 — Package 6B
+Match Center UI
+Professional Match Management
+
+Now we upgrade the match editor from basic fields into a workflow.
+
+The goal:
+
+Create Match
+
+      ↓
+
+Assign Teams
+
+      ↓
+
+Enter Result
+
+      ↓
+
+Process Match
+
+      ↓
+
+Update:
+
+- Standings
+- Rankings
+- Statistics
+
+Create:
+
+includes/admin/
+
+└── class-match-center.php
+File 47
+includes/admin/class-match-center.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Match Center
+ *
+ * Adds match workflow tools.
+ */
+class Athletix_Match_Center {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'add_meta_boxes',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+        add_action(
+
+            'admin_post_athletix_process_match',
+
+            [
+
+                __CLASS__,
+
+                'process'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        add_meta_box(
+
+            'athletix_match_center',
+
+            'Match Center',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ],
+
+            'ax_match',
+
+            'side',
+
+            'high'
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render(
+        $post
+    ) {
+
+
+        $url =
+            admin_url(
+                'admin-post.php'
+            );
+
+
+        ?>
+
+
+        <p>
+
+            Process this match after
+            entering the final score.
+
+        </p>
+
+
+        <form method="post"
+            action="<?php echo esc_url($url); ?>">
+
+
+            <input
+                type="hidden"
+                name="action"
+                value="athletix_process_match"
+            >
+
+
+            <input
+                type="hidden"
+                name="match_id"
+                value="<?php echo esc_attr($post->ID); ?>"
+            >
+
+
+
+            <?php
+
+            wp_nonce_field(
+                'athletix_process_match'
+            );
+
+            ?>
+
+
+
+            <button
+                class="button button-primary"
+            >
+
+                Process Match
+
+            </button>
+
+
+        </form>
+
+
+        <?php
+
+
+    }
+
+
+
+
+
+    public static function process() {
+
+
+        if (
+            ! current_user_can(
+                'edit_posts'
+            )
+        ) {
+
+            wp_die(
+                'Permission denied'
+            );
+
+        }
+
+
+
+        check_admin_referer(
+            'athletix_process_match'
+        );
+
+
+
+        $match =
+            absint(
+                $_POST['match_id']
+            );
+
+
+
+        if (
+            $match
+        ) {
+
+
+            $home =
+                get_post_meta(
+
+                    $match,
+
+                    '_athletix_home_team',
+
+                    true
+
+                );
+
+
+            $away =
+                get_post_meta(
+
+                    $match,
+
+                    '_athletix_away_team',
+
+                    true
+
+                );
+
+
+            $scores =
+                get_post_meta(
+
+                    $match,
+
+                    '_athletix_scores',
+
+                    true
+
+                );
+
+
+
+            Athletix_Match_Engine::process(
+
+                $match,
+
+                get_post($match)
+
+            );
+
+
+        }
+
+
+
+        wp_safe_redirect(
+
+            get_edit_post_link(
+
+                $match,
+
+                'url'
+
+            )
+
+        );
+
+
+        exit;
+
+
+    }
+
+
+}
+Update class-plugin.php
+
+Add:
+
+Athletix_Match_Center,
+Update class-loader.php
+
+Add:
+
+admin/class-match-center.php
+Important Fix
+
+The Match Engine currently listens to:
+
+save_post_ax_match
+
+The Match Center manually processes.
+
+We need to update the Match Engine to expose a reusable method.
+
+Update
+includes/engine/class-match-engine.php
+
+Add this method before the final closing brace:
+
+public static function process_match(
+    $match_id
+) {
+
+
+    $post =
+        get_post(
+            $match_id
+        );
+
+
+    if (
+        ! $post
+    ) {
+
+        return;
+
+    }
+
+
+
+    self::process(
+        $match_id,
+        $post
+    );
+
+
+}
+
+Then update Match Center:
+
+Replace:
+
+Athletix_Match_Engine::process(
+
+with:
+
+Athletix_Match_Engine::process_match(
+Package 6B Complete ✅
+
+The Match workflow now exists:
+
+Admin Match Screen
+
+      |
+      |
+      ↓
+
+Process Match Button
+
+      |
+      |
+      ↓
+
+Match Engine
+
+      |
+      |
+      ├── Standings
+      ├── Statistics
+      └── Rankings

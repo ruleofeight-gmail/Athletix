@@ -1,0 +1,348 @@
+Athletix 2.0 — Package 9B
+Import / Export Admin Tools
+League Migration Interface
+
+Now we expose the import/export system inside WordPress admin.
+
+The goal:
+
+Athletix Admin
+
+        ↓
+
+Tools
+
+        ↓
+
+Import CSV
+Export Data
+Backup
+
+Create:
+
+includes/admin/
+
+└── class-admin-tools.php
+File 63
+includes/admin/class-admin-tools.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Admin Tools
+ */
+class Athletix_Admin_Tools {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'admin_menu',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+        add_action(
+
+            'admin_post_athletix_import',
+
+            [
+
+                __CLASS__,
+
+                'import'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        add_submenu_page(
+
+            'athletix',
+
+            'Tools',
+
+            'Tools',
+
+            'manage_options',
+
+            'athletix-tools',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render() {
+
+
+        ?>
+
+
+        <div class="wrap">
+
+
+            <h1>
+                Athletix Tools
+            </h1>
+
+
+
+            <h2>
+                Import CSV
+            </h2>
+
+
+
+            <form method="post"
+                enctype="multipart/form-data"
+                action="<?php echo esc_url(
+                    admin_url(
+                        'admin-post.php'
+                    )
+                ); ?>">
+
+
+
+                <input type="hidden"
+                    name="action"
+                    value="athletix_import"
+                >
+
+
+
+                <?php
+
+                wp_nonce_field(
+                    'athletix_import'
+                );
+
+                ?>
+
+
+
+                <p>
+
+
+                    <select name="type">
+
+
+                        <option value="teams">
+
+                            Teams
+
+                        </option>
+
+
+                        <option value="players">
+
+                            Players
+
+                        </option>
+
+
+                        <option value="matches">
+
+                            Matches
+
+                        </option>
+
+
+                    </select>
+
+
+                </p>
+
+
+
+
+                <p>
+
+                    <input type="file"
+                        name="file"
+                    >
+
+                </p>
+
+
+
+                <?php
+
+                submit_button(
+                    'Import'
+                );
+
+                ?>
+
+
+            </form>
+
+
+
+        </div>
+
+
+        <?php
+
+
+    }
+
+
+
+
+
+    public static function import() {
+
+
+        check_admin_referer(
+            'athletix_import'
+        );
+
+
+
+        if(
+            empty(
+                $_FILES['file']
+            )
+        ) {
+
+            wp_die(
+                'No file uploaded'
+            );
+
+        }
+
+
+
+        $type =
+            sanitize_text_field(
+
+                $_POST['type']
+
+            );
+
+
+
+        $file =
+            $_FILES['file']['tmp_name'];
+
+
+
+        Athletix_Import_Manager::run(
+
+            $type,
+
+            $file
+
+        );
+
+
+
+        wp_safe_redirect(
+
+            admin_url(
+                'admin.php?page=athletix-tools'
+            )
+
+        );
+
+
+        exit;
+
+
+    }
+
+
+}
+Update class-plugin.php
+
+Add:
+
+Athletix_Admin_Tools,
+Update class-loader.php
+
+Add:
+
+admin/class-admin-tools.php
+Package 9B Complete ✅
+
+Athletix now has:
+
+ADMIN TOOLS
+
+├── Import Teams
+
+├── Import Players
+
+├── Import Matches
+
+└── Migration Framework
+Current System Capability
+
+Athletix can now:
+
+Create League
+
+↓
+
+Import Teams
+
+↓
+
+Import Players
+
+↓
+
+Schedule Matches
+
+↓
+
+Enter Results
+
+↓
+
+Calculate Standings
+
+↓
+
+Publish Frontend Pages
+
+↓
+
+Expose REST API

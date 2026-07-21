@@ -1,0 +1,427 @@
+Athletix 2.0 — Package 13A
+Media & Asset Management System
+Branding + Image Foundation
+
+We now add the visual identity layer.
+
+The goal:
+
+League
+
+ ├── Logo
+ ├── Branding
+ └── Galleries
+
+
+Team
+
+ ├── Crest
+ └── Photos
+
+
+Player
+
+ ├── Headshot
+ └── Media
+
+Create:
+
+includes/media/
+
+├── class-media-manager.php
+├── class-image-handler.php
+├── class-logo-manager.php
+└── class-gallery.php
+File 84
+includes/media/class-media-manager.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Media Manager
+ */
+class Athletix_Media_Manager {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'init',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        register_post_type(
+
+            'ax_media',
+
+            [
+
+                'labels'=>[
+
+                    'name'=>
+                        'Athletix Media',
+
+                    'singular_name'=>
+                        'Media'
+
+                ],
+
+
+                'public'=>
+                    false,
+
+
+                'show_ui'=>
+                    true,
+
+
+                'supports'=>[
+
+                    'title',
+
+                    'thumbnail'
+
+                ]
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function attach(
+        $object_id,
+        $media_id
+    ) {
+
+
+        update_post_meta(
+
+            $object_id,
+
+            '_athletix_media',
+
+            absint(
+                $media_id
+            )
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function get(
+        $object_id
+    ) {
+
+
+        return get_post_meta(
+
+            $object_id,
+
+            '_athletix_media',
+
+            true
+
+        );
+
+
+    }
+
+
+}
+File 85
+class-image-handler.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Image Handler
+ */
+class Athletix_Image_Handler {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function url(
+        $attachment_id,
+        $size = 'medium'
+    ) {
+
+
+        return wp_get_attachment_image_url(
+
+            $attachment_id,
+
+            $size
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function html(
+        $attachment_id,
+        $size = 'medium'
+    ) {
+
+
+        return wp_get_attachment_image(
+
+            $attachment_id,
+
+            $size
+
+        );
+
+
+    }
+
+
+}
+File 86
+class-logo-manager.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Logo Manager
+ */
+class Athletix_Logo_Manager {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function set(
+        $object_id,
+        $attachment_id
+    ) {
+
+
+        update_post_meta(
+
+            $object_id,
+
+            '_athletix_logo',
+
+            absint(
+                $attachment_id
+            )
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function get(
+        $object_id
+    ) {
+
+
+        return get_post_meta(
+
+            $object_id,
+
+            '_athletix_logo',
+
+            true
+
+        );
+
+
+    }
+
+
+}
+File 87
+class-gallery.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Gallery Manager
+ */
+class Athletix_Gallery {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function add(
+        $object_id,
+        $images
+    ) {
+
+
+        update_post_meta(
+
+            $object_id,
+
+            '_athletix_gallery',
+
+            array_map(
+
+                'absint',
+
+                $images
+
+            )
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function get(
+        $object_id
+    ) {
+
+
+        return get_post_meta(
+
+            $object_id,
+
+            '_athletix_gallery',
+
+            true
+
+        );
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+media/class-media-manager.php
+
+media/class-image-handler.php
+
+media/class-logo-manager.php
+
+media/class-gallery.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Media_Manager,
+
+Athletix_Image_Handler,
+
+Athletix_Logo_Manager,
+
+Athletix_Gallery,
+Package 13A Complete ✅
+
+Athletix now supports:
+
+Media Objects
+Media Library Layer
+
+      ↓
+
+Teams
+
+      ↓
+
+Players
+
+      ↓
+
+Leagues
+
+      ↓
+
+Profiles
+New Capabilities
+✓ Team Logos
+
+✓ Player Photos
+
+✓ League Branding
+
+✓ Galleries
+
+✓ Image Retrieval
+
+✓ Media Attachments

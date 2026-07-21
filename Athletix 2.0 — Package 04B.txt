@@ -1,0 +1,351 @@
+Package 4B
+Repository Data Layer (continued)
+
+Continue inside:
+
+includes/repositories/
+File 34
+class-match-repository.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Match Repository
+ *
+ * Handles match data access.
+ */
+class Athletix_Match_Repository
+extends Athletix_Base_Repository {
+
+
+    protected $post_type =
+        'ax_match';
+
+
+
+
+
+    /**
+     * Get home team.
+     */
+    public function home_team(
+        $match
+    ) {
+
+
+        return Athletix_Match_Participants::get_home_team(
+            $match
+        );
+
+
+    }
+
+
+
+
+
+    /**
+     * Get away team.
+     */
+    public function away_team(
+        $match
+    ) {
+
+
+        return Athletix_Match_Participants::get_away_team(
+            $match
+        );
+
+
+    }
+
+
+
+
+
+    /**
+     * Get match score.
+     */
+    public function score(
+        $match
+    ) {
+
+
+        return $this->get_meta(
+
+            $match,
+
+            '_athletix_scores',
+
+            [
+
+                'home'=>0,
+                'away'=>0
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    /**
+     * Get season.
+     */
+    public function season(
+        $match
+    ) {
+
+
+        return $this->get_meta(
+
+            $match,
+
+            '_athletix_season',
+
+            0
+
+        );
+
+
+    }
+
+
+}
+File 35
+class-league-repository.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * League Repository
+ */
+class Athletix_League_Repository
+extends Athletix_Base_Repository {
+
+
+    protected $post_type =
+        'ax_league';
+
+
+
+
+
+    /**
+     * Get seasons.
+     */
+    public function seasons(
+        $league
+    ) {
+
+
+        return Athletix_Relationship_Engine::get(
+
+            $league,
+
+            'league_season'
+
+        );
+
+
+    }
+
+
+
+
+
+    /**
+     * Get league teams.
+     */
+    public function teams(
+        $league
+    ) {
+
+
+        $seasons =
+            $this->seasons(
+                $league
+            );
+
+
+
+        $teams = [];
+
+
+
+        foreach (
+            $seasons as $season
+        ) {
+
+
+            $teams =
+                array_merge(
+
+                    $teams,
+
+                    Athletix_Relationship_Engine::get(
+
+                        $season,
+
+                        'season_team'
+
+                    )
+
+                );
+
+
+        }
+
+
+
+        return array_unique(
+            $teams
+        );
+
+
+    }
+
+
+}
+File 36
+class-season-repository.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Season Repository
+ */
+class Athletix_Season_Repository
+extends Athletix_Base_Repository {
+
+
+    protected $post_type =
+        'ax_season';
+
+
+
+
+
+    /**
+     * Get season teams.
+     */
+    public function teams(
+        $season
+    ) {
+
+
+        return Athletix_Relationship_Engine::get(
+
+            $season,
+
+            'season_team'
+
+        );
+
+
+    }
+
+
+
+
+
+    /**
+     * Get season fixtures.
+     */
+    public function fixtures(
+        $season
+    ) {
+
+
+        return Athletix_Schedule_Engine::fixtures(
+            $season
+        );
+
+
+    }
+
+
+}
+Package 4B Complete ✅
+
+The repository layer is now:
+
+Repository Layer
+
+Team
+ |
+ ├── Players
+ └── Standings
+
+
+Player
+ |
+ └── Statistics
+
+
+Match
+ |
+ ├── Teams
+ ├── Scores
+ └── Season
+
+
+League
+ |
+ └── Seasons
+
+
+Season
+ |
+ ├── Teams
+ └── Fixtures
+Next: Connect Repositories
+
+We add:
+
+includes/core/class-registry.php
+
+upgrade it into a service container and register:
+
+team.repository
+player.repository
+match.repository
+league.repository
+season.repository
+
+Then engines can request data cleanly:
+
+$teams =
+Athletix_Registry::get(
+    'team.repository'
+);
+
+After that:
+
+Package 5 — Admin Framework
+
+We start building:
+
+Athletix admin menu
+settings pages
+sport configuration UI
+dashboard
+match entry screens
+
+This is where the plugin begins looking like a professional product inside WordPress.

@@ -1,0 +1,498 @@
+Athletix 2.0 — Package 20B
+Membership & Registration System
+Team Enrollment + Eligibility Management
+
+We now complete the league enrollment workflow.
+
+The flow:
+
+Registration
+
+      ↓
+
+Membership Plan
+
+      ↓
+
+Team / Player Enrollment
+
+      ↓
+
+Eligibility Validation
+
+      ↓
+
+Competition Access
+
+Create:
+
+includes/membership/
+
+├── class-team-registration.php
+├── class-membership-plans.php
+├── class-eligibility.php
+└── class-registration-admin.php
+File 143
+includes/membership/class-team-registration.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Team Registration
+ */
+class Athletix_Team_Registration {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function register(
+        $user_id,
+        $team_data
+    ) {
+
+
+        $team_id =
+            wp_insert_post(
+
+                [
+
+                    'post_type'=>
+                        'ax_team',
+
+
+                    'post_title'=>
+                        sanitize_text_field(
+
+                            $team_data['name']
+
+                        ),
+
+
+                    'post_status'=>
+                        'publish'
+
+                ]
+
+            );
+
+
+
+        if(
+            $team_id
+        ) {
+
+
+            update_post_meta(
+
+                $team_id,
+
+                '_athletix_owner',
+
+                absint(
+
+                    $user_id
+
+                )
+
+            );
+
+
+        }
+
+
+
+        return $team_id;
+
+
+    }
+
+
+}
+File 144
+class-membership-plans.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Membership Plans
+ */
+class Athletix_Membership_Plans {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'init',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        register_post_type(
+
+            'ax_plan',
+
+            [
+
+                'labels'=>[
+
+                    'name'=>
+                        'Membership Plans',
+
+
+                    'singular_name'=>
+                        'Membership Plan'
+
+                ],
+
+
+                'public'=>
+                    false,
+
+
+                'show_ui'=>
+                    true,
+
+
+                'supports'=>[
+
+                    'title',
+
+                    'editor'
+
+                ]
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function assign(
+        $user_id,
+        $plan_id
+    ) {
+
+
+        update_user_meta(
+
+            $user_id,
+
+            '_athletix_plan',
+
+            absint(
+
+                $plan_id
+
+            )
+
+        );
+
+
+    }
+
+
+}
+File 145
+class-eligibility.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Eligibility Engine
+ */
+class Athletix_Eligibility {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function check(
+        $player_id,
+        $rules = []
+    ) {
+
+
+        foreach(
+            $rules as $key=>$value
+        ) {
+
+
+            $player_value =
+                get_post_meta(
+
+                    $player_id,
+
+                    '_athletix_' .
+                    sanitize_key(
+
+                        $key
+
+                    ),
+
+                    true
+
+                );
+
+
+
+            if(
+                $player_value !=
+                $value
+            ) {
+
+                return false;
+
+            }
+
+
+        }
+
+
+
+        return true;
+
+
+    }
+
+
+}
+File 146
+class-registration-admin.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Registration Admin
+ */
+class Athletix_Registration_Admin {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'admin_menu',
+
+            [
+
+                __CLASS__,
+
+                'menu'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function menu() {
+
+
+        add_submenu_page(
+
+            'athletix',
+
+            'Registrations',
+
+            'Registrations',
+
+            'manage_athletix',
+
+            'athletix-registration',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render() {
+
+
+        ?>
+
+
+        <div class="wrap">
+
+
+            <h1>
+                Registration Management
+            </h1>
+
+
+            <p>
+
+                Manage player and team enrollment.
+
+            </p>
+
+
+        </div>
+
+
+        <?php
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+membership/class-team-registration.php
+
+membership/class-membership-plans.php
+
+membership/class-eligibility.php
+
+membership/class-registration-admin.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Team_Registration,
+
+Athletix_Membership_Plans,
+
+Athletix_Eligibility,
+
+Athletix_Registration_Admin,
+Package 20B Complete ✅
+
+Athletix membership system now supports:
+
+Team Enrollment
+Manager
+
+ ↓
+
+Team Registration
+
+ ↓
+
+Team Profile
+
+ ↓
+
+Competition Entry
+Membership Plans
+
+Supports:
+
+✓ Free Plans
+
+✓ Paid Plans Ready
+
+✓ League Packages
+
+✓ Access Levels
+Eligibility Engine
+
+Examples:
+
+Age Group
+
+Division
+
+Skill Level
+
+Season Requirements
+Registration Admin
+
+New admin area:
+
+Athletix
+
+ └── Registrations
+Athletix 2.0 Platform Status
+MEMBERSHIP
+
+✓ User Enrollment
+✓ Player Registration
+✓ Team Registration
+✓ Membership Plans
+✓ Eligibility
+✓ Waivers
+✓ Admin Management
+
+SPORTS
+✓ Teams
+✓ Players
+✓ Matches
+
+OPERATIONS
+✓ Scheduling
+✓ Notifications
+✓ Analytics

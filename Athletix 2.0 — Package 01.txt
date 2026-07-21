@@ -1,0 +1,146 @@
+Package 1
+Foundation + Core Runtime
+
+This package establishes the framework:
+
+Included components
+athletix/
+│
+├── athletix.php
+├── uninstall.php
+│
+└── includes/
+    │
+    ├── class-loader.php
+    ├── class-plugin.php
+    ├── class-activator.php
+    ├── class-deactivator.php
+    │
+    └── core/
+        │
+        ├── class-hooks.php
+        ├── class-events.php
+        ├── class-config.php
+        ├── class-registry.php
+        ├── class-cache.php
+        ├── class-logger.php
+        └── class-validator.php
+Design goals for Package 1
+1. Central bootstrap
+
+Everything flows through:
+
+athletix.php
+        |
+        ↓
+Athletix_Loader
+        |
+        ↓
+Athletix_Plugin
+        |
+        ↓
+Registered Modules
+2. Future modules plug in cleanly
+
+Future systems will register like:
+
+Athletix_Registry::register(
+    'standings',
+    Athletix_Standings_Engine::class
+);
+
+No more editing the main plugin file every time.
+
+3. Events system
+
+Instead of classes directly talking to each other:
+
+Old:
+
+Match Meta
+    |
+    ↓
+Standings
+    |
+    ↓
+Stats
+
+New:
+
+Match Saved
+
+↓
+
+Event Dispatcher
+
+↓
+
+Statistics Engine
+
+↓
+
+Standings Engine
+
+↓
+
+Rankings Engine
+4. Configuration layer
+
+Instead of:
+
+get_option(
+    'ax_sport_profiles'
+);
+
+everywhere:
+
+New:
+
+Athletix_Config::get(
+    'sports'
+);
+5. Logging foundation
+
+Future debugging:
+
+Athletix_Logger::info(
+    'Match processed',
+    [
+        'match_id'=>123
+    ]
+);
+6. Cache foundation
+
+Future optimization:
+
+Athletix_Cache::remember(
+    'league_table_5',
+    function(){
+        return $table;
+    }
+);
+After Package 1 is installed
+
+The plugin should:
+
+✅ Activate
+✅ Load without errors
+✅ Register the Athletix framework
+✅ Provide internal services
+✅ Be ready for CPTs and engines
+
+I'll start producing Package 1 files next in a controlled order:
+
+athletix.php
+loader
+plugin manager
+activation/deactivation
+core framework classes
+
+Once Package 1 is complete, we'll lock that foundation and move forward.
+
+yes
+
+Great. We'll begin Athletix 2.0 — Package 1: Foundation + Core Runtime.
+
+I will provide this package in complete file groups so it stays manageable, but unlike the old batches, every file in this package will work together.

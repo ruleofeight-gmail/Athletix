@@ -1,0 +1,437 @@
+Athletix 2.0 — Package 2B
+Relationships Engine
+Data Connections Layer
+
+This replaces the older relationship/meta approach with a reusable relationship framework.
+
+The goal:
+
+Instead of scattered:
+
+update_post_meta()
+get_post_meta()
+
+everywhere, we create a centralized relationship layer.
+
+Create:
+
+includes/relationships/
+
+Add:
+
+relationships/
+
+├── class-relationship-engine.php
+├── class-league-season.php
+├── class-team-season.php
+├── class-player-team.php
+└── class-match-participants.php
+File 18
+includes/relationships/class-relationship-engine.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Relationship Engine
+ *
+ * Central relationship storage.
+ */
+class Athletix_Relationship_Engine {
+
+
+    public static function init() {
+
+    }
+
+
+
+    /**
+     * Create relationship.
+     */
+    public static function connect(
+        $parent,
+        $child,
+        $type
+    ) {
+
+
+        $relationships =
+            get_post_meta(
+                $parent,
+                '_athletix_relationships',
+                true
+            );
+
+
+        if (
+            ! is_array(
+                $relationships
+            )
+        ) {
+
+            $relationships = [];
+
+        }
+
+
+
+        $relationships[] = [
+
+            'child' =>
+                absint(
+                    $child
+                ),
+
+            'type' =>
+                sanitize_key(
+                    $type
+                )
+
+        ];
+
+
+
+        update_post_meta(
+            $parent,
+            '_athletix_relationships',
+            $relationships
+        );
+
+
+    }
+
+
+
+
+
+    /**
+     * Get related items.
+     */
+    public static function get(
+        $parent,
+        $type = ''
+    ) {
+
+
+        $relationships =
+            get_post_meta(
+                $parent,
+                '_athletix_relationships',
+                true
+            );
+
+
+        if (
+            ! is_array(
+                $relationships
+            )
+        ) {
+
+            return [];
+
+        }
+
+
+
+        $results = [];
+
+
+
+        foreach (
+            $relationships as $relationship
+        ) {
+
+
+            if (
+                $type === ''
+                ||
+                $relationship['type'] === $type
+            ) {
+
+
+                $results[] =
+                    $relationship['child'];
+
+
+            }
+
+
+        }
+
+
+
+        return $results;
+
+
+    }
+
+
+
+}
+File 19
+class-league-season.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * League → Season Relationship
+ */
+class Athletix_League_Season {
+
+
+    public static function init() {
+
+
+        add_action(
+            'athletix_register_relationships',
+            [
+                __CLASS__,
+                'register'
+            ]
+        );
+
+
+    }
+
+
+
+    public static function register() {
+
+    }
+
+
+
+    public static function attach(
+        $league,
+        $season
+    ) {
+
+
+        Athletix_Relationship_Engine::connect(
+            $league,
+            $season,
+            'league_season'
+        );
+
+
+    }
+
+
+}
+File 20
+class-team-season.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Team → Season Relationship
+ */
+class Athletix_Team_Season {
+
+
+    public static function init() {
+
+    }
+
+
+
+    public static function attach(
+        $team,
+        $season
+    ) {
+
+
+        Athletix_Relationship_Engine::connect(
+            $season,
+            $team,
+            'season_team'
+        );
+
+
+    }
+
+
+}
+File 21
+class-player-team.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Player → Team Relationship
+ */
+class Athletix_Player_Team {
+
+
+    public static function init() {
+
+    }
+
+
+
+    public static function attach(
+        $player,
+        $team
+    ) {
+
+
+        Athletix_Relationship_Engine::connect(
+            $team,
+            $player,
+            'team_player'
+        );
+
+
+    }
+
+
+}
+File 22
+class-match-participants.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Match Participants
+ *
+ * Connects matches to teams.
+ */
+class Athletix_Match_Participants {
+
+
+    public static function init() {
+
+    }
+
+
+
+    public static function set_home_team(
+        $match,
+        $team
+    ) {
+
+
+        update_post_meta(
+            $match,
+            '_athletix_home_team',
+            absint(
+                $team
+            )
+        );
+
+
+    }
+
+
+
+
+    public static function set_away_team(
+        $match,
+        $team
+    ) {
+
+
+        update_post_meta(
+            $match,
+            '_athletix_away_team',
+            absint(
+                $team
+            )
+        );
+
+
+    }
+
+
+
+
+    public static function get_home_team(
+        $match
+    ) {
+
+
+        return absint(
+            get_post_meta(
+                $match,
+                '_athletix_home_team',
+                true
+            )
+        );
+
+
+    }
+
+
+
+    public static function get_away_team(
+        $match
+    ) {
+
+
+        return absint(
+            get_post_meta(
+                $match,
+                '_athletix_away_team',
+                true
+            )
+        );
+
+
+    }
+
+
+}
+Update class-plugin.php
+
+Add these modules to the $modules array:
+
+Athletix_Relationship_Engine,
+Athletix_League_Season,
+Athletix_Team_Season,
+Athletix_Player_Team,
+Athletix_Match_Participants,
+Package 2B Complete ✅
+
+Athletix now understands:
+
+League
+ |
+ └── Season
+       |
+       └── Teams
+             |
+             └── Players
+
+
+Match
+ |
+ ├── Home Team
+ └── Away Team
+
+This is the foundation needed for:
+
+standings
+statistics
+rankings
+schedules
+player history

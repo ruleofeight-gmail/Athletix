@@ -1,0 +1,368 @@
+Package 7B
+REST API Layer
+Matches + Standings Endpoints
+
+We complete the public API layer.
+
+New endpoints:
+
+GET
+
+/wp-json/athletix/v1/matches
+
+
+/wp-json/athletix/v1/standings/{league}
+
+Create:
+
+includes/api/
+
+├── class-rest-matches.php
+└── class-rest-standings.php
+File 52
+class-rest-matches.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Match REST Controller
+ */
+class Athletix_REST_Matches {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'athletix_register_rest_routes',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        register_rest_route(
+
+            'athletix/v1',
+
+            '/matches',
+
+            [
+
+                'methods' =>
+                    'GET',
+
+
+                'callback' =>
+                    [
+
+                        __CLASS__,
+
+                        'index'
+
+                    ]
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function index() {
+
+
+        $repository =
+            Athletix_Registry::get(
+
+                'match.repository'
+
+            );
+
+
+
+        $matches =
+            $repository->all();
+
+
+
+        $results = [];
+
+
+
+        foreach (
+            $matches as $match
+        ) {
+
+
+            $results[] = [
+
+                'id' =>
+                    $match->ID,
+
+
+                'title' =>
+                    $match->post_title,
+
+
+                'home_team' =>
+                    $repository->home_team(
+
+                        $match->ID
+
+                    ),
+
+
+                'away_team' =>
+                    $repository->away_team(
+
+                        $match->ID
+
+                    ),
+
+
+                'score' =>
+                    $repository->score(
+
+                        $match->ID
+
+                    ),
+
+
+                'season' =>
+                    $repository->season(
+
+                        $match->ID
+
+                    )
+
+            ];
+
+
+        }
+
+
+
+        return $results;
+
+
+    }
+
+
+}
+File 53
+class-rest-standings.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Standings REST Controller
+ */
+class Athletix_REST_Standings {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'athletix_register_rest_routes',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        register_rest_route(
+
+            'athletix/v1',
+
+            '/standings/(?P<league>\d+)',
+
+            [
+
+                'methods' =>
+                    'GET',
+
+
+                'callback' =>
+                    [
+
+                        __CLASS__,
+
+                        'show'
+
+                    ]
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function show(
+        $request
+    ) {
+
+
+        $league =
+            absint(
+
+                $request['league']
+
+            );
+
+
+
+        $repository =
+            Athletix_Registry::get(
+
+                'league.repository'
+
+            );
+
+
+
+        $teams =
+            $repository->teams(
+
+                $league
+
+            );
+
+
+
+        return Athletix_Ranking_Engine::rank(
+
+            $teams
+
+        );
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+api/class-rest-matches.php
+
+api/class-rest-standings.php
+Update class-plugin.php
+
+Add:
+
+Athletix_REST_Matches,
+
+Athletix_REST_Standings,
+Package 7B Complete ✅
+
+Athletix API is now:
+
+REST API
+
+Teams
+ |
+ └── standings
+
+
+Players
+ |
+ └── statistics
+
+
+Matches
+ |
+ ├── teams
+ ├── scores
+ └── seasons
+
+
+Standings
+ |
+ └── rankings
+Current Platform Status
+
+Athletix 2.0 now contains:
+
+FOUNDATION
+
+✓ Plugin Bootstrap
+
+✓ Loader
+
+✓ Registry
+
+✓ CPT Architecture
+
+✓ Relationships
+
+✓ Sports Engine
+
+✓ Match Processing
+
+✓ Standings
+
+✓ Rankings
+
+✓ Statistics
+
+✓ Repository Layer
+
+✓ Admin Framework
+
+✓ Meta Boxes
+
+✓ Match Center
+
+✓ REST API

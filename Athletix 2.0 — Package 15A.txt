@@ -1,0 +1,438 @@
+Athletix 2.0 — Package 15A
+League Management Dashboard
+Admin Command Center Foundation
+
+We now build the central dashboard for league operators.
+
+Purpose:
+
+League Manager
+
+        ↓
+
+Athletix Dashboard
+
+        ↓
+
+Overview
+Matches
+Teams
+Players
+Activity
+
+Create:
+
+includes/dashboard/
+
+├── class-dashboard.php
+├── class-dashboard-widgets.php
+├── class-dashboard-stats.php
+└── class-dashboard-notices.php
+File 98
+includes/dashboard/class-dashboard.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Dashboard
+ */
+class Athletix_Dashboard {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'wp_dashboard_setup',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        wp_add_dashboard_widget(
+
+            'athletix_overview',
+
+            'Athletix Overview',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render() {
+
+
+        echo Athletix_Dashboard_Widgets::overview();
+
+
+    }
+
+
+}
+File 99
+class-dashboard-widgets.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Dashboard Widgets
+ */
+class Athletix_Dashboard_Widgets {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function overview() {
+
+
+        $stats =
+            Athletix_Dashboard_Stats::get();
+
+
+
+        ob_start();
+
+
+        ?>
+
+
+        <div class="athletix-dashboard">
+
+
+            <h3>
+                League Summary
+            </h3>
+
+
+            <ul>
+
+
+                <li>
+
+                    Teams:
+                    <?php echo esc_html(
+
+                        $stats['teams']
+
+                    ); ?>
+
+                </li>
+
+
+
+                <li>
+
+                    Players:
+                    <?php echo esc_html(
+
+                        $stats['players']
+
+                    ); ?>
+
+                </li>
+
+
+
+                <li>
+
+                    Matches:
+                    <?php echo esc_html(
+
+                        $stats['matches']
+
+                    ); ?>
+
+                </li>
+
+
+            </ul>
+
+
+        </div>
+
+
+        <?php
+
+
+        return ob_get_clean();
+
+
+    }
+
+
+}
+File 100
+class-dashboard-stats.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Dashboard Statistics
+ */
+class Athletix_Dashboard_Stats {
+
+
+    public static function init() {
+
+
+    }
+
+
+
+
+
+    public static function get() {
+
+
+        return [
+
+            'teams'=>
+
+                self::count(
+                    'ax_team'
+                ),
+
+
+            'players'=>
+
+                self::count(
+                    'ax_player'
+                ),
+
+
+            'matches'=>
+
+                self::count(
+                    'ax_match'
+                )
+
+        ];
+
+
+    }
+
+
+
+
+
+    private static function count(
+        $type
+    ) {
+
+
+        return wp_count_posts(
+
+            $type
+
+        )->publish;
+
+
+    }
+
+
+}
+File 101
+class-dashboard-notices.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Dashboard Notices
+ */
+class Athletix_Dashboard_Notices {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'admin_notices',
+
+            [
+
+                __CLASS__,
+
+                'show'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function show() {
+
+
+        if(
+            ! current_user_can(
+                'manage_athletix'
+            )
+        ) {
+
+            return;
+
+        }
+
+
+
+        $teams =
+            wp_count_posts(
+                'ax_team'
+            )->publish;
+
+
+
+        if(
+            ! $teams
+        ) {
+
+
+            echo '<div class="notice notice-warning">';
+
+            echo '<p>';
+
+            echo 'Athletix: Add your first team to begin setup.';
+
+            echo '</p>';
+
+            echo '</div>';
+
+
+        }
+
+
+    }
+
+
+}
+Update Loader
+
+Add:
+
+dashboard/class-dashboard.php
+
+dashboard/class-dashboard-widgets.php
+
+dashboard/class-dashboard-stats.php
+
+dashboard/class-dashboard-notices.php
+Update class-plugin.php
+
+Add:
+
+Athletix_Dashboard,
+
+Athletix_Dashboard_Widgets,
+
+Athletix_Dashboard_Stats,
+
+Athletix_Dashboard_Notices,
+Package 15A Complete ✅
+
+Athletix now has a command center:
+
+Dashboard
+
+ ├── Team Count
+
+ ├── Player Count
+
+ ├── Match Count
+
+ └── Setup Notices
+Current Platform Map
+ATHLETIX 2.0
+
+FOUNDATION
+✓ Framework
+✓ Loader
+✓ Registry
+
+SPORTS ENGINE
+✓ Teams
+✓ Players
+✓ Matches
+✓ Standings
+✓ Statistics
+
+OPERATIONS
+✓ Imports
+✓ Exports
+✓ Automation
+
+SECURITY
+✓ Roles
+✓ Permissions
+✓ Audit
+
+MEDIA
+✓ Branding
+✓ Galleries
+
+DISCOVERY
+✓ Search
+✓ Directories
+
+ADMIN
+✓ Tools
+✓ Reports
+✓ Dashboard

@@ -1,0 +1,363 @@
+Athletix 2.0 — Package 6C
+Player Statistics Entry System
+Match-Level Performance Data
+
+Now we add the player performance workflow.
+
+The architecture:
+
+Match Editor
+
+      ↓
+
+Player Stats Panel
+
+      ↓
+
+Save Match Statistics
+
+      ↓
+
+Statistics Engine
+
+      ↓
+
+Career Totals
+Rankings
+Reports
+
+Create:
+
+includes/meta/
+
+└── class-player-statistics-meta-box.php
+File 48
+includes/meta/class-player-statistics-meta-box.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Player Statistics Meta Box
+ *
+ * Stores match performance data.
+ */
+class Athletix_Player_Statistics_Meta_Box {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'athletix_register_meta_boxes',
+
+            [
+
+                __CLASS__,
+
+                'register'
+
+            ]
+
+        );
+
+
+        add_action(
+
+            'save_post_ax_match',
+
+            [
+
+                __CLASS__,
+
+                'save'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function register() {
+
+
+        add_meta_box(
+
+            'athletix_player_statistics',
+
+            'Player Statistics',
+
+            [
+
+                __CLASS__,
+
+                'render'
+
+            ],
+
+            'ax_match',
+
+            'normal',
+
+            'default'
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function render(
+        $post
+    ) {
+
+
+        $stats =
+            get_post_meta(
+
+                $post->ID,
+
+                '_athletix_statistics',
+
+                true
+
+            );
+
+
+
+        if (
+            ! is_array($stats)
+        ) {
+
+            $stats = [];
+
+        }
+
+
+
+        ?>
+
+
+        <p>
+
+        Enter player statistics
+        as JSON.
+
+        </p>
+
+
+
+        <textarea
+
+            name="athletix_statistics"
+
+            style="width:100%;height:150px;"
+
+        ><?php
+
+            echo esc_textarea(
+
+                wp_json_encode(
+
+                    $stats,
+
+                    JSON_PRETTY_PRINT
+
+                )
+
+            );
+
+        ?></textarea>
+
+
+
+        <?php
+
+
+    }
+
+
+
+
+
+    public static function save(
+        $post_id
+    ) {
+
+
+        if (
+            empty(
+                $_POST['athletix_statistics']
+            )
+        ) {
+
+            return;
+
+        }
+
+
+
+        $json =
+            stripslashes(
+
+                $_POST['athletix_statistics']
+
+            );
+
+
+
+        $data =
+            json_decode(
+
+                $json,
+
+                true
+
+            );
+
+
+
+        if (
+            is_array($data)
+        ) {
+
+
+            update_post_meta(
+
+                $post_id,
+
+                '_athletix_statistics',
+
+                $data
+
+            );
+
+
+        }
+
+
+    }
+
+
+}
+Example Data Format
+
+A match can now store:
+
+{
+    "124": {
+        "goals": 2,
+        "assists": 1,
+        "yellow_cards": 1
+    },
+
+    "205": {
+        "goals": 0,
+        "assists": 2
+    }
+}
+
+Where:
+
+124
+205
+
+are player post IDs.
+
+Update class-plugin.php
+
+Add:
+
+Athletix_Player_Statistics_Meta_Box,
+Update class-loader.php
+
+Add:
+
+meta/class-player-statistics-meta-box.php
+Update Statistics Engine
+
+File:
+
+includes/engine/class-statistics-engine.php
+
+Replace:
+
+$stats =
+    get_post_meta(
+        $match,
+        '_athletix_statistics',
+        true
+    );
+
+with:
+
+$stats =
+    get_post_meta(
+        $match,
+        '_athletix_statistics',
+        true
+    );
+
+
+if (
+    empty($stats)
+) {
+
+    return;
+
+}
+
+This prevents empty matches from processing.
+
+Package 6C Complete ✅
+
+Athletix now supports:
+
+Match Data
+Match
+
+├── Home Team
+├── Away Team
+├── Score
+└── Player Statistics
+Player Records
+Player
+
+├── Career Goals
+├── Assists
+├── Cards
+├── Custom Metrics
+Current Athletix Architecture
+Athletix 2.0
+
+Bootstrap
+ |
+Core Framework
+ |
+Content Types
+ |
+Relationships
+ |
+Sports Engine
+ |
+Repositories
+ |
+Admin Framework
+ |
+Meta System
+ |
+Match Center
+ |
+Statistics

@@ -1,0 +1,281 @@
+Package 5B
+Professional Admin Framework
+Admin Assets + Notices
+
+We finish the first admin framework layer.
+
+This adds:
+
+Admin styling hooks
+Admin JavaScript loading
+Setup notifications
+Upgrade notifications
+
+Create/update:
+
+includes/admin/
+
+├── class-admin-assets.php
+└── class-admin-notices.php
+File 40
+includes/admin/class-admin-assets.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Admin Assets
+ */
+class Athletix_Admin_Assets {
+
+
+    public static function init() {
+
+
+        add_action(
+            'admin_enqueue_scripts',
+            [
+                __CLASS__,
+                'enqueue'
+            ]
+        );
+
+
+    }
+
+
+
+
+
+    public static function enqueue(
+        $hook
+    ) {
+
+
+        if (
+            strpos(
+                $hook,
+                'athletix'
+            ) === false
+        ) {
+
+            return;
+
+        }
+
+
+
+        wp_enqueue_style(
+
+            'athletix-admin',
+
+            ATHLETIX_URL .
+            'assets/css/admin.css',
+
+            [],
+
+            ATHLETIX_VERSION
+
+        );
+
+
+
+        wp_enqueue_script(
+
+            'athletix-admin',
+
+            ATHLETIX_URL .
+            'assets/js/admin.js',
+
+            [
+
+                'jquery'
+
+            ],
+
+            ATHLETIX_VERSION,
+
+            true
+
+        );
+
+
+
+        wp_localize_script(
+
+            'athletix-admin',
+
+            'AthletixAdmin',
+
+            [
+
+                'ajax_url' =>
+                    admin_url(
+                        'admin-ajax.php'
+                    ),
+
+
+                'nonce' =>
+                    wp_create_nonce(
+                        'athletix_admin'
+                    )
+
+            ]
+
+        );
+
+
+    }
+
+
+}
+File 41
+includes/admin/class-admin-notices.php
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+
+/**
+ * Athletix Admin Notices
+ */
+class Athletix_Admin_Notices {
+
+
+    public static function init() {
+
+
+        add_action(
+
+            'admin_notices',
+
+            [
+
+                __CLASS__,
+
+                'display'
+
+            ]
+
+        );
+
+
+    }
+
+
+
+
+
+    public static function display() {
+
+
+        if (
+            ! current_user_can(
+                'manage_options'
+            )
+        ) {
+
+            return;
+
+        }
+
+
+
+        $installed =
+            get_option(
+                'athletix_installed'
+            );
+
+
+
+        if (
+            empty($installed)
+        ) {
+
+
+            ?>
+
+            <div class="notice notice-info">
+
+                <p>
+
+                Athletix setup is incomplete.
+
+                Please configure your sport settings.
+
+                </p>
+
+            </div>
+
+            <?php
+
+
+        }
+
+
+    }
+
+
+}
+Update class-plugin.php
+
+Add:
+
+Athletix_Admin_Assets,
+
+Athletix_Admin_Notices,
+
+Your admin module list now becomes:
+
+Athletix_Admin_Menu,
+
+Athletix_Admin_Dashboard,
+
+Athletix_Admin_Settings,
+
+Athletix_Admin_Assets,
+
+Athletix_Admin_Notices,
+Update class-loader.php
+
+Add:
+
+admin/class-admin-assets.php
+
+admin/class-admin-notices.php
+Package 5 Complete ✅
+
+Athletix now has:
+
+ADMIN FRAMEWORK
+
+Dashboard
+   |
+Settings
+   |
+Assets
+   |
+Notices
+
+The plugin now has all major foundation layers:
+
+Athletix 2.0
+
+├── Bootstrap
+│
+├── Core Framework
+│
+├── Content Model
+│
+├── Relationships
+│
+├── Sports Engine
+│
+├── Repositories
+│
+└── Admin Framework
