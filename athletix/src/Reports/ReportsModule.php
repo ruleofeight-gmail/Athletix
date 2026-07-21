@@ -36,5 +36,7 @@ class ReportsModule implements Module {
 	 */
 	public function register( Plugin $plugin ) {
 		( new ReportBuilder( $plugin ) )->register();
+		( new PlayerReport( $plugin ) )->register();
+		( new TeamReport( $plugin ) )->register();
 	}
 }

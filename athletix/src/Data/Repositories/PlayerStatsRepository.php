@@ -112,6 +112,35 @@ class PlayerStatsRepository {
 	}
 
 	/**
+	 * Summed totals per metric for a player.
+	 *
+	 * @param int $player_id Player id.
+	 * @param int $season_id Season id (0 = all).
+	 * @return array<string,float> Map of metric => total.
+	 */
+	public function player_totals( $player_id, $season_id = 0 ) {
+		$sql  = "SELECT metric, SUM(value) AS total FROM {$this->table} WHERE player_id = %d";
+		$args = array( absint( $player_id ) );
+
+		if ( $season_id ) {
+			$sql   .= ' AND season_id = %d';
+			$args[] = absint( $season_id );
+		}
+
+		$sql .= ' GROUP BY metric ORDER BY metric ASC';
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$rows   = $this->db->get_results( $this->db->prepare( $sql, $args ), ARRAY_A );
+		$totals = array();
+
+		foreach ( (array) $rows as $row ) {
+			$totals[ (string) $row['metric'] ] = (float) $row['total'];
+		}
+
+		return $totals;
+	}
+
+	/**
 	 * Delete all stats for a match (used before re-recording on edit).
 	 *
 	 * @param int $match_id Match id.
