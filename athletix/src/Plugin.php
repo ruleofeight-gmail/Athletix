@@ -198,6 +198,7 @@ final class Plugin {
 			\Athletix\Rest\RestModule::class,
 			\Athletix\Frontend\FrontendModule::class,
 			\Athletix\Elementor\ElementorModule::class,
+			\Athletix\Settings\SettingsModule::class,
 			\Athletix\Dashboard\DashboardModule::class,
 			\Athletix\Search\SearchModule::class,
 			\Athletix\ImportExport\ImportExportModule::class,
