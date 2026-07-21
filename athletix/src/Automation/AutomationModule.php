@@ -36,5 +36,12 @@ class AutomationModule implements Module {
 	 */
 	public function register( Plugin $plugin ) {
 		( new Scheduler( $plugin ) )->register();
+
+		$rules = new RuleManager( $plugin->events(), new TemplateEngine(), $plugin->logger() );
+		$rules->register();
+
+		if ( is_admin() ) {
+			( new RulesAdmin( $rules ) )->register();
+		}
 	}
 }
