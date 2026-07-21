@@ -37,5 +37,6 @@ class SearchModule implements Module {
 	public function register( Plugin $plugin ) {
 		unset( $plugin );
 		( new Search() )->register();
+		( new Directory( new FilterEngine() ) )->register();
 	}
 }

@@ -369,3 +369,16 @@
 	padding: 0.35rem 0;
 	border-bottom: 1px solid rgba( 0, 0, 0, 0.06 );
 }
+
+/* Directory */
+.athletix-directory {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+}
+
+.athletix-directory input,
+.athletix-directory select {
+	padding: 0.4rem 0.6rem;
+}
