@@ -36,14 +36,20 @@ class SecurityModule implements Module {
 	 */
 	public function register( Plugin $plugin ) {
 		$roles = new Roles();
+		$caps  = new Capabilities();
 		$audit = new AuditLog();
 
 		$plugin->container()->instance( 'security.roles', $roles );
 		$plugin->container()->instance( 'security.audit', $audit );
+		$plugin->container()->instance( 'security.access', new AccessControl() );
 
-		// Ensure caps exist on activation and self-heal on admin load.
-		add_action( 'athletix/activate', array( $roles, 'ensure' ) );
-		add_action( 'admin_init', array( $roles, 'ensure' ) );
+		// Ensure roles and capabilities exist on activation and self-heal on admin load.
+		$ensure = static function () use ( $roles, $caps ) {
+			$roles->ensure();
+			$caps->ensure();
+		};
+		add_action( 'athletix/activate', $ensure );
+		add_action( 'admin_init', $ensure );
 
 		$audit->register();
 	}
