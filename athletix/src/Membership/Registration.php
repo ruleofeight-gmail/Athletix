@@ -75,7 +75,8 @@ class Registration {
 		$team_id = $this->plugin->make( 'repo.team' )->create(
 			array(
 				'post_title'  => $name,
-				'post_status' => 'draft', // Pending admin review.
+				'post_status' => 'draft',
+			// Pending admin review.
 			)
 		);
 

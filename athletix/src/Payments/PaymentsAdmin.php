@@ -125,7 +125,8 @@ class PaymentsAdmin {
 			$this->ledger->record( $entity_id, $amount, __( 'Manual entry', 'athletix' ) );
 		}
 
-		wp_safe_redirect( get_edit_post_link( $entity_id, 'redirect' ) ?: admin_url() ); // phpcs:ignore WordPress.PHP.DisallowShortTernary.Found
+		$redirect = get_edit_post_link( $entity_id, 'redirect' );
+		wp_safe_redirect( $redirect ? $redirect : admin_url() );
 		exit;
 	}
 }

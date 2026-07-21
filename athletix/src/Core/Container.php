@@ -79,7 +79,7 @@ class Container {
 		}
 
 		if ( ! isset( $this->bindings[ $id ] ) ) {
-			throw new \RuntimeException( sprintf( 'Athletix container has no binding for "%s".', $id ) );
+			throw new \RuntimeException( esc_html( sprintf( 'Athletix container has no binding for "%s".', $id ) ) );
 		}
 
 		$this->instances[ $id ] = call_user_func( $this->bindings[ $id ], $this );

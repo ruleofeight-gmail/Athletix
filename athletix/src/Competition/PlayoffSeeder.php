@@ -83,7 +83,8 @@ class PlayoffSeeder {
 
 		$pairings           = $this->seeder->first_round( $qualifiers );
 		$result['pairings'] = $pairings;
-		$round_number       = 1000; // Playoff rounds numbered high to sort after the regular season.
+		$round_number       = 1000;
+		// Playoff rounds numbered high to sort after the regular season.
 
 		foreach ( $pairings as $pair ) {
 			if ( $pair['bye'] ) {

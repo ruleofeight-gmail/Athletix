@@ -37,11 +37,11 @@ class PostTypes {
 			__( 'Teams', 'athletix' ),
 			__( 'Team', 'athletix' ),
 			array(
-				'menu_icon'   => self::MENU_ICON,
+				'menu_icon'     => self::MENU_ICON,
 				'menu_position' => 26,
-				'has_archive' => true,
-				'rewrite'     => array( 'slug' => 'teams' ),
-				'supports'    => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+				'has_archive'   => true,
+				'rewrite'       => array( 'slug' => 'teams' ),
+				'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
 			)
 		);
 
@@ -117,22 +117,22 @@ class PostTypes {
 	 */
 	private function register_type( $slug, $plural, $singular, array $args ) {
 		$labels = array(
-			'name'               => $plural,
-			'singular_name'      => $singular,
+			'name'          => $plural,
+			'singular_name' => $singular,
 			/* translators: %s: singular post type name. */
-			'add_new_item'       => sprintf( __( 'Add New %s', 'athletix' ), $singular ),
+			'add_new_item'  => sprintf( __( 'Add New %s', 'athletix' ), $singular ),
 			/* translators: %s: singular post type name. */
-			'edit_item'          => sprintf( __( 'Edit %s', 'athletix' ), $singular ),
+			'edit_item'     => sprintf( __( 'Edit %s', 'athletix' ), $singular ),
 			/* translators: %s: singular post type name. */
-			'new_item'           => sprintf( __( 'New %s', 'athletix' ), $singular ),
+			'new_item'      => sprintf( __( 'New %s', 'athletix' ), $singular ),
 			/* translators: %s: singular post type name. */
-			'view_item'          => sprintf( __( 'View %s', 'athletix' ), $singular ),
+			'view_item'     => sprintf( __( 'View %s', 'athletix' ), $singular ),
 			/* translators: %s: plural post type name. */
-			'search_items'       => sprintf( __( 'Search %s', 'athletix' ), $plural ),
+			'search_items'  => sprintf( __( 'Search %s', 'athletix' ), $plural ),
 			/* translators: %s: plural post type name. */
-			'all_items'          => sprintf( __( 'All %s', 'athletix' ), $plural ),
+			'all_items'     => sprintf( __( 'All %s', 'athletix' ), $plural ),
 			/* translators: %s: plural post type name. */
-			'not_found'          => sprintf( __( 'No %s found', 'athletix' ), strtolower( $plural ) ),
+			'not_found'     => sprintf( __( 'No %s found', 'athletix' ), strtolower( $plural ) ),
 		);
 
 		$defaults = array(

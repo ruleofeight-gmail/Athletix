@@ -36,9 +36,24 @@ class StandingsCalculatorTest extends TestCase {
 
 		$table = $calc->compute(
 			array(
-				array( 'home' => 1, 'away' => 2, 'home_score' => 2, 'away_score' => 1 ),
-				array( 'home' => 2, 'away' => 3, 'home_score' => 3, 'away_score' => 0 ),
-				array( 'home' => 1, 'away' => 3, 'home_score' => 1, 'away_score' => 1 ),
+				array(
+					'home'       => 1,
+					'away'       => 2,
+					'home_score' => 2,
+					'away_score' => 1,
+				),
+				array(
+					'home'       => 2,
+					'away'       => 3,
+					'home_score' => 3,
+					'away_score' => 0,
+				),
+				array(
+					'home'       => 1,
+					'away'       => 3,
+					'home_score' => 1,
+					'away_score' => 1,
+				),
 			)
 		);
 
@@ -64,9 +79,24 @@ class StandingsCalculatorTest extends TestCase {
 
 		$table = $calc->compute(
 			array(
-				array( 'home' => 5, 'away' => 5, 'home_score' => 1, 'away_score' => 0 ), // same team
-				array( 'home' => 0, 'away' => 6, 'home_score' => 1, 'away_score' => 0 ), // missing home
-				array( 'home' => 7, 'away' => 8, 'home_score' => 0, 'away_score' => 0 ), // valid draw
+				array(
+					'home'       => 5,
+					'away'       => 5,
+					'home_score' => 1,
+					'away_score' => 0,
+				), // same team
+				array(
+					'home'       => 0,
+					'away'       => 6,
+					'home_score' => 1,
+					'away_score' => 0,
+				), // missing home
+				array(
+					'home'       => 7,
+					'away'       => 8,
+					'home_score' => 0,
+					'away_score' => 0,
+				), // valid draw
 			)
 		);
 
@@ -82,11 +112,22 @@ class StandingsCalculatorTest extends TestCase {
 	 * @return void
 	 */
 	public function test_respects_custom_points() {
-		$calc = new StandingsCalculator( array( 'win' => 2, 'draw' => 1, 'loss' => 0 ) );
+		$calc = new StandingsCalculator(
+			array(
+				'win'  => 2,
+				'draw' => 1,
+				'loss' => 0,
+			)
+		);
 
 		$table = $calc->compute(
 			array(
-				array( 'home' => 1, 'away' => 2, 'home_score' => 4, 'away_score' => 0 ),
+				array(
+					'home'       => 1,
+					'away'       => 2,
+					'home_score' => 4,
+					'away_score' => 0,
+				),
 			)
 		);
 

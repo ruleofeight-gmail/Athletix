@@ -97,7 +97,7 @@ class ImportExport {
 
 			<h2><?php esc_html_e( 'Import CSV', 'athletix' ); ?></h2>
 			<p class="description"><?php esc_html_e( 'Teams CSV: one column "name". Players CSV: columns "name","team_id","position","number".', 'athletix' ); ?></p>
-			<form method="post" action="<?php echo $action; ?>" enctype="multipart/form-data">
+			<form method="post" action="<?php echo esc_url( $action ); ?>" enctype="multipart/form-data">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACTION_IMPORT ); ?>" />
 				<?php wp_nonce_field( self::ACTION_IMPORT ); ?>
 				<table class="form-table" role="presentation"><tbody>
@@ -121,7 +121,7 @@ class ImportExport {
 			<hr />
 
 			<h2><?php esc_html_e( 'Export Standings', 'athletix' ); ?></h2>
-			<form method="post" action="<?php echo $action; ?>">
+			<form method="post" action="<?php echo esc_url( $action ); ?>">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACTION_EXPORT ); ?>" />
 				<?php wp_nonce_field( self::ACTION_EXPORT ); ?>
 				<select name="league_id" required>
@@ -182,9 +182,15 @@ class ImportExport {
 					++$made;
 				}
 			}
-		}
+		}//end foreach
 
-		$this->plugin->logger()->info( 'CSV import', array( 'type' => $type, 'rows' => $made ) );
+		$this->plugin->logger()->info(
+			'CSV import',
+			array(
+				'type' => $type,
+				'rows' => $made,
+			)
+		);
 		$this->redirect( array( 'ax_imported' => $made ) );
 	}
 
@@ -269,7 +275,13 @@ class ImportExport {
 	private function redirect( array $args ) {
 		wp_safe_redirect(
 			add_query_arg(
-				array_merge( array( 'post_type' => Keys::TEAM, 'page' => self::PAGE ), $args ),
+				array_merge(
+					array(
+						'post_type' => Keys::TEAM,
+						'page'      => self::PAGE,
+					),
+					$args
+				),
 				admin_url( 'edit.php' )
 			)
 		);

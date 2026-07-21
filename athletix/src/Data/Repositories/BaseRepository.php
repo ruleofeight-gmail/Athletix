@@ -58,7 +58,8 @@ abstract class BaseRepository {
 		);
 
 		$args              = array_merge( $defaults, $args );
-		$args['post_type'] = $this->post_type; // Never overridable.
+		$args['post_type'] = $this->post_type;
+		// Never overridable.
 
 		return get_posts( $args );
 	}

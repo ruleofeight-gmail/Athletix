@@ -56,11 +56,11 @@ class MetaBoxManager {
 	 */
 	private function schemas() {
 		return array(
-			Keys::TEAM   => array(
+			Keys::TEAM     => array(
 				Keys::TEAM_LEAGUE  => array(
-					'label'    => __( 'League', 'athletix' ),
-					'type'     => 'post',
-					'sanitize' => 'int',
+					'label'     => __( 'League', 'athletix' ),
+					'type'      => 'post',
+					'sanitize'  => 'int',
 					'post_type' => Keys::LEAGUE,
 				),
 				Keys::TEAM_VENUE   => array(
@@ -79,7 +79,7 @@ class MetaBoxManager {
 					'sanitize' => 'text',
 				),
 			),
-			Keys::PLAYER => array(
+			Keys::PLAYER   => array(
 				Keys::PLAYER_TEAM     => array(
 					'label'     => __( 'Team', 'athletix' ),
 					'type'      => 'post',
@@ -117,7 +117,7 @@ class MetaBoxManager {
 					'sanitize' => 'date',
 				),
 			),
-			Keys::MATCH  => array(
+			Keys::MATCH    => array(
 				Keys::MATCH_LEAGUE     => array(
 					'label'     => __( 'League', 'athletix' ),
 					'type'      => 'post',
@@ -167,7 +167,7 @@ class MetaBoxManager {
 					),
 				),
 			),
-			Keys::SEASON => array(
+			Keys::SEASON   => array(
 				Keys::SEASON_LEAGUE => array(
 					'label'     => __( 'League', 'athletix' ),
 					'type'      => 'post',
@@ -281,7 +281,7 @@ class MetaBoxManager {
 			default:
 				echo '<input type="text" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '" value="' . esc_attr( $value ) . '" class="regular-text" />';
 				break;
-		}
+		}//end switch
 	}
 
 	/**

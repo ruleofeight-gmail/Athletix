@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<ruleset name="Athletix">
+	<description>Coding standards for the Athletix plugin.</description>
+
+	<!-- What to scan. -->
+	<file>athletix.php</file>
+	<file>uninstall.php</file>
+	<file>src</file>
+	<file>tests</file>
+
+	<!-- Exclusions. -->
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+
+	<!-- Show progress and sniff codes; use colours. -->
+	<arg value="ps"/>
+	<arg name="colors"/>
+	<arg name="extensions" value="php"/>
+	<arg name="parallel" value="8"/>
+
+	<!-- Errors fail the build; warnings are reported but do not gate. -->
+	<config name="ignore_warnings_on_exit" value="1"/>
+
+	<!-- Base standard. -->
+	<rule ref="WordPress">
+		<!--
+			The plugin uses PSR-4 (StudlyCase filenames, one namespaced class per
+			file), so the classic class-*.php filename sniff does not apply.
+		-->
+		<exclude name="WordPress.Files.FileName"/>
+		<!--
+			Athletix events use a namespaced "athletix/event_name" hook
+			convention (via Core\Events), which is intentional and common.
+		-->
+		<exclude name="WordPress.NamingConventions.ValidHookName"/>
+	</rule>
+
+	<!-- Minimum supported WordPress version for deprecation/compat sniffs. -->
+	<config name="minimum_wp_version" value="5.8"/>
+
+	<!-- Text domain for i18n sniffs. -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="athletix"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Global symbol prefixes. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="Athletix"/>
+				<element value="ATHLETIX_"/>
+				<element value="athletix"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Relaxations for the test suite (WP test scaffolding defines globals,
+	     triggers core hooks and echoes bootstrap errors). -->
+	<rule ref="WordPress.DB.DirectDatabaseQuery">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.DB.PreparedSQL">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Security.EscapeOutput">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+</ruleset>

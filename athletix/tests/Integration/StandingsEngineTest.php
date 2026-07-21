@@ -55,9 +55,24 @@ class StandingsEngineTest extends IntegrationTestCase {
 	 */
 	public function test_standings_recompute_on_match_save() {
 		$league = self::factory()->post->create( array( 'post_type' => Keys::LEAGUE ) );
-		$a      = self::factory()->post->create( array( 'post_type' => Keys::TEAM, 'post_title' => 'A' ) );
-		$b      = self::factory()->post->create( array( 'post_type' => Keys::TEAM, 'post_title' => 'B' ) );
-		$c      = self::factory()->post->create( array( 'post_type' => Keys::TEAM, 'post_title' => 'C' ) );
+		$a      = self::factory()->post->create(
+			array(
+				'post_type'  => Keys::TEAM,
+				'post_title' => 'A',
+			)
+		);
+		$b      = self::factory()->post->create(
+			array(
+				'post_type'  => Keys::TEAM,
+				'post_title' => 'B',
+			)
+		);
+		$c      = self::factory()->post->create(
+			array(
+				'post_type'  => Keys::TEAM,
+				'post_title' => 'C',
+			)
+		);
 
 		$this->record_match( $league, $a, $b, 2, 1 ); // A win
 		$this->record_match( $league, $b, $c, 3, 0 ); // B win

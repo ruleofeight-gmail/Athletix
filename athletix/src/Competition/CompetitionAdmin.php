@@ -23,9 +23,9 @@ use Athletix\Support\Keys;
  */
 class CompetitionAdmin {
 
-	const PAGE               = 'athletix-competitions';
-	const ACTION_SCHEDULE    = 'athletix_generate_schedule';
-	const ACTION_PLAYOFFS    = 'athletix_generate_playoffs';
+	const PAGE            = 'athletix-competitions';
+	const ACTION_SCHEDULE = 'athletix_generate_schedule';
+	const ACTION_PLAYOFFS = 'athletix_generate_playoffs';
 
 	/**
 	 * Scheduler.
@@ -126,7 +126,7 @@ class CompetitionAdmin {
 
 			<h2><?php esc_html_e( 'Generate Round-Robin Schedule', 'athletix' ); ?></h2>
 			<p class="description"><?php esc_html_e( 'Creates fixtures for every team in the selected league.', 'athletix' ); ?></p>
-			<form method="post" action="<?php echo $action; ?>">
+			<form method="post" action="<?php echo esc_url( $action ); ?>">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACTION_SCHEDULE ); ?>" />
 				<?php wp_nonce_field( self::ACTION_SCHEDULE ); ?>
 				<table class="form-table" role="presentation"><tbody>
@@ -153,7 +153,7 @@ class CompetitionAdmin {
 
 			<h2><?php esc_html_e( 'Generate Playoffs', 'athletix' ); ?></h2>
 			<p class="description"><?php esc_html_e( 'Seeds a single-elimination bracket from the current standings.', 'athletix' ); ?></p>
-			<form method="post" action="<?php echo $action; ?>">
+			<form method="post" action="<?php echo esc_url( $action ); ?>">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACTION_PLAYOFFS ); ?>" />
 				<?php wp_nonce_field( self::ACTION_PLAYOFFS ); ?>
 				<table class="form-table" role="presentation"><tbody>
@@ -226,7 +226,8 @@ class CompetitionAdmin {
 	 * @return void
 	 */
 	public function handle_schedule() {
-		$this->guard( self::ACTION_SCHEDULE );
+		check_admin_referer( self::ACTION_SCHEDULE );
+		$this->authorize();
 
 		$league_id = isset( $_POST['league_id'] ) ? absint( $_POST['league_id'] ) : 0;
 		$season_id = isset( $_POST['season_id'] ) ? absint( $_POST['season_id'] ) : 0;
@@ -260,7 +261,8 @@ class CompetitionAdmin {
 	 * @return void
 	 */
 	public function handle_playoffs() {
-		$this->guard( self::ACTION_PLAYOFFS );
+		check_admin_referer( self::ACTION_PLAYOFFS );
+		$this->authorize();
 
 		$league_id = isset( $_POST['league_id'] ) ? absint( $_POST['league_id'] ) : 0;
 		$season_id = isset( $_POST['season_id'] ) ? absint( $_POST['season_id'] ) : 0;
@@ -282,17 +284,17 @@ class CompetitionAdmin {
 	}
 
 	/**
-	 * Verify nonce + capability or die.
+	 * Ensure the current user may manage competitions, or die.
 	 *
-	 * @param string $action Action name (nonce action).
+	 * The nonce is verified by each handler via check_admin_referer() before
+	 * this call, keeping the check visible at the point of form processing.
+	 *
 	 * @return void
 	 */
-	private function guard( $action ) {
+	private function authorize() {
 		if ( ! current_user_can( Keys::capability() ) ) {
 			wp_die( esc_html__( 'You are not allowed to do this.', 'athletix' ) );
 		}
-
-		check_admin_referer( $action );
 	}
 
 	/**

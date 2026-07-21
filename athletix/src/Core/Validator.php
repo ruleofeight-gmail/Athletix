@@ -57,7 +57,7 @@ class Validator {
 			case 'text':
 			default:
 				return sanitize_text_field( (string) $value );
-		}
+		}//end switch
 	}
 
 	/**

@@ -12,7 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Athletix\Plugin;
-use Athletix\Security\AuditLog;
 use Athletix\Support\Keys;
 
 /**
@@ -143,7 +142,6 @@ class DashboardPage {
 			return;
 		}
 
-		/** @var AuditLog $audit */
 		$audit   = $this->plugin->make( 'security.audit' );
 		$entries = array_reverse( $audit->recent() );
 

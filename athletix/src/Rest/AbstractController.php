@@ -50,11 +50,13 @@ abstract class AbstractController {
 	 * @return array
 	 */
 	protected function basic_post( $post ) {
+		$thumbnail = get_the_post_thumbnail_url( $post, 'medium' );
+
 		return array(
 			'id'        => $post->ID,
 			'title'     => get_the_title( $post ),
 			'permalink' => get_permalink( $post ),
-			'thumbnail' => get_the_post_thumbnail_url( $post, 'medium' ) ?: '', // phpcs:ignore WordPress.PHP.DisallowShortTernary.Found
+			'thumbnail' => $thumbnail ? $thumbnail : '',
 		);
 	}
 }

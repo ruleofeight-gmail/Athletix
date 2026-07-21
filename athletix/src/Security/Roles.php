@@ -37,12 +37,12 @@ class Roles {
 				self::ROLE,
 				__( 'League Manager', 'athletix' ),
 				array(
-					'read'            => true,
-					'upload_files'    => true,
-					self::CAP         => true,
-					'edit_posts'      => true,
-					'publish_posts'   => true,
-					'delete_posts'    => true,
+					'read'          => true,
+					'upload_files'  => true,
+					self::CAP       => true,
+					'edit_posts'    => true,
+					'publish_posts' => true,
+					'delete_posts'  => true,
 				)
 			);
 		}

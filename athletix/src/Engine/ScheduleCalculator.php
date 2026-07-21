@@ -53,7 +53,8 @@ class ScheduleCalculator {
 				$away = $line[ $count - 1 - $i ];
 
 				if ( 0 === $home || 0 === $away ) {
-					continue; // Bye — no match.
+					continue;
+					// Bye — no match.
 				}
 
 				// Alternate home/away by round for fairness.
@@ -68,13 +69,13 @@ class ScheduleCalculator {
 						'away' => $home,
 					);
 				}
-			}
+			}//end for
 
 			$rounds[] = $round;
 
 			// Rotate all but the fixed team clockwise.
 			array_unshift( $rotating, array_pop( $rotating ) );
-		}
+		}//end for
 
 		if ( $double_round ) {
 			$rounds = array_merge( $rounds, $this->mirror( $rounds ) );

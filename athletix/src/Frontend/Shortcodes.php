@@ -157,8 +157,8 @@ class Shortcodes {
 		if ( $atts['team'] ) {
 			$posts = $players->for_team( absint( $atts['team'] ) );
 		} elseif ( $atts['league'] ) {
-			$teams   = wp_list_pluck( $this->plugin->make( 'repo.team' )->for_league( absint( $atts['league'] ) ), 'ID' );
-			$posts   = empty( $teams ) ? array() : $players->all(
+			$teams = wp_list_pluck( $this->plugin->make( 'repo.team' )->for_league( absint( $atts['league'] ) ), 'ID' );
+			$posts = empty( $teams ) ? array() : $players->all(
 				array(
 					'posts_per_page' => -1,
 					'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query

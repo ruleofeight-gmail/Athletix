@@ -15,7 +15,7 @@ use Athletix\Support\Keys;
 class RepositoryTest extends IntegrationTestCase {
 
 	/**
-	 * create() forces the post type and find() round-trips.
+	 * The create() method forces the post type and find() round-trips.
 	 *
 	 * @return void
 	 */
@@ -34,7 +34,7 @@ class RepositoryTest extends IntegrationTestCase {
 	}
 
 	/**
-	 * find() rejects a post of the wrong type.
+	 * The find() method rejects a post of the wrong type.
 	 *
 	 * @return void
 	 */
@@ -46,7 +46,7 @@ class RepositoryTest extends IntegrationTestCase {
 	}
 
 	/**
-	 * for_league() filters by the league meta.
+	 * The for_league() method filters by the league meta.
 	 *
 	 * @return void
 	 */

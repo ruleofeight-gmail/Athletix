@@ -52,29 +52,53 @@ class DataModule implements Module {
 
 		$container = $plugin->container();
 
-		$container->bind( 'repo.team', static function () {
-			return new TeamRepository();
-		} );
-		$container->bind( 'repo.player', static function () {
-			return new PlayerRepository();
-		} );
-		$container->bind( 'repo.match', static function () {
-			return new MatchRepository();
-		} );
-		$container->bind( 'repo.league', static function () {
-			return new LeagueRepository();
-		} );
-		$container->bind( 'repo.season', static function () {
-			return new SeasonRepository();
-		} );
-		$container->bind( 'repo.standings', static function () {
-			return new StandingsRepository();
-		} );
-		$container->bind( 'repo.player_stats', static function () {
-			return new PlayerStatsRepository();
-		} );
-		$container->bind( 'repo.relationship', static function () {
-			return new RelationshipRepository();
-		} );
+		$container->bind(
+			'repo.team',
+			static function () {
+				return new TeamRepository();
+			}
+		);
+		$container->bind(
+			'repo.player',
+			static function () {
+				return new PlayerRepository();
+			}
+		);
+		$container->bind(
+			'repo.match',
+			static function () {
+				return new MatchRepository();
+			}
+		);
+		$container->bind(
+			'repo.league',
+			static function () {
+				return new LeagueRepository();
+			}
+		);
+		$container->bind(
+			'repo.season',
+			static function () {
+				return new SeasonRepository();
+			}
+		);
+		$container->bind(
+			'repo.standings',
+			static function () {
+				return new StandingsRepository();
+			}
+		);
+		$container->bind(
+			'repo.player_stats',
+			static function () {
+				return new PlayerStatsRepository();
+			}
+		);
+		$container->bind(
+			'repo.relationship',
+			static function () {
+				return new RelationshipRepository();
+			}
+		);
 	}
 }

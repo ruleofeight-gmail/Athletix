@@ -30,6 +30,7 @@
     "scripts": {
         "test": "phpunit -c phpunit.xml.dist",
         "test:integration": "phpunit -c phpunit-integration.xml.dist",
-        "lint": "phpcs --standard=WordPress src"
+        "lint": "phpcs",
+        "lint:fix": "phpcbf"
     }
 }

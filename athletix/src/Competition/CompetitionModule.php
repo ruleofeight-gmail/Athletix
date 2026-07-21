@@ -39,29 +39,44 @@ class CompetitionModule implements Module {
 	public function register( Plugin $plugin ) {
 		$c = $plugin->container();
 
-		$c->bind( 'competition.divisions', static function () use ( $plugin ) {
-			return new Divisions( $plugin->make( 'repo.relationship' ) );
-		} );
+		$c->bind(
+			'competition.divisions',
+			static function () use ( $plugin ) {
+				return new Divisions( $plugin->make( 'repo.relationship' ) );
+			}
+		);
 
-		$c->bind( 'competition.bracket_seeder', static function () {
-			return new BracketSeeder();
-		} );
+		$c->bind(
+			'competition.bracket_seeder',
+			static function () {
+				return new BracketSeeder();
+			}
+		);
 
-		$c->bind( 'competition.scheduler', static function () use ( $plugin ) {
-			return new CompetitionScheduler( $plugin->make( 'repo.match' ), new ScheduleCalculator() );
-		} );
+		$c->bind(
+			'competition.scheduler',
+			static function () use ( $plugin ) {
+				return new CompetitionScheduler( $plugin->make( 'repo.match' ), new ScheduleCalculator() );
+			}
+		);
 
-		$c->bind( 'competition.playoffs', static function () use ( $plugin ) {
-			return new PlayoffSeeder(
-				$plugin->make( 'engine.ranking' ),
-				$plugin->make( 'competition.bracket_seeder' ),
-				$plugin->make( 'competition.scheduler' )
-			);
-		} );
+		$c->bind(
+			'competition.playoffs',
+			static function () use ( $plugin ) {
+				return new PlayoffSeeder(
+					$plugin->make( 'engine.ranking' ),
+					$plugin->make( 'competition.bracket_seeder' ),
+					$plugin->make( 'competition.scheduler' )
+				);
+			}
+		);
 
-		$c->bind( 'competition.tournaments', static function () use ( $plugin ) {
-			return new TournamentBuilder( $plugin->make( 'repo.league' ), $plugin->make( 'repo.relationship' ) );
-		} );
+		$c->bind(
+			'competition.tournaments',
+			static function () use ( $plugin ) {
+				return new TournamentBuilder( $plugin->make( 'repo.league' ), $plugin->make( 'repo.relationship' ) );
+			}
+		);
 
 		if ( is_admin() ) {
 			$admin = new CompetitionAdmin(

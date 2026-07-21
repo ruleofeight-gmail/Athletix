@@ -87,11 +87,11 @@ final class Plugin {
 			static function () {
 				return new Config(
 					array(
-						'active_sport'  => 'soccer',
-						'points_win'    => 3,
-						'points_draw'   => 1,
-						'points_loss'   => 0,
-						'delete_data'   => false,
+						'active_sport' => 'soccer',
+						'points_win'   => 3,
+						'points_draw'  => 1,
+						'points_loss'  => 0,
+						'delete_data'  => false,
 					)
 				);
 			}

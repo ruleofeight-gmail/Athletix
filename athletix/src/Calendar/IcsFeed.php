@@ -1,6 +1,6 @@
 <?php
 /**
- * iCalendar (.ics) feed for match schedules.
+ * Subscribable iCalendar (.ics) feed for match schedules.
  *
  * @package Athletix
  */
@@ -135,6 +135,6 @@ class IcsFeed {
 	 * @return string
 	 */
 	private function escape( $value ) {
-		return addcslashes( wp_strip_all_tags( $value ), ",;\\" );
+		return addcslashes( wp_strip_all_tags( $value ), ',;\\' );
 	}
 }

@@ -116,9 +116,8 @@ jobs:
         run: composer test:integration
 
   coding-standards:
-    name: Coding Standards (advisory)
+    name: Coding Standards
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
 
@@ -126,11 +125,11 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          tools: composer
+          tools: composer, cs2pr
           coverage: none
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-progress
 
-      - name: Run PHPCS (WordPress standard)
+      - name: Run PHPCS (WordPress Coding Standards)
         run: composer lint

@@ -63,7 +63,7 @@ class BracketSeeder {
 				'seed_away' => $seed_away,
 				'bye'       => ( null === $away ),
 			);
-		}
+		}//end for
 
 		return $pairs;
 	}

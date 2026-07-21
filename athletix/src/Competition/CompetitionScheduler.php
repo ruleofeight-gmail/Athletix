@@ -69,8 +69,8 @@ class CompetitionScheduler {
 		}
 
 		$rounds       = $this->calculator->round_robin( $team_ids, (bool) $double_round );
-		$created       = array();
-		$base_ts       = $start_date ? strtotime( $start_date ) : current_time( 'timestamp' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$created      = array();
+		$base_ts      = $start_date ? strtotime( $start_date ) : current_time( 'timestamp' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 		$days_between = max( 1, absint( $days_between ) );
 
 		foreach ( $rounds as $round_index => $round ) {
