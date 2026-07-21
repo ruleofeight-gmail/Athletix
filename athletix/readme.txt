@@ -1,45 +1,68 @@
 === Athletix ===
 Contributors: athletix
-Tags: sports, fitness, athletes, elementor, teams, events
+Tags: sports, league, teams, players, standings, elementor, competition
 Requires at least: 5.8
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Sports & fitness toolkit with a full Elementor integration: athlete, team and event management plus custom widgets and dynamic tags.
+Modular sports-league management: teams, players, matches, standings and
+competitions, with a full Elementor integration.
 
 == Description ==
 
-Athletix adds three custom post types — Athletes, Teams and Events — together with Sport and Season taxonomies, and ships a complete Elementor integration:
+Athletix is a modular framework for running sports leagues on WordPress.
 
-* **Athlete Card** widget — photo, name and stats for a single athlete.
-* **Team Roster** widget — responsive grid of athletes, optionally filtered by sport.
-* **Event Schedule** widget — upcoming fixtures or past results as a styled table.
-* **Athlete Field** dynamic tag — bind athlete meta (position, number, height, weight, country, DOB) into any Elementor element.
-* A dedicated **Athletix** panel category and dynamic-tags group.
+Content types: Leagues, Seasons, Teams, Players, Matches and Divisions, with a
+shared Sport taxonomy and secure meta boxes.
 
-The Elementor pieces load only when a compatible version of Elementor (3.5.0+) is active; without it, the post types and admin still work and a dismissible notice explains what is missing.
+Engine: matches are processed through an event system that recomputes standings
+(stored in a real, indexed table — not post meta), player statistics and
+rankings. Standings sort by points, goal difference then goals for.
+
+Competition: generate a balanced round-robin schedule (circle method, single or
+double), and seed a single-elimination playoff bracket directly from the
+standings, with correct byes for non-power-of-two fields.
+
+REST API (namespace `athletix/v1`): `/standings`, `/teams`, `/players`,
+`/matches`, with a filterable public-read permission.
+
+Shortcodes:
+
+* `[athletix_standings league="12" season="0"]`
+* `[athletix_roster team="5" columns="3"]`
+* `[athletix_schedule league="12" limit="20"]`
+
+Elementor: a dedicated "Athletix" category with League Table, Team Roster and
+Match Schedule widgets, plus a Player Field dynamic tag. The Elementor layer
+loads only when a compatible Elementor (3.5+) is active; without it the rest of
+the plugin works normally.
 
 == Installation ==
 
 1. Upload the `athletix` folder to `/wp-content/plugins/`.
-2. Activate the plugin through the *Plugins* screen in WordPress.
-3. (Optional) Install and activate Elementor to use the widgets and dynamic tags.
-4. Add athletes, teams and events under the **Athletix** menu.
+2. Activate the plugin. Custom tables are created on activation.
+3. (Optional) `composer install` to enable the PHPUnit/PHPCS dev tooling.
+4. Add leagues, teams, players and matches under the Athletix menu, then use
+   the Competitions screen to generate schedules and playoffs.
 
 == Frequently Asked Questions ==
 
 = Does it require Elementor? =
 
-No. The content types and admin work standalone. Elementor is only needed for the drag-and-drop widgets and dynamic tags.
+No. Elementor is only needed for the drag-and-drop widgets and dynamic tags.
 
-= Where are athlete stats stored? =
+= Where are standings stored? =
 
-As post meta on the athlete, editable from the *Athlete Details* meta box.
+In a dedicated custom table, recomputed from completed matches whenever a match
+changes, so the table can never drift from the results.
 
 == Changelog ==
 
-= 1.0.0 =
-* Initial release: Athlete/Team/Event post types, taxonomies, meta boxes, three Elementor widgets and the Athlete Field dynamic tag.
+= 2.0.0 =
+* Complete rebuild on a modular, namespaced (PSR-4) architecture.
+* Event-driven engines; standings/stats/relationships in custom tables.
+* Competition module: round-robin scheduling and standings-seeded playoffs.
+* REST API, shortcodes and Elementor widgets + dynamic tag.
