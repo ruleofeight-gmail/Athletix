@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Athletix 2.0.0\n"
 "Report-Msgid-Bugs-To: https://example.com/support\n"
-"POT-Creation-Date: 2026-07-21 23:28+0000\n"
+"POT-Creation-Date: 2026-07-21 23:31+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -95,6 +95,10 @@ msgstr ""
 msgid "Athletix Elementor widgets require Elementor to be installed and active."
 msgstr ""
 
+#: assets/js/blocks.js
+msgid "Athletix Match"
+msgstr ""
+
 #: src/Notifications/Preferences.php
 msgid "Athletix Notifications"
 msgstr ""
@@ -103,8 +107,24 @@ msgstr ""
 msgid "Athletix Overview"
 msgstr ""
 
+#: assets/js/blocks.js
+msgid "Athletix Player"
+msgstr ""
+
+#: assets/js/blocks.js
+msgid "Athletix Roster"
+msgstr ""
+
+#: assets/js/blocks.js
+msgid "Athletix Schedule"
+msgstr ""
+
 #: src/Settings/SettingsPage.php
 msgid "Athletix Settings"
+msgstr ""
+
+#: assets/js/blocks.js
+msgid "Athletix Standings"
 msgstr ""
 
 #: src/Automation/RuleManager.php
@@ -159,7 +179,7 @@ msgstr ""
 msgid "Card"
 msgstr ""
 
-#: src/Elementor/Widgets/TeamRosterWidget.php
+#: assets/js/blocks.js src/Elementor/Widgets/TeamRosterWidget.php
 msgid "Columns"
 msgstr ""
 
@@ -463,6 +483,10 @@ msgstr ""
 msgid "League"
 msgstr ""
 
+#: assets/js/blocks.js
+msgid "League ID"
+msgstr ""
+
 #: src/Security/Roles.php
 msgid "League Manager"
 msgstr ""
@@ -519,6 +543,10 @@ msgstr ""
 msgid "Match Date"
 msgstr ""
 
+#: assets/js/blocks.js
+msgid "Match ID"
+msgstr ""
+
 #: src/Elementor/Widgets/ScheduleWidget.php
 msgid "Match Schedule"
 msgstr ""
@@ -537,6 +565,10 @@ msgstr ""
 
 #: src/Elementor/Widgets/ScheduleWidget.php
 msgid "Max Matches"
+msgstr ""
+
+#: assets/js/blocks.js
+msgid "Max matches"
 msgstr ""
 
 #: src/Automation/RulesAdmin.php
@@ -681,6 +713,10 @@ msgstr ""
 
 #: src/Elementor/Tags/PlayerFieldTag.php
 msgid "Player Field"
+msgstr ""
+
+#: assets/js/blocks.js
+msgid "Player ID"
 msgstr ""
 
 #: src/Elementor/Widgets/PlayerProfileWidget.php
@@ -839,6 +875,10 @@ msgstr ""
 msgid "Season"
 msgstr ""
 
+#: assets/js/blocks.js
+msgid "Season ID (0 = all)"
+msgstr ""
+
 #: src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/StatisticsWidget.php
 msgid "Season ID (optional)"
 msgstr ""
@@ -883,12 +923,16 @@ msgstr ""
 msgid "Set the home and away teams (and give them players) to record statistics."
 msgstr ""
 
-#: src/Settings/SettingsPage.php
+#: assets/js/blocks.js src/Settings/SettingsPage.php
 msgid "Settings"
 msgstr ""
 
 #: src/Elementor/Widgets/PlayerProfileWidget.php
 msgid "Show Stats"
+msgstr ""
+
+#: assets/js/blocks.js
+msgid "Show statistics"
 msgstr ""
 
 #: src/Membership/Registration.php
@@ -941,6 +985,10 @@ msgstr ""
 
 #: src/Meta/MetaBoxManager.php
 msgid "Team Color"
+msgstr ""
+
+#: assets/js/blocks.js
+msgid "Team ID"
 msgstr ""
 
 #: src/Membership/Registration.php

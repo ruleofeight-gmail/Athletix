@@ -16,7 +16,7 @@ $root   = dirname( __DIR__ );
 $domain = 'athletix';
 $out    = $root . '/languages/athletix.pot';
 
-$scan_dirs = array( '/src', '/templates', '/athletix.php' );
+$scan_dirs = array( '/src', '/templates', '/athletix.php', '/assets/js' );
 
 $files = array();
 foreach ( $scan_dirs as $rel ) {
@@ -29,7 +29,7 @@ foreach ( $scan_dirs as $rel ) {
 		continue;
 	}
 	$iter = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $path ) );
-	foreach ( new RegexIterator( $iter, '/\.php$/' ) as $file ) {
+	foreach ( new RegexIterator( $iter, '/\.(php|js)$/' ) as $file ) {
 		$files[] = (string) $file;
 	}
 }

@@ -197,6 +197,7 @@ final class Plugin {
 			\Athletix\Competition\CompetitionModule::class,
 			\Athletix\Rest\RestModule::class,
 			\Athletix\Frontend\FrontendModule::class,
+			\Athletix\Blocks\BlocksModule::class,
 			\Athletix\Elementor\ElementorModule::class,
 			\Athletix\Settings\SettingsModule::class,
 			\Athletix\Dashboard\DashboardModule::class,
