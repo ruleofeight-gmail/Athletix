@@ -35,7 +35,7 @@ class MediaModule implements Module {
 	 * @return void
 	 */
 	public function register( Plugin $plugin ) {
-		unset( $plugin );
 		( new Gallery() )->register();
+		( new MediaShortcodes( $plugin ) )->register();
 	}
 }

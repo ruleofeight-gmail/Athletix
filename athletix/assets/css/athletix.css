@@ -348,3 +348,24 @@
 	font-weight: 700;
 	font-variant-numeric: tabular-nums;
 }
+
+/* Media extras */
+.athletix-video {
+	position: relative;
+	max-width: 100%;
+}
+
+.athletix-video iframe {
+	max-width: 100%;
+}
+
+.athletix-feed {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.athletix-feed li {
+	padding: 0.35rem 0;
+	border-bottom: 1px solid rgba( 0, 0, 0, 0.06 );
+}
