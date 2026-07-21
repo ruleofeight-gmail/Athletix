@@ -1,56 +1,83 @@
 # Athletix
 
-A WordPress plugin — a sports & fitness toolkit with a **full Elementor integration**.
+A modular **sports-league management** plugin for WordPress with a full **Elementor** integration.
 
-## What's inside
+This repository contains **Athletix 2.0** — a ground-up rebuild converted from a
+ChatGPT-authored draft spec (see [`docs/athletix-2.0-review.md`](docs/athletix-2.0-review.md)
+for the original code review that guided the rewrite).
 
-The plugin lives in [`athletix/`](athletix/) and is a drop-in WordPress plugin.
+## Highlights
 
-### WordPress side
-- **Custom post types**: Athletes, Teams, Events (fixtures/results)
-- **Taxonomies**: Sport, Season (shared across the types)
-- **Meta boxes**: athlete stats (position, number, height, weight, country, DOB) and event details (date, location, home/away, score) — nonce-protected, capability-checked and sanitized
-- **REST-enabled** post types and clean permalinks
-- **Uninstall cleanup** that removes plugin content on deletion
-
-### Elementor integration
-- Dedicated **Athletix** panel category and dynamic-tags group
-- **Athlete Card** widget — photo, name and stats, with content + style controls
-- **Team Roster** widget — responsive grid, filterable by sport, responsive gap control
-- **Event Schedule** widget — upcoming fixtures or past results as a styled, mobile-friendly table
-- **Athlete Field** dynamic tag — binds athlete meta into any text-capable Elementor control
-- Version/activation guards: Elementor pieces load only when Elementor ≥ 3.5.0 is active, with admin notices otherwise
+- **Modular architecture** — PSR-4 autoloading, namespaced code under `Athletix\`,
+  a service container and a hook-based module registry (`athletix/modules`).
+  Modules self-register; adding one never touches the bootstrap or autoloader.
+- **Real data layer** — standings, player stats and relationships live in
+  indexed custom tables, not serialized post meta.
+- **Event-driven engines** — a match save recomputes standings, statistics and
+  rankings; the standings/schedule/bracket math is pure and **unit-tested**.
+- **Competition** — round-robin scheduling that persists real matches, correctly
+  seeded single-elimination brackets with byes, and standings-seeded playoffs.
+- **REST API** (`athletix/v1`), **shortcodes**, and **Elementor** widgets +
+  dynamic tag.
+- **Platform modules** — security/roles/audit, dashboard, search, import/export,
+  calendar (iCal), notifications, analytics, media, reports, automation,
+  membership and a PCI-safe payment ledger.
 
 ## Structure
 
 ```
 athletix/
-├── athletix.php                 # Main plugin file (headers, constants, bootstrap)
-├── uninstall.php                # Cleanup on delete
-├── readme.txt                   # WordPress.org-style readme
-├── includes/
-│   ├── class-athletix.php       # Singleton loader
-│   ├── class-meta-boxes.php     # Custom fields + secure save
-│   ├── class-assets.php         # Front-end CSS registration
-│   ├── class-elementor.php      # Elementor bootstrapper + guards
-│   ├── post-types/
-│   │   └── class-post-types.php # CPTs + taxonomies
-│   └── elementor/
-│       ├── widgets/             # Athlete Card, Team Roster, Event Schedule
-│       └── tags/                # Athlete Field dynamic tag
-├── assets/css/athletix.css      # Widget styles
-└── languages/                   # i18n
+├── athletix.php            # Bootstrap (constants, autoloader, lifecycle)
+├── uninstall.php           # Opt-in data removal
+├── composer.json           # PSR-4 + PHPUnit/PHPCS
+├── phpunit.xml.dist
+├── src/                    # Namespaced source (80 classes / 19 modules)
+│   ├── Plugin.php          # Container + module registry
+│   ├── Core/               # Config, Events, Cache, Logger, Validator, lifecycle
+│   ├── Support/            # Autoloader, Keys (single source of truth)
+│   ├── PostTypes/ Taxonomies/ Meta/
+│   ├── Data/               # Schema + repositories (incl. custom tables)
+│   ├── Engine/             # Sport/Match/Standings/Statistics/Ranking + calculators
+│   ├── Competition/        # Divisions, scheduler, brackets, playoffs, tournaments
+│   ├── Rest/ Frontend/ Elementor/
+│   ├── Security/ Dashboard/ Search/ ImportExport/ Calendar/
+│   ├── Notifications/ Analytics/ Media/ Reports/ Automation/
+│   └── Membership/ Payments/
+├── templates/              # Escaped front-end partials
+├── tests/                  # PHPUnit (standings, schedule, bracket)
+└── assets/                 # CSS
 ```
+
+## Shortcodes
+
+| Shortcode | Purpose |
+|---|---|
+| `[athletix_standings league="12"]` | League table |
+| `[athletix_roster team="5" columns="3"]` | Team roster grid |
+| `[athletix_schedule league="12"]` | Fixtures / results |
+| `[athletix_leaderboard metric="goals"]` | Player leaderboard |
+| `[athletix_report league="12"]` | Standings + top scorers |
+| `[athletix_gallery team="5"]` | Team image gallery |
+| `[athletix_search]` | Search teams & players |
+| `[athletix_register_team]` | Front-end team registration |
+
+## Development
+
+```bash
+cd athletix
+composer install     # optional: enables PHPUnit + PHPCS
+composer test        # runs the unit tests
+composer lint        # WordPress Coding Standards
+```
+
+Every PHP file passes `php -l`; the full plugin boots with all modules and the
+domain algorithms are verified by the test suite.
 
 ## Installation
 
 1. Copy the `athletix/` folder into `wp-content/plugins/`.
-2. Activate **Athletix** from the Plugins screen.
-3. (Optional) Activate Elementor to use the widgets and dynamic tags.
-4. Add content under the **Athletix** admin menu.
-
-## Development notes
-
-- Text domain: `athletix`; all user-facing strings are translation-ready.
-- Coding follows WordPress standards: escaping on output, sanitization on input, nonces on saves, and capability checks.
-- All PHP passes `php -l` with no syntax errors.
+2. Activate **Athletix** (custom tables are created on activation).
+3. (Optional) Activate Elementor for the widgets and dynamic tag.
+4. Add leagues, teams, players and matches under the **Athletix** menu; use the
+   **Competitions** screen to generate schedules and playoffs.
+```
