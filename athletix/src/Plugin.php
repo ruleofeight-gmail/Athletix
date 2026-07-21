@@ -200,6 +200,9 @@ final class Plugin {
 			\Athletix\Elementor\ElementorModule::class,
 			\Athletix\Dashboard\DashboardModule::class,
 			\Athletix\Search\SearchModule::class,
+			\Athletix\ImportExport\ImportExportModule::class,
+			\Athletix\Calendar\CalendarModule::class,
+			\Athletix\Notifications\NotificationsModule::class,
 		);
 	}
 
