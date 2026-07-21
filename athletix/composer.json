@@ -31,6 +31,7 @@
         "test": "phpunit -c phpunit.xml.dist",
         "test:integration": "phpunit -c phpunit-integration.xml.dist",
         "lint": "phpcs",
-        "lint:fix": "phpcbf"
+        "lint:fix": "phpcbf",
+        "class-check": "php bin/class-check.php src"
     }
 }

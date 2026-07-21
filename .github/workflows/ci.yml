@@ -31,6 +31,9 @@ jobs:
           find . -name '*.php' -not -path './vendor/*' -print0 \
             | xargs -0 -n1 -P4 php -l
 
+      - name: Static class-reference check
+        run: php bin/class-check.php src
+
   unit:
     name: Unit tests (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
