@@ -1,0 +1,370 @@
+<?php
+/**
+ * Schema-driven meta boxes for Athletix entities.
+ *
+ * @package Athletix
+ */
+
+namespace Athletix\Meta;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+use Athletix\Core\Validator;
+use Athletix\Support\Keys;
+
+/**
+ * Registers, renders and securely saves the custom fields for teams, players,
+ * matches, seasons and divisions from a declarative schema.
+ */
+class MetaBoxManager {
+
+	const NONCE_ACTION = 'athletix_meta';
+	const NONCE_NAME   = 'athletix_meta_nonce';
+
+	/**
+	 * Validator service.
+	 *
+	 * @var Validator
+	 */
+	private $validator;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param Validator $validator Sanitizer/validator.
+	 */
+	public function __construct( Validator $validator ) {
+		$this->validator = $validator;
+	}
+
+	/**
+	 * Hook into WordPress.
+	 *
+	 * @return void
+	 */
+	public function register() {
+		add_action( 'add_meta_boxes', array( $this, 'add' ) );
+		add_action( 'save_post', array( $this, 'save' ), 10, 2 );
+	}
+
+	/**
+	 * Field schemas keyed by post type.
+	 *
+	 * @return array<string,array<string,array>>
+	 */
+	private function schemas() {
+		return array(
+			Keys::TEAM   => array(
+				Keys::TEAM_LEAGUE  => array(
+					'label'    => __( 'League', 'athletix' ),
+					'type'     => 'post',
+					'sanitize' => 'int',
+					'post_type' => Keys::LEAGUE,
+				),
+				Keys::TEAM_VENUE   => array(
+					'label'    => __( 'Home Venue', 'athletix' ),
+					'type'     => 'text',
+					'sanitize' => 'text',
+				),
+				Keys::TEAM_FOUNDED => array(
+					'label'    => __( 'Founded (year)', 'athletix' ),
+					'type'     => 'number',
+					'sanitize' => 'int',
+				),
+				Keys::TEAM_COLOR   => array(
+					'label'    => __( 'Team Color', 'athletix' ),
+					'type'     => 'color',
+					'sanitize' => 'text',
+				),
+			),
+			Keys::PLAYER => array(
+				Keys::PLAYER_TEAM     => array(
+					'label'     => __( 'Team', 'athletix' ),
+					'type'      => 'post',
+					'sanitize'  => 'int',
+					'post_type' => Keys::TEAM,
+				),
+				Keys::PLAYER_POSITION => array(
+					'label'    => __( 'Position', 'athletix' ),
+					'type'     => 'text',
+					'sanitize' => 'text',
+				),
+				Keys::PLAYER_NUMBER   => array(
+					'label'    => __( 'Jersey Number', 'athletix' ),
+					'type'     => 'number',
+					'sanitize' => 'int',
+				),
+				Keys::PLAYER_HEIGHT   => array(
+					'label'    => __( 'Height', 'athletix' ),
+					'type'     => 'text',
+					'sanitize' => 'text',
+				),
+				Keys::PLAYER_WEIGHT   => array(
+					'label'    => __( 'Weight', 'athletix' ),
+					'type'     => 'text',
+					'sanitize' => 'text',
+				),
+				Keys::PLAYER_COUNTRY  => array(
+					'label'    => __( 'Country', 'athletix' ),
+					'type'     => 'text',
+					'sanitize' => 'text',
+				),
+				Keys::PLAYER_DOB      => array(
+					'label'    => __( 'Date of Birth', 'athletix' ),
+					'type'     => 'date',
+					'sanitize' => 'date',
+				),
+			),
+			Keys::MATCH  => array(
+				Keys::MATCH_LEAGUE     => array(
+					'label'     => __( 'League', 'athletix' ),
+					'type'      => 'post',
+					'sanitize'  => 'int',
+					'post_type' => Keys::LEAGUE,
+				),
+				Keys::MATCH_SEASON     => array(
+					'label'     => __( 'Season', 'athletix' ),
+					'type'      => 'post',
+					'sanitize'  => 'int',
+					'post_type' => Keys::SEASON,
+				),
+				Keys::MATCH_HOME_TEAM  => array(
+					'label'     => __( 'Home Team', 'athletix' ),
+					'type'      => 'post',
+					'sanitize'  => 'int',
+					'post_type' => Keys::TEAM,
+				),
+				Keys::MATCH_AWAY_TEAM  => array(
+					'label'     => __( 'Away Team', 'athletix' ),
+					'type'      => 'post',
+					'sanitize'  => 'int',
+					'post_type' => Keys::TEAM,
+				),
+				Keys::MATCH_HOME_SCORE => array(
+					'label'    => __( 'Home Score', 'athletix' ),
+					'type'     => 'number',
+					'sanitize' => 'int',
+				),
+				Keys::MATCH_AWAY_SCORE => array(
+					'label'    => __( 'Away Score', 'athletix' ),
+					'type'     => 'number',
+					'sanitize' => 'int',
+				),
+				Keys::MATCH_DATE       => array(
+					'label'    => __( 'Match Date', 'athletix' ),
+					'type'     => 'date',
+					'sanitize' => 'date',
+				),
+				Keys::MATCH_STATUS     => array(
+					'label'    => __( 'Status', 'athletix' ),
+					'type'     => 'select',
+					'sanitize' => 'key',
+					'options'  => array(
+						Keys::STATUS_SCHEDULED => __( 'Scheduled', 'athletix' ),
+						Keys::STATUS_COMPLETED => __( 'Completed', 'athletix' ),
+					),
+				),
+			),
+			Keys::SEASON => array(
+				Keys::SEASON_LEAGUE => array(
+					'label'     => __( 'League', 'athletix' ),
+					'type'      => 'post',
+					'sanitize'  => 'int',
+					'post_type' => Keys::LEAGUE,
+				),
+				Keys::SEASON_START  => array(
+					'label'    => __( 'Start Date', 'athletix' ),
+					'type'     => 'date',
+					'sanitize' => 'date',
+				),
+				Keys::SEASON_END    => array(
+					'label'    => __( 'End Date', 'athletix' ),
+					'type'     => 'date',
+					'sanitize' => 'date',
+				),
+			),
+			Keys::DIVISION => array(
+				Keys::DIVISION_LEAGUE => array(
+					'label'     => __( 'League', 'athletix' ),
+					'type'      => 'post',
+					'sanitize'  => 'int',
+					'post_type' => Keys::LEAGUE,
+				),
+			),
+		);
+	}
+
+	/**
+	 * Register meta boxes for each schema.
+	 *
+	 * @return void
+	 */
+	public function add() {
+		foreach ( array_keys( $this->schemas() ) as $post_type ) {
+			add_meta_box(
+				'athletix_' . $post_type . '_details',
+				__( 'Details', 'athletix' ),
+				array( $this, 'render' ),
+				$post_type,
+				'normal',
+				'high'
+			);
+		}
+	}
+
+	/**
+	 * Render the fields for the current post type.
+	 *
+	 * @param \WP_Post $post Post being edited.
+	 * @return void
+	 */
+	public function render( $post ) {
+		$schemas = $this->schemas();
+
+		if ( ! isset( $schemas[ $post->post_type ] ) ) {
+			return;
+		}
+
+		wp_nonce_field( self::NONCE_ACTION, self::NONCE_NAME );
+
+		echo '<table class="form-table" role="presentation"><tbody>';
+
+		foreach ( $schemas[ $post->post_type ] as $key => $field ) {
+			$value = get_post_meta( $post->ID, $key, true );
+			echo '<tr><th scope="row"><label for="' . esc_attr( $key ) . '">' . esc_html( $field['label'] ) . '</label></th><td>';
+			$this->render_field( $key, $field, $value );
+			echo '</td></tr>';
+		}
+
+		echo '</tbody></table>';
+	}
+
+	/**
+	 * Render a single input by type.
+	 *
+	 * @param string $key   Meta key / field name.
+	 * @param array  $field Field definition.
+	 * @param mixed  $value Current value.
+	 * @return void
+	 */
+	private function render_field( $key, array $field, $value ) {
+		$type = isset( $field['type'] ) ? $field['type'] : 'text';
+
+		switch ( $type ) {
+			case 'post':
+				$this->render_post_select( $key, $field['post_type'], (int) $value );
+				break;
+
+			case 'select':
+				echo '<select id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '">';
+				foreach ( $field['options'] as $opt_value => $opt_label ) {
+					echo '<option value="' . esc_attr( $opt_value ) . '" ' . selected( $value, $opt_value, false ) . '>' . esc_html( $opt_label ) . '</option>';
+				}
+				echo '</select>';
+				break;
+
+			case 'number':
+				echo '<input type="number" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '" value="' . esc_attr( $value ) . '" class="small-text" />';
+				break;
+
+			case 'date':
+				echo '<input type="date" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '" value="' . esc_attr( $value ) . '" />';
+				break;
+
+			case 'color':
+				echo '<input type="text" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '" value="' . esc_attr( $value ) . '" class="regular-text" placeholder="#1a73e8" />';
+				break;
+
+			case 'text':
+			default:
+				echo '<input type="text" id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '" value="' . esc_attr( $value ) . '" class="regular-text" />';
+				break;
+		}
+	}
+
+	/**
+	 * Render a dropdown of posts of a given type.
+	 *
+	 * @param string $key       Field name.
+	 * @param string $post_type Post type to list.
+	 * @param int    $selected  Currently selected post id.
+	 * @return void
+	 */
+	private function render_post_select( $key, $post_type, $selected ) {
+		$posts = get_posts(
+			array(
+				'post_type'      => $post_type,
+				'posts_per_page' => 200,
+				'orderby'        => 'title',
+				'order'          => 'ASC',
+				'post_status'    => 'publish',
+			)
+		);
+
+		echo '<select id="' . esc_attr( $key ) . '" name="' . esc_attr( $key ) . '">';
+		echo '<option value="0">' . esc_html__( '— Select —', 'athletix' ) . '</option>';
+
+		foreach ( $posts as $post ) {
+			echo '<option value="' . esc_attr( $post->ID ) . '" ' . selected( $selected, $post->ID, false ) . '>' . esc_html( $post->post_title ) . '</option>';
+		}
+
+		echo '</select>';
+	}
+
+	/**
+	 * Securely persist submitted values.
+	 *
+	 * @param int      $post_id Post id.
+	 * @param \WP_Post $post    Post object.
+	 * @return void
+	 */
+	public function save( $post_id, $post ) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		$schemas = $this->schemas();
+		if ( ! isset( $schemas[ $post->post_type ] ) ) {
+			return;
+		}
+
+		if ( ! isset( $_POST[ self::NONCE_NAME ] ) ) {
+			return;
+		}
+
+		$nonce = sanitize_text_field( wp_unslash( $_POST[ self::NONCE_NAME ] ) );
+		if ( ! wp_verify_nonce( $nonce, self::NONCE_ACTION ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		foreach ( $schemas[ $post->post_type ] as $key => $field ) {
+			if ( ! isset( $_POST[ $key ] ) ) {
+				continue;
+			}
+
+			// wp_unslash then delegate sanitization to the Validator by type.
+			$raw   = wp_unslash( $_POST[ $key ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized on next line.
+			$clean = $this->validator->sanitize( $raw, $field['sanitize'] );
+
+			if ( '' === $clean || '0' === (string) $clean ) {
+				// Keep explicit zero scores; only drop empty relationships/text.
+				if ( 'int' === $field['sanitize'] && 0 === (int) $clean && false === strpos( $key, 'score' ) ) {
+					delete_post_meta( $post_id, $key );
+					continue;
+				}
+			}
+
+			update_post_meta( $post_id, $key, $clean );
+		}
+	}
+}
