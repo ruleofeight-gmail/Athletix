@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Athletix\Plugin;
+use Athletix\Security\Capabilities;
 use Athletix\Support\Keys;
 
 /**
