@@ -46,6 +46,13 @@ class MatchEngine {
 	private $logger;
 
 	/**
+	 * Scope (league/season) captured before a hard delete, keyed by post id.
+	 *
+	 * @var array<int,array>
+	 */
+	private $pending_delete = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Events          $events  Event dispatcher.
@@ -65,8 +72,50 @@ class MatchEngine {
 	 */
 	public function register() {
 		add_action( 'save_post_' . Keys::MATCH, array( $this, 'on_save' ), 20, 2 );
-		add_action( 'before_delete_post', array( $this, 'on_delete' ) );
+
+		// Hard delete: capture scope before removal, recompute after — otherwise
+		// the match is still in the DB when standings recompute and its result
+		// is not actually removed.
+		add_action( 'before_delete_post', array( $this, 'capture_delete_scope' ) );
+		add_action( 'deleted_post', array( $this, 'on_deleted' ) );
+
+		// Trash/untrash keep the post + meta, so recompute immediately; the
+		// completed() query excludes non-published matches.
 		add_action( 'trashed_post', array( $this, 'on_delete' ) );
+		add_action( 'untrashed_post', array( $this, 'on_delete' ) );
+	}
+
+	/**
+	 * Remember a match's scope just before it is hard-deleted.
+	 *
+	 * @param int $post_id Post id.
+	 * @return void
+	 */
+	public function capture_delete_scope( $post_id ) {
+		if ( get_post_type( $post_id ) !== Keys::MATCH ) {
+			return;
+		}
+
+		$this->pending_delete[ (int) $post_id ] = $this->matches->details( $post_id );
+	}
+
+	/**
+	 * After a hard delete, recompute the captured scope (the match is now gone).
+	 *
+	 * @param int $post_id Post id.
+	 * @return void
+	 */
+	public function on_deleted( $post_id ) {
+		$post_id = (int) $post_id;
+
+		if ( ! isset( $this->pending_delete[ $post_id ] ) ) {
+			return;
+		}
+
+		$details = $this->pending_delete[ $post_id ];
+		unset( $this->pending_delete[ $post_id ] );
+
+		$this->events->fire( 'match_saved', array_merge( array( 'match_id' => $post_id ), $details ) );
 	}
 
 	/**
