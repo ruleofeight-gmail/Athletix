@@ -155,3 +155,58 @@
 		padding: 0.35rem 0;
 	}
 }
+
+/* Standings table */
+.athletix-standings {
+	width: 100%;
+	border-collapse: collapse;
+	font-variant-numeric: tabular-nums;
+}
+
+.athletix-standings thead th {
+	text-align: center;
+	padding: 0.6rem 0.5rem;
+	background: #f4f4f5;
+	font-weight: 700;
+}
+
+.athletix-standings thead th.athletix-standings__team {
+	text-align: left;
+}
+
+.athletix-standings tbody td {
+	text-align: center;
+	padding: 0.55rem 0.5rem;
+	border-bottom: 1px solid rgba( 0, 0, 0, 0.08 );
+}
+
+.athletix-standings__pos {
+	width: 2.5rem;
+	color: #888;
+}
+
+.athletix-standings__team {
+	text-align: left;
+}
+
+.athletix-standings__team a {
+	text-decoration: none;
+	color: inherit;
+	font-weight: 600;
+}
+
+.athletix-standings__pts {
+	font-weight: 700;
+}
+
+.athletix-empty {
+	color: #888;
+	font-style: italic;
+}
+
+@media ( max-width: 600px ) {
+	.athletix-standings th:nth-child(n+6):nth-child(-n+8),
+	.athletix-standings td:nth-child(n+6):nth-child(-n+8) {
+		display: none;
+	}
+}

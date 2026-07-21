@@ -194,6 +194,8 @@ final class Plugin {
 			\Athletix\PostTypes\PostTypesModule::class,
 			\Athletix\Engine\EngineModule::class,
 			\Athletix\Competition\CompetitionModule::class,
+			\Athletix\Rest\RestModule::class,
+			\Athletix\Frontend\FrontendModule::class,
 		);
 	}
 
