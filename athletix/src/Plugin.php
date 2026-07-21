@@ -190,6 +190,7 @@ final class Plugin {
 	 */
 	private function module_classes() {
 		return array(
+			\Athletix\Data\DataModule::class,
 			\Athletix\PostTypes\PostTypesModule::class,
 		);
 	}
