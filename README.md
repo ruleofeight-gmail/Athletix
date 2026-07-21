@@ -65,13 +65,19 @@ athletix/
 
 ```bash
 cd athletix
-composer install     # optional: enables PHPUnit + PHPCS
-composer test        # runs the unit tests
-composer lint        # WordPress Coding Standards
+composer install               # optional: enables PHPUnit + PHPCS
+composer test                  # pure unit tests (standings/schedule/bracket math)
+composer lint                  # WordPress Coding Standards
+
+# WordPress integration tests (need a test DB + the WP test suite):
+bin/install-wp-tests.sh wordpress_test root '' localhost latest
+composer test:integration      # schema/tables, repositories, standings recompute
 ```
 
-Every PHP file passes `php -l`; the full plugin boots with all modules and the
-domain algorithms are verified by the test suite.
+Every PHP file passes `php -l`; the full plugin boots with all modules, the
+domain algorithms are covered by fast unit tests, and the WordPress-backed
+behaviour (custom tables, repositories, the match→standings event flow) is
+covered by integration tests.
 
 ## Installation
 
