@@ -36,5 +36,7 @@ class AnalyticsModule implements Module {
 	 */
 	public function register( Plugin $plugin ) {
 		( new Leaderboards( $plugin ) )->register();
+		( new TeamAnalytics( $plugin ) )->register();
+		( new PlayerAnalytics( $plugin ) )->register();
 	}
 }

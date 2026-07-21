@@ -141,6 +141,30 @@ class PlayerStatsRepository {
 	}
 
 	/**
+	 * Per-match values for a player's metric, oldest first.
+	 *
+	 * @param int    $player_id Player id.
+	 * @param string $metric    Metric slug.
+	 * @param int    $limit     Max rows.
+	 * @return array[] Rows of match_id => value.
+	 */
+	public function timeline( $player_id, $metric, $limit = 10 ) {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		return $this->db->get_results(
+			$this->db->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT match_id, SUM(value) AS value FROM {$this->table}
+				 WHERE player_id = %d AND metric = %s AND match_id > 0
+				 GROUP BY match_id ORDER BY id ASC LIMIT %d",
+				absint( $player_id ),
+				sanitize_key( $metric ),
+				absint( $limit )
+			),
+			ARRAY_A
+		);
+	}
+
+	/**
 	 * Delete all stats for a match (used before re-recording on edit).
 	 *
 	 * @param int $match_id Match id.
