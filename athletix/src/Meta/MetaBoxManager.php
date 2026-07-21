@@ -24,6 +24,12 @@ class MetaBoxManager {
 	const NONCE_NAME   = 'athletix_meta_nonce';
 
 	/**
+	 * Above this many candidate posts, a relationship field switches from a
+	 * native <select> to the searchable AJAX picker.
+	 */
+	const PICKER_THRESHOLD = 30;
+
+	/**
 	 * Validator service.
 	 *
 	 * @var Validator
@@ -47,6 +53,37 @@ class MetaBoxManager {
 	public function register() {
 		add_action( 'add_meta_boxes', array( $this, 'add' ) );
 		add_action( 'save_post', array( $this, 'save' ), 10, 2 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
+
+		( new PostSearchAjax() )->register();
+	}
+
+	/**
+	 * Enqueue the relationship-picker assets on the post editor for our types.
+	 *
+	 * @param string $hook Current admin page hook.
+	 * @return void
+	 */
+	public function enqueue( $hook ) {
+		if ( 'post.php' !== $hook && 'post-new.php' !== $hook ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+		if ( ! $screen || ! in_array( $screen->post_type, Keys::post_types(), true ) ) {
+			return;
+		}
+
+		wp_enqueue_style( 'athletix-admin', ATHLETIX_URL . 'assets/css/admin.css', array(), ATHLETIX_VERSION );
+		wp_enqueue_script( 'athletix-post-picker', ATHLETIX_URL . 'assets/js/post-picker.js', array(), ATHLETIX_VERSION, true );
+		wp_localize_script(
+			'athletix-post-picker',
+			'AthletixPicker',
+			array(
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'nonce'   => wp_create_nonce( PostSearchAjax::NONCE ),
+			)
+		);
 	}
 
 	/**
@@ -293,10 +330,18 @@ class MetaBoxManager {
 	 * @return void
 	 */
 	private function render_post_select( $key, $post_type, $selected ) {
+		$counts = wp_count_posts( $post_type );
+		$total  = isset( $counts->publish ) ? (int) $counts->publish : 0;
+
+		if ( $total > self::PICKER_THRESHOLD ) {
+			$this->render_post_picker( $key, $post_type, $selected );
+			return;
+		}
+
 		$posts = get_posts(
 			array(
 				'post_type'      => $post_type,
-				'posts_per_page' => 200,
+				'posts_per_page' => self::PICKER_THRESHOLD,
 				'orderby'        => 'title',
 				'order'          => 'ASC',
 				'post_status'    => 'publish',
@@ -311,6 +356,38 @@ class MetaBoxManager {
 		}
 
 		echo '</select>';
+	}
+
+	/**
+	 * Render the searchable AJAX picker for a large relationship field.
+	 *
+	 * A hidden input carries the selected id (so the form submits exactly as the
+	 * <select> would); the text input drives the AJAX search once JS enhances it.
+	 *
+	 * @param string $key       Field name.
+	 * @param string $post_type Post type to search.
+	 * @param int    $selected  Currently selected post id.
+	 * @return void
+	 */
+	private function render_post_picker( $key, $post_type, $selected ) {
+		$current = $selected ? get_the_title( $selected ) : '';
+
+		printf(
+			'<span class="athletix-picker" data-post-type="%s">',
+			esc_attr( $post_type )
+		);
+		printf(
+			'<input type="hidden" class="athletix-picker__value" id="%1$s" name="%1$s" value="%2$d" />',
+			esc_attr( $key ),
+			(int) $selected
+		);
+		printf(
+			'<input type="text" class="athletix-picker__search regular-text" value="%s" placeholder="%s" autocomplete="off" />',
+			esc_attr( $current ),
+			esc_attr__( 'Search…', 'athletix' )
+		);
+		echo '<span class="athletix-picker__results" role="listbox" hidden></span>';
+		echo '</span>';
 	}
 
 	/**
