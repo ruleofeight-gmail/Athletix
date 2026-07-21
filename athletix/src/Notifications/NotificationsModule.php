@@ -36,5 +36,10 @@ class NotificationsModule implements Module {
 	 */
 	public function register( Plugin $plugin ) {
 		( new Notifier( $plugin->events(), $plugin->config() ) )->register();
+		( new Announcements() )->register();
+
+		if ( is_admin() ) {
+			( new Preferences() )->register();
+		}
 	}
 }
