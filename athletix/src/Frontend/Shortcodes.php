@@ -45,6 +45,73 @@ class Shortcodes {
 		add_shortcode( 'athletix_standings', array( $this, 'standings' ) );
 		add_shortcode( 'athletix_roster', array( $this, 'roster' ) );
 		add_shortcode( 'athletix_schedule', array( $this, 'schedule' ) );
+		add_shortcode( 'athletix_match', array( $this, 'match_card' ) );
+		add_shortcode( 'athletix_player', array( $this, 'player' ) );
+	}
+
+	/**
+	 * [athletix_match id="42"]
+	 *
+	 * @param array $atts Attributes.
+	 * @return string
+	 */
+	public function match_card( $atts ) {
+		$atts = shortcode_atts( array( 'id' => 0 ), $atts, 'athletix_match' );
+
+		$match_id = absint( $atts['id'] );
+		if ( ! $match_id ) {
+			$match_id = (int) get_the_ID();
+		}
+
+		$repo = $this->plugin->make( 'repo.match' );
+		$post = $match_id ? get_post( $match_id ) : null;
+
+		if ( ! $post || Keys::MATCH !== $post->post_type ) {
+			return '';
+		}
+
+		return $this->render(
+			'match-card',
+			array(
+				'match'   => $post,
+				'details' => $repo->details( $match_id ),
+			)
+		);
+	}
+
+	/**
+	 * [athletix_player id="7"] (defaults to the current player in the loop)
+	 *
+	 * @param array $atts Attributes.
+	 * @return string
+	 */
+	public function player( $atts ) {
+		$atts = shortcode_atts(
+			array(
+				'id'    => 0,
+				'stats' => 'yes',
+			),
+			$atts,
+			'athletix_player'
+		);
+
+		$player_id = absint( $atts['id'] );
+		if ( ! $player_id ) {
+			$player_id = (int) get_the_ID();
+		}
+
+		$post = $player_id ? get_post( $player_id ) : null;
+		if ( ! $post || Keys::PLAYER !== $post->post_type ) {
+			return '';
+		}
+
+		return $this->render(
+			'player',
+			array(
+				'player'     => $post,
+				'show_stats' => ( 'yes' === $atts['stats'] ),
+			)
+		);
 	}
 
 	/**

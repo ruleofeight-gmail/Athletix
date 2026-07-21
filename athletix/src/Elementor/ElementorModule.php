@@ -80,6 +80,9 @@ class ElementorModule implements Module {
 		$manager->register( new Widgets\LeagueTableWidget() );
 		$manager->register( new Widgets\TeamRosterWidget() );
 		$manager->register( new Widgets\ScheduleWidget() );
+		$manager->register( new Widgets\MatchCardWidget() );
+		$manager->register( new Widgets\PlayerProfileWidget() );
+		$manager->register( new Widgets\StatisticsWidget() );
 	}
 
 	/**
