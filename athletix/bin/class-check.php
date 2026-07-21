@@ -58,7 +58,7 @@ foreach ( $files as $file ) {
 
 $globals = array(
 	'WP_Post', 'WP_Query', 'WP_Error', 'WP_REST_Request', 'WP_REST_Response', 'WP_REST_Server',
-	'WP_User', 'WP_Roles', 'WP_Term', 'wpdb', 'WP_UnitTestCase',
+	'WP_User', 'WP_Roles', 'WP_Term', 'WP_List_Table', 'wpdb', 'WP_UnitTestCase',
 	'Exception', 'RuntimeException', 'InvalidArgumentException', 'LogicException', 'Throwable',
 	'stdClass', 'ArrayIterator', 'Closure', 'Generator', 'DateTime', 'DateTimeImmutable',
 );
