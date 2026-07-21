@@ -72,6 +72,19 @@ class Ledger {
 	}
 
 	/**
+	 * Record a refund (a negative ledger entry).
+	 *
+	 * @param int    $entity_id Entity id.
+	 * @param float  $amount    Positive amount to refund.
+	 * @param string $note      Optional note.
+	 * @return void
+	 */
+	public function refund( $entity_id, $amount, $note = '' ) {
+		$amount = abs( (float) $amount );
+		$this->record( $entity_id, -$amount, '' !== $note ? $note : __( 'Refund', 'athletix' ) );
+	}
+
+	/**
 	 * All payment records for an entity.
 	 *
 	 * @param int $entity_id Post id.

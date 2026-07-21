@@ -38,8 +38,15 @@ class PaymentsModule implements Module {
 		$ledger = new Ledger( $plugin->events() );
 		$plugin->container()->instance( 'payments.ledger', $ledger );
 
+		$subscriptions = new Subscriptions( $ledger );
+		$subscriptions->register();
+		$plugin->container()->instance( 'payments.subscriptions', $subscriptions );
+
+		( new Invoice( $ledger ) )->register();
+
 		if ( is_admin() ) {
 			( new PaymentsAdmin( $ledger ) )->register();
+			( new FinancialReport( $plugin, $ledger ) )->register();
 		}
 	}
 }
