@@ -35,6 +35,9 @@ class RestModule implements Module {
 	 * @return void
 	 */
 	public function register( Plugin $plugin ) {
+		// Outgoing webhooks are event-driven, not part of the REST server.
+		( new Webhooks( $plugin->events() ) )->register();
+
 		add_action(
 			'rest_api_init',
 			static function () use ( $plugin ) {
@@ -45,6 +48,8 @@ class RestModule implements Module {
 						$plugin->make( 'repo.player' ),
 						$plugin->make( 'repo.match' )
 					),
+					new MobileController( $plugin->make( 'engine.standings' ), $plugin->make( 'repo.match' ) ),
+					new DocsController(),
 				);
 
 				foreach ( $controllers as $controller ) {
