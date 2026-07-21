@@ -37,6 +37,7 @@ class DashboardModule implements Module {
 	public function register( Plugin $plugin ) {
 		if ( is_admin() ) {
 			( new DashboardPage( $plugin ) )->register();
+			( new Widgets( $plugin ) )->register();
 		}
 	}
 }
