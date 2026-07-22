@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "athletix/match",
+	"title": "Athletix Match",
+	"category": "athletix",
+	"icon": "clipboard",
+	"description": "A single match card.",
+	"textdomain": "athletix",
+	"editorScript": "athletix-blocks",
+	"style": "athletix",
+	"editorStyle": "athletix",
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"id": {
+			"type": "number",
+			"default": 0
+		}
+	}
+}

@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "athletix/roster",
+	"title": "Athletix Roster",
+	"category": "athletix",
+	"icon": "groups",
+	"description": "Team roster card grid.",
+	"textdomain": "athletix",
+	"editorScript": "athletix-blocks",
+	"style": "athletix",
+	"editorStyle": "athletix",
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"team": {
+			"type": "number",
+			"default": 0
+		},
+		"league": {
+			"type": "number",
+			"default": 0
+		},
+		"columns": {
+			"type": "number",
+			"default": 3
+		}
+	}
+}

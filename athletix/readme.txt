@@ -34,6 +34,14 @@ Shortcodes:
 * `[athletix_standings league="12" season="0"]`
 * `[athletix_roster team="5" columns="3"]`
 * `[athletix_schedule league="12" limit="20"]`
+* `[athletix_match id="42"]`
+* `[athletix_player id="7" stats="yes"]`
+* `[athletix_bracket league="12" season="3"]`
+
+Blocks: the same views are available as server-rendered Gutenberg blocks in the
+"Athletix" inserter category (Standings, Roster, Schedule, Bracket, Match,
+Player), each registered from block.json metadata with League/Season pickers —
+the Season picker is scoped to the chosen League.
 
 Elementor: a dedicated "Athletix" category with League Table, Team Roster and
 Match Schedule widgets, plus a Player Field dynamic tag. The Elementor layer

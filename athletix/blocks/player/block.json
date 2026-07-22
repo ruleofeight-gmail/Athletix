@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "athletix/player",
+	"title": "Athletix Player",
+	"category": "athletix",
+	"icon": "admin-users",
+	"description": "A player profile with optional statistics.",
+	"textdomain": "athletix",
+	"editorScript": "athletix-blocks",
+	"style": "athletix",
+	"editorStyle": "athletix",
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"id": {
+			"type": "number",
+			"default": 0
+		},
+		"stats": {
+			"type": "boolean",
+			"default": true
+		}
+	}
+}

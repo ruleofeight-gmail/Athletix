@@ -71,99 +71,26 @@ class BlocksModule implements Module {
 	}
 
 	/**
-	 * The block definitions: name => [attributes, shortcode callback].
+	 * Server-side render callbacks keyed by block slug. Attributes, category,
+	 * script/style handles and metadata now live in each block's block.json;
+	 * only the PHP render callback (which cannot live in JSON) is supplied here.
 	 *
-	 * @return array<string,array>
+	 * @return array<string,callable>
 	 */
-	private function definitions() {
+	private function render_callbacks() {
 		return array(
-			'standings' => array(
-				'attributes' => array(
-					'league' => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-					'season' => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-				),
-				'render'     => array( $this, 'render_standings' ),
-			),
-			'roster'    => array(
-				'attributes' => array(
-					'team'    => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-					'league'  => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-					'columns' => array(
-						'type'    => 'number',
-						'default' => 3,
-					),
-				),
-				'render'     => array( $this, 'render_roster' ),
-			),
-			'schedule'  => array(
-				'attributes' => array(
-					'league' => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-					'season' => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-					'limit'  => array(
-						'type'    => 'number',
-						'default' => 20,
-					),
-				),
-				'render'     => array( $this, 'render_schedule' ),
-			),
-			'bracket'   => array(
-				'attributes' => array(
-					'league' => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-					'season' => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-				),
-				'render'     => array( $this, 'render_bracket' ),
-			),
-			'match'     => array(
-				'attributes' => array(
-					'id' => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-				),
-				'render'     => array( $this, 'render_match' ),
-			),
-			'player'    => array(
-				'attributes' => array(
-					'id'    => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-					'stats' => array(
-						'type'    => 'boolean',
-						'default' => true,
-					),
-				),
-				'render'     => array( $this, 'render_player' ),
-			),
+			'standings' => array( $this, 'render_standings' ),
+			'roster'    => array( $this, 'render_roster' ),
+			'schedule'  => array( $this, 'render_schedule' ),
+			'bracket'   => array( $this, 'render_bracket' ),
+			'match'     => array( $this, 'render_match' ),
+			'player'    => array( $this, 'render_player' ),
 		);
 	}
 
 	/**
-	 * Register every block plus the shared editor script.
+	 * Register every block from its block.json metadata, plus the shared editor
+	 * script and style the metadata references.
 	 *
 	 * @return void
 	 */
@@ -186,18 +113,10 @@ class BlocksModule implements Module {
 
 		wp_register_style( 'athletix', ATHLETIX_URL . 'assets/css/athletix.css', array(), ATHLETIX_VERSION );
 
-		foreach ( $this->definitions() as $name => $def ) {
+		foreach ( $this->render_callbacks() as $slug => $callback ) {
 			register_block_type(
-				'athletix/' . $name,
-				array(
-					'api_version'     => 2,
-					'category'        => 'athletix',
-					'editor_script'   => 'athletix-blocks',
-					'style'           => 'athletix',
-					'editor_style'    => 'athletix',
-					'attributes'      => $def['attributes'],
-					'render_callback' => $def['render'],
-				)
+				ATHLETIX_PATH . 'blocks/' . $slug,
+				array( 'render_callback' => $callback )
 			);
 		}
 	}

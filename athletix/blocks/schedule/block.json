@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "athletix/schedule",
+	"title": "Athletix Schedule",
+	"category": "athletix",
+	"icon": "calendar-alt",
+	"description": "Fixtures and results for a league and optional season.",
+	"textdomain": "athletix",
+	"editorScript": "athletix-blocks",
+	"style": "athletix",
+	"editorStyle": "athletix",
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"league": {
+			"type": "number",
+			"default": 0
+		},
+		"season": {
+			"type": "number",
+			"default": 0
+		},
+		"limit": {
+			"type": "number",
+			"default": 20
+		}
+	}
+}
