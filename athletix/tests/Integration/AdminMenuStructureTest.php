@@ -16,25 +16,37 @@ use Athletix\Support\Keys;
 class AdminMenuStructureTest extends IntegrationTestCase {
 
 	/**
-	 * Each content type carries the "Athletix - X" menu name and a de-"All"ed
+	 * Content post types carry the "Athletix - X" menu name and a de-"All"ed
 	 * list submenu label.
 	 *
 	 * @return void
 	 */
 	public function test_content_type_menu_labels() {
-		$league = get_post_type_object( Keys::LEAGUE );
-
-		$this->assertSame( 'Athletix - Leagues', $league->labels->menu_name );
-		$this->assertSame( 'Leagues', $league->labels->all_items, 'The list submenu drops "All".' );
-		$this->assertSame( 'Add New League', $league->labels->add_new );
-
 		$team = get_post_type_object( Keys::TEAM );
 		$this->assertSame( 'Athletix - Teams', $team->labels->menu_name );
-		$this->assertSame( 'Teams', $team->labels->all_items );
+		$this->assertSame( 'Teams', $team->labels->all_items, 'The list submenu drops "All".' );
 
-		// Announcements is registered separately but follows the same pattern.
+		// Announcements follows the same pattern.
 		$ann = get_post_type_object( 'ax_announcement' );
 		$this->assertSame( 'Athletix - Announcements', $ann->labels->menu_name );
+	}
+
+	/**
+	 * League, Season and Division are taxonomies kept out of the per-type menus
+	 * (surfaced only under Athletix).
+	 *
+	 * @return void
+	 */
+	public function test_league_season_division_are_hidden_taxonomies() {
+		foreach ( array( Keys::LEAGUE, Keys::SEASON, Keys::DIVISION ) as $taxonomy ) {
+			$this->assertTrue( taxonomy_exists( $taxonomy ), $taxonomy . ' is a registered taxonomy.' );
+
+			$object = get_taxonomy( $taxonomy );
+			$this->assertFalse( $object->show_in_menu, $taxonomy . ' is not in the per-type menus.' );
+		}
+
+		// They are no longer post types.
+		$this->assertNull( get_post_type_object( Keys::LEAGUE ) );
 	}
 
 	/**

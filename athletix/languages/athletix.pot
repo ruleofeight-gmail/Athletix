@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Athletix 2.0.0\n"
 "Report-Msgid-Bugs-To: https://example.com/support\n"
-"POT-Creation-Date: 2026-07-22 08:19+0000\n"
+"POT-Creation-Date: 2026-07-22 13:06+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -35,16 +35,12 @@ msgstr ""
 msgid "Activity logging is not available."
 msgstr ""
 
-#: src/PostTypes/PostTypes.php
+#: src/PostTypes/PostTypes.php src/Taxonomies/Taxonomies.php
 msgid "Add New %s"
 msgstr ""
 
 #: src/Notifications/Announcements.php
 msgid "Add New Announcement"
-msgstr ""
-
-#: src/Taxonomies/Taxonomies.php
-msgid "Add New Sport"
 msgstr ""
 
 #: src/Calendar/Venues.php
@@ -61,10 +57,6 @@ msgstr ""
 
 #: src/Search/Directory.php
 msgid "All"
-msgstr ""
-
-#: src/Taxonomies/Taxonomies.php
-msgid "All Sports"
 msgstr ""
 
 #: src/Automation/RulesAdmin.php
@@ -219,10 +211,6 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: src/Admin/LeagueTablesPage.php
-msgid "Create a league first to see its table."
-msgstr ""
-
 #: src/Competition/CompetitionAdmin.php
 msgid "Creates fixtures for every team in the selected league."
 msgstr ""
@@ -259,11 +247,7 @@ msgstr ""
 msgid "Details"
 msgstr ""
 
-#: src/PostTypes/PostTypes.php
-msgid "Division"
-msgstr ""
-
-#: src/PostTypes/PostTypes.php
+#: src/Admin/Hub.php
 msgid "Divisions"
 msgstr ""
 
@@ -283,16 +267,12 @@ msgstr ""
 msgid "Drawn"
 msgstr ""
 
-#: src/PostTypes/PostTypes.php
+#: src/PostTypes/PostTypes.php src/Taxonomies/Taxonomies.php
 msgid "Edit %s"
 msgstr ""
 
 #: src/Notifications/Announcements.php
 msgid "Edit Announcement"
-msgstr ""
-
-#: src/Taxonomies/Taxonomies.php
-msgid "Edit Sport"
 msgstr ""
 
 #: src/Calendar/Venues.php
@@ -321,10 +301,6 @@ msgstr ""
 
 #: src/Automation/RulesAdmin.php
 msgid "Email recipient"
-msgstr ""
-
-#: src/Meta/MetaBoxManager.php
-msgid "End Date"
 msgstr ""
 
 #: src/ImportExport/ImportExport.php
@@ -491,7 +467,7 @@ msgstr ""
 msgid "L"
 msgstr ""
 
-#: src/Competition/CompetitionAdmin.php src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/ScheduleWidget.php src/Meta/MetaBoxManager.php src/PostTypes/PostTypes.php
+#: src/Competition/CompetitionAdmin.php src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/ScheduleWidget.php
 msgid "League"
 msgstr ""
 
@@ -507,15 +483,7 @@ msgstr ""
 msgid "League Table"
 msgstr ""
 
-#: src/Admin/LeagueTablesPage.php
-msgid "League Tables"
-msgstr ""
-
-#: src/Admin/LeagueTablesPage.php
-msgid "League:"
-msgstr ""
-
-#: src/Dashboard/DashboardPage.php src/Dashboard/Widgets.php src/PostTypes/PostTypes.php
+#: src/Admin/Hub.php src/Dashboard/DashboardPage.php src/Dashboard/Widgets.php
 msgid "Leagues"
 msgstr ""
 
@@ -871,12 +839,8 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: src/PostTypes/PostTypes.php
+#: src/PostTypes/PostTypes.php src/Taxonomies/Taxonomies.php
 msgid "Search %s"
-msgstr ""
-
-#: src/Taxonomies/Taxonomies.php
-msgid "Search Sports"
 msgstr ""
 
 #: src/Calendar/Venues.php
@@ -891,7 +855,7 @@ msgstr ""
 msgid "Search…"
 msgstr ""
 
-#: src/Competition/CompetitionAdmin.php src/Meta/MetaBoxManager.php src/PostTypes/PostTypes.php
+#: src/Competition/CompetitionAdmin.php
 msgid "Season"
 msgstr ""
 
@@ -907,7 +871,7 @@ msgstr ""
 msgid "Season Statistics"
 msgstr ""
 
-#: src/PostTypes/PostTypes.php
+#: src/Admin/Hub.php
 msgid "Seasons"
 msgstr ""
 
@@ -959,6 +923,10 @@ msgstr ""
 msgid "Sorry, your registration could not be saved."
 msgstr ""
 
+#: src/Admin/Hub.php
+msgid "Sports"
+msgstr ""
+
 #: src/Reports/TeamReport.php templates/single-ax_team.php
 msgid "Squad"
 msgstr ""
@@ -971,7 +939,7 @@ msgstr ""
 msgid "Standings updated"
 msgstr ""
 
-#: src/Competition/CompetitionAdmin.php src/Meta/MetaBoxManager.php
+#: src/Competition/CompetitionAdmin.php
 msgid "Start Date"
 msgstr ""
 
@@ -1183,14 +1151,44 @@ msgctxt "Created %d matches."
 msgid "Created %d match."
 msgstr ""
 
+#: src/Taxonomies/Taxonomies.php
+msgctxt "Division"
+msgid "taxonomy singular name"
+msgstr ""
+
+#: src/Taxonomies/Taxonomies.php
+msgctxt "Divisions"
+msgid "taxonomy general name"
+msgstr ""
+
 #: src/ImportExport/ImportExport.php
 msgctxt "Imported %d rows."
 msgid "Imported %d row."
 msgstr ""
 
+#: src/Taxonomies/Taxonomies.php
+msgctxt "League"
+msgid "taxonomy singular name"
+msgstr ""
+
+#: src/Taxonomies/Taxonomies.php
+msgctxt "Leagues"
+msgid "taxonomy general name"
+msgstr ""
+
 #: src/ImportExport/ImportExport.php
 msgctxt "Restored %d records."
 msgid "Restored %d record."
+msgstr ""
+
+#: src/Taxonomies/Taxonomies.php
+msgctxt "Season"
+msgid "taxonomy singular name"
+msgstr ""
+
+#: src/Taxonomies/Taxonomies.php
+msgctxt "Seasons"
+msgid "taxonomy general name"
 msgstr ""
 
 #: src/Taxonomies/Taxonomies.php

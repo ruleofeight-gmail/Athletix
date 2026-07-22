@@ -50,4 +50,17 @@ abstract class IntegrationTestCase extends WP_UnitTestCase {
 	protected function plugin() {
 		return \Athletix\Plugin::instance();
 	}
+
+	/**
+	 * Create an Athletix taxonomy term and return its id.
+	 *
+	 * @param string $taxonomy Taxonomy slug.
+	 * @param string $name     Term name.
+	 * @return int
+	 */
+	protected function make_term( $taxonomy, $name ) {
+		$term = wp_insert_term( $name, $taxonomy );
+
+		return is_wp_error( $term ) ? 0 : (int) $term['term_id'];
+	}
 }

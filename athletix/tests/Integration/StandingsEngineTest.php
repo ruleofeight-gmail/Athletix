@@ -34,7 +34,7 @@ class StandingsEngineTest extends IntegrationTestCase {
 			)
 		);
 
-		update_post_meta( $match_id, Keys::MATCH_LEAGUE, $league );
+		wp_set_object_terms( $match_id, array( (int) $league ), Keys::LEAGUE, false );
 		update_post_meta( $match_id, Keys::MATCH_HOME_TEAM, $home );
 		update_post_meta( $match_id, Keys::MATCH_AWAY_TEAM, $away );
 		update_post_meta( $match_id, Keys::MATCH_HOME_SCORE, $home_score );
@@ -54,7 +54,7 @@ class StandingsEngineTest extends IntegrationTestCase {
 	 * @return void
 	 */
 	public function test_standings_recompute_on_match_save() {
-		$league = self::factory()->post->create( array( 'post_type' => Keys::LEAGUE ) );
+		$league = $this->make_term( Keys::LEAGUE, 'Premier' );
 		$a      = self::factory()->post->create(
 			array(
 				'post_type'  => Keys::TEAM,
@@ -103,7 +103,7 @@ class StandingsEngineTest extends IntegrationTestCase {
 	 * @return void
 	 */
 	public function test_standings_update_on_match_delete() {
-		$league = self::factory()->post->create( array( 'post_type' => Keys::LEAGUE ) );
+		$league = $this->make_term( Keys::LEAGUE, 'Premier' );
 		$a      = self::factory()->post->create( array( 'post_type' => Keys::TEAM ) );
 		$b      = self::factory()->post->create( array( 'post_type' => Keys::TEAM ) );
 

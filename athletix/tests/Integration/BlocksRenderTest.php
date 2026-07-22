@@ -41,7 +41,7 @@ class BlocksRenderTest extends IntegrationTestCase {
 	 * @return void
 	 */
 	public function test_standings_block_renders_table() {
-		$league = self::factory()->post->create( array( 'post_type' => Keys::LEAGUE ) );
+		$league = $this->make_term( Keys::LEAGUE, 'League' );
 		$home   = self::factory()->post->create(
 			array(
 				'post_type'  => Keys::TEAM,
@@ -61,7 +61,7 @@ class BlocksRenderTest extends IntegrationTestCase {
 				'post_status' => 'publish',
 			)
 		);
-		update_post_meta( $match, Keys::MATCH_LEAGUE, $league );
+		wp_set_object_terms( $match, array( (int) $league ), Keys::LEAGUE, false );
 		update_post_meta( $match, Keys::MATCH_HOME_TEAM, $home );
 		update_post_meta( $match, Keys::MATCH_AWAY_TEAM, $away );
 		update_post_meta( $match, Keys::MATCH_HOME_SCORE, 2 );

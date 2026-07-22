@@ -46,21 +46,37 @@ class RepositoryTest extends IntegrationTestCase {
 	}
 
 	/**
-	 * The for_league() method filters by the league meta.
+	 * The for_league() method filters by the assigned league term.
 	 *
 	 * @return void
 	 */
 	public function test_for_league_filter() {
 		$teams  = $this->plugin()->make( 'repo.team' );
-		$league = self::factory()->post->create( array( 'post_type' => Keys::LEAGUE ) );
+		$league = $this->make_term( Keys::LEAGUE, 'Premier' );
 
 		$in  = $teams->create( array( 'post_title' => 'In League' ) );
 		$out = $teams->create( array( 'post_title' => 'No League' ) );
-		update_post_meta( $in, Keys::TEAM_LEAGUE, $league );
+		wp_set_object_terms( $in, array( (int) $league ), Keys::LEAGUE, false );
 
 		$found_ids = wp_list_pluck( $teams->for_league( $league ), 'ID' );
 
 		$this->assertContains( $in, $found_ids );
 		$this->assertNotContains( $out, $found_ids );
+	}
+
+	/**
+	 * The league repository stores and reads leagues as terms.
+	 *
+	 * @return void
+	 */
+	public function test_league_repository_terms() {
+		$leagues = $this->plugin()->make( 'repo.league' );
+
+		$id = $leagues->create( array( 'name' => 'Premier Division' ) );
+
+		$this->assertIsInt( $id );
+		$this->assertGreaterThan( 0, $id );
+		$this->assertSame( 'Premier Division', $leagues->name( $id ) );
+		$this->assertContains( $id, wp_list_pluck( $leagues->all(), 'term_id' ) );
 	}
 }

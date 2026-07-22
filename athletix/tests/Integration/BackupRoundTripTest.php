@@ -47,12 +47,7 @@ class BackupRoundTripTest extends IntegrationTestCase {
 	 * @return void
 	 */
 	public function test_round_trip_preserves_relationships_and_stats() {
-		$league = self::factory()->post->create(
-			array(
-				'post_type'  => Keys::LEAGUE,
-				'post_title' => 'RT League',
-			)
-		);
+		$league = $this->make_term( Keys::LEAGUE, 'RT League' );
 		$team   = self::factory()->post->create(
 			array(
 				'post_type'  => Keys::TEAM,
@@ -66,7 +61,7 @@ class BackupRoundTripTest extends IntegrationTestCase {
 			)
 		);
 
-		update_post_meta( $team, Keys::TEAM_LEAGUE, $league );
+		wp_set_object_terms( $team, array( (int) $league ), Keys::LEAGUE, false );
 		update_post_meta( $player, Keys::PLAYER_TEAM, $team );
 
 		$relationships = $this->plugin()->make( 'repo.relationship' );
@@ -87,12 +82,14 @@ class BackupRoundTripTest extends IntegrationTestCase {
 		$created = $backup->import( $data );
 		$this->assertGreaterThanOrEqual( 3, $created );
 
-		$new_league = $this->imported_id( Keys::LEAGUE, 'RT League', $league );
 		$new_team   = $this->imported_id( Keys::TEAM, 'RT Team', $team );
 		$new_player = $this->imported_id( Keys::PLAYER, 'RT Player', $player );
 
-		// Relational meta points at the new ids, not the originals.
-		$this->assertSame( $new_league, (int) get_post_meta( $new_team, Keys::TEAM_LEAGUE, true ) );
+		// The league taxonomy term followed the team across the round trip (by name).
+		$league_names = wp_get_object_terms( $new_team, Keys::LEAGUE, array( 'fields' => 'names' ) );
+		$this->assertContains( 'RT League', $league_names );
+
+		// The post-id relationship meta points at the new player, not the original.
 		$this->assertSame( $new_team, (int) get_post_meta( $new_player, Keys::PLAYER_TEAM, true ) );
 
 		// The custom-table relationship was remapped.

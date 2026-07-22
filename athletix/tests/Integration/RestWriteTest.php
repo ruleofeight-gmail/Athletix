@@ -64,7 +64,7 @@ class RestWriteTest extends IntegrationTestCase {
 				'post_title'  => 'Fixture',
 			)
 		);
-		update_post_meta( $match_id, Keys::MATCH_LEAGUE, $league );
+		wp_set_object_terms( $match_id, array( (int) $league ), Keys::LEAGUE, false );
 		update_post_meta( $match_id, Keys::MATCH_HOME_TEAM, $home );
 		update_post_meta( $match_id, Keys::MATCH_AWAY_TEAM, $away );
 		update_post_meta( $match_id, Keys::MATCH_STATUS, Keys::STATUS_SCHEDULED );
@@ -102,7 +102,7 @@ class RestWriteTest extends IntegrationTestCase {
 	public function test_manager_can_record_result() {
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
 
-		$league   = self::factory()->post->create( array( 'post_type' => Keys::LEAGUE ) );
+		$league   = $this->make_term( Keys::LEAGUE, 'League' );
 		$home     = self::factory()->post->create( array( 'post_type' => Keys::TEAM ) );
 		$away     = self::factory()->post->create( array( 'post_type' => Keys::TEAM ) );
 		$match_id = $this->scheduled_match( $league, $home, $away );
@@ -134,7 +134,7 @@ class RestWriteTest extends IntegrationTestCase {
 	public function test_subscriber_is_forbidden() {
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
 
-		$league   = self::factory()->post->create( array( 'post_type' => Keys::LEAGUE ) );
+		$league   = $this->make_term( Keys::LEAGUE, 'League' );
 		$home     = self::factory()->post->create( array( 'post_type' => Keys::TEAM ) );
 		$away     = self::factory()->post->create( array( 'post_type' => Keys::TEAM ) );
 		$match_id = $this->scheduled_match( $league, $home, $away );
