@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Athletix 2.0.0\n"
 "Report-Msgid-Bugs-To: https://example.com/support\n"
-"POT-Creation-Date: 2026-07-21 23:58+0000\n"
+"POT-Creation-Date: 2026-07-22 07:56+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -155,6 +155,10 @@ msgstr ""
 msgid "Automation"
 msgstr ""
 
+#: src/Admin/AdminMenu.php
+msgid "Automation & Tools"
+msgstr ""
+
 #: src/Automation/RulesAdmin.php
 msgid "Automation Rules"
 msgstr ""
@@ -189,6 +193,14 @@ msgstr ""
 
 #: assets/js/blocks.js src/Elementor/Widgets/TeamRosterWidget.php
 msgid "Columns"
+msgstr ""
+
+#: src/Admin/AdminMenu.php
+msgid "Communication"
+msgstr ""
+
+#: src/Admin/AdminMenu.php
+msgid "Competition"
 msgstr ""
 
 #: src/Competition/CompetitionAdmin.php
@@ -707,6 +719,10 @@ msgstr ""
 msgid "Pending Registrations"
 msgstr ""
 
+#: src/Admin/AdminMenu.php
+msgid "People & Payments"
+msgstr ""
+
 #: src/Analytics/PlayerAnalytics.php
 msgid "Performance trend"
 msgstr ""
@@ -969,6 +985,10 @@ msgstr ""
 
 #: src/Meta/MetaBoxManager.php
 msgid "Status"
+msgstr ""
+
+#: src/Admin/AdminMenu.php
+msgid "Structure"
 msgstr ""
 
 #: src/Automation/RulesAdmin.php

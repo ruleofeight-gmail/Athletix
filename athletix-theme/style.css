@@ -2,128 +2,291 @@
 Theme Name: Athletix
 Theme URI: https://github.com/ruleofeight-gmail/athletix
 Author: Athletix
-Description: Companion theme for the Athletix sports-league plugin. Ships polished single and archive templates for teams, players and matches out of the box. Works as a normal theme without the plugin, and shines with it.
-Version: 1.0.0
+Description: A polished, sport-focused companion theme for the Athletix league plugin. Ships a hero-led home page, card-based archives, and designed single templates for teams, players and matches — with a full light/dark design system. Works as a normal theme on its own, and comes alive with the plugin.
+Version: 1.1.0
 Requires at least: 5.8
 Requires PHP: 7.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: athletix-theme
-Tags: sports, custom-post-types, block-styles, translation-ready
+Tags: sports, custom-post-types, block-styles, translation-ready, full-width-template, footer-widgets
 */
 
+/* ==========================================================================
+   Design tokens
+   ========================================================================== */
 :root {
 	--ax-accent: #1a73e8;
-	--ax-ink: #1f2328;
-	--ax-muted: #6b7280;
-	--ax-line: rgba( 0, 0, 0, 0.1 );
+	--ax-accent-2: #12b886;
+	--ax-accent-ink: #ffffff;
+	--ax-ink: #1a1f2b;
+	--ax-muted: #626c7a;
+	--ax-line: #e6e9ee;
 	--ax-bg: #ffffff;
+	--ax-bg-alt: #f4f6f9;
+	--ax-card: #ffffff;
+	--ax-shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 8px 24px rgba(16, 24, 40, .06);
+	--ax-shadow-lg: 0 12px 40px rgba(16, 24, 40, .14);
+	--ax-radius: 14px;
+	--ax-radius-sm: 9px;
+	--ax-container: 1140px;
+	--ax-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	--ax-head: var(--ax-font);
 }
 
+@media (prefers-color-scheme: dark) {
+	:root {
+		--ax-ink: #e7ebf0;
+		--ax-muted: #9aa4b2;
+		--ax-line: #262c38;
+		--ax-bg: #0f131a;
+		--ax-bg-alt: #141a23;
+		--ax-card: #161c26;
+		--ax-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .35);
+		--ax-shadow-lg: 0 16px 48px rgba(0, 0, 0, .5);
+	}
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
 * { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
 
 body {
 	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	font-family: var(--ax-font);
 	color: var(--ax-ink);
-	background: #f6f7f9;
-	line-height: 1.6;
+	background: var(--ax-bg);
+	line-height: 1.65;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
 }
 
-a { color: var(--ax-accent); }
+h1, h2, h3, h4 {
+	font-family: var(--ax-head);
+	line-height: 1.15;
+	letter-spacing: -0.02em;
+	margin: 0 0 .5em;
+}
+
+h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; }
+h2 { font-size: clamp(1.5rem, 2.6vw, 2rem); font-weight: 750; }
+h3 { font-size: 1.25rem; font-weight: 700; }
+
+p { margin: 0 0 1rem; }
+
+a { color: var(--ax-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+img { max-width: 100%; height: auto; display: block; }
 
 .ax-container {
-	max-width: 1080px;
+	width: 100%;
+	max-width: var(--ax-container);
 	margin: 0 auto;
-	padding: 0 1rem;
+	padding: 0 1.25rem;
 }
 
-/* Header */
+.screen-reader-text {
+	position: absolute !important;
+	clip: rect(1px, 1px, 1px, 1px);
+	width: 1px; height: 1px; overflow: hidden;
+}
+
+/* ==========================================================================
+   Buttons & badges
+   ========================================================================== */
+.ax-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: .5rem;
+	padding: .7rem 1.3rem;
+	border-radius: 999px;
+	font-weight: 700;
+	font-size: .95rem;
+	border: 1px solid transparent;
+	cursor: pointer;
+	transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.ax-btn:hover { text-decoration: none; transform: translateY(-1px); }
+.ax-btn--primary { background: var(--ax-accent); color: var(--ax-accent-ink); box-shadow: var(--ax-shadow); }
+.ax-btn--ghost { background: transparent; color: var(--ax-ink); border-color: var(--ax-line); }
+.ax-btn--ghost:hover { border-color: var(--ax-accent); color: var(--ax-accent); }
+
+.ax-badge {
+	display: inline-block;
+	padding: .2rem .6rem;
+	border-radius: 999px;
+	font-size: .72rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: .04em;
+	background: color-mix(in srgb, var(--ax-accent) 14%, transparent);
+	color: var(--ax-accent);
+}
+
+/* ==========================================================================
+   Site header
+   ========================================================================== */
 .ax-site-header {
-	background: var(--ax-bg);
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	background: color-mix(in srgb, var(--ax-bg) 85%, transparent);
+	backdrop-filter: saturate(140%) blur(10px);
 	border-bottom: 1px solid var(--ax-line);
 }
-
 .ax-site-header__inner {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	gap: 1rem;
-	padding: 1rem;
+	padding: .85rem 0;
+}
+.ax-brand { display: flex; align-items: center; gap: .6rem; }
+.ax-brand__mark {
+	width: 34px; height: 34px; border-radius: 9px;
+	background: linear-gradient(135deg, var(--ax-accent), var(--ax-accent-2));
+	color: #fff; display: grid; place-items: center; font-weight: 900;
+	box-shadow: var(--ax-shadow);
+}
+.ax-site-title { font-size: 1.25rem; font-weight: 800; margin: 0; }
+.ax-site-title a { color: inherit; }
+.ax-site-title a:hover { text-decoration: none; }
+.ax-site-desc { margin: 0; font-size: .8rem; color: var(--ax-muted); }
+
+.ax-nav ul { display: flex; gap: 1.35rem; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+.ax-nav a { color: var(--ax-ink); font-weight: 600; font-size: .95rem; position: relative; }
+.ax-nav a:hover { color: var(--ax-accent); text-decoration: none; }
+.ax-nav .current-menu-item > a { color: var(--ax-accent); }
+
+.ax-nav-toggle {
+	display: none;
+	background: none; border: 1px solid var(--ax-line);
+	border-radius: 9px; padding: .5rem .6rem; cursor: pointer; color: var(--ax-ink);
 }
 
-.ax-site-title {
-	font-size: 1.4rem;
-	font-weight: 800;
-	margin: 0;
+@media (max-width: 782px) {
+	.ax-nav-toggle { display: inline-flex; }
+	.ax-nav {
+		position: absolute; top: 100%; left: 0; right: 0;
+		background: var(--ax-bg); border-bottom: 1px solid var(--ax-line);
+		padding: .5rem 1.25rem 1rem; display: none; box-shadow: var(--ax-shadow);
+	}
+	.ax-nav.is-open { display: block; }
+	.ax-nav ul { flex-direction: column; gap: .25rem; }
+	.ax-nav a { display: block; padding: .6rem 0; border-bottom: 1px solid var(--ax-line); }
 }
 
-.ax-site-title a {
-	text-decoration: none;
-	color: inherit;
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+.ax-hero {
+	position: relative;
+	color: #fff;
+	background: radial-gradient(1200px 500px at 15% -10%, rgba(255,255,255,.18), transparent 60%),
+		linear-gradient(135deg, var(--ax-accent), #0b3d91 70%);
+	overflow: hidden;
 }
+.ax-hero::after {
+	content: ""; position: absolute; inset: 0;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 39.5H40M39.5 0V40' stroke='%23ffffff' stroke-opacity='.06'/%3E%3C/svg%3E");
+	pointer-events: none;
+}
+.ax-hero__inner { position: relative; padding: clamp(3rem, 8vw, 6rem) 0; max-width: 720px; }
+.ax-hero h1 { color: #fff; margin-bottom: .35em; }
+.ax-hero p { font-size: 1.15rem; color: rgba(255,255,255,.9); margin-bottom: 1.6rem; }
+.ax-hero .ax-btn--ghost { color: #fff; border-color: rgba(255,255,255,.5); }
+.ax-hero .ax-btn--ghost:hover { background: rgba(255,255,255,.12); color: #fff; }
+.ax-hero__actions { display: flex; gap: .75rem; flex-wrap: wrap; }
 
-.ax-nav ul {
-	display: flex;
-	gap: 1rem;
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	flex-wrap: wrap;
-}
+/* ==========================================================================
+   Sections & cards
+   ========================================================================== */
+.ax-main { padding: clamp(2rem, 5vw, 3.5rem) 0; }
+.ax-section { margin: 0 0 clamp(2rem, 5vw, 3.5rem); }
+.ax-section__head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.ax-section__head h2 { margin: 0; }
+.ax-eyebrow { text-transform: uppercase; letter-spacing: .08em; font-size: .75rem; font-weight: 800; color: var(--ax-accent); margin: 0 0 .3rem; }
 
-.ax-nav a {
-	text-decoration: none;
-	color: var(--ax-ink);
-	font-weight: 600;
-}
-
-/* Content */
-.ax-main {
-	padding: 2rem 0;
-}
+.ax-grid { display: grid; gap: 1.25rem; }
+.ax-grid--3 { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.ax-grid--2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
 
 .ax-card {
-	background: var(--ax-bg);
+	background: var(--ax-card);
 	border: 1px solid var(--ax-line);
-	border-radius: 10px;
+	border-radius: var(--ax-radius);
 	padding: 1.5rem;
-	margin-bottom: 1.5rem;
+	box-shadow: var(--ax-shadow);
+}
+a.ax-card, .ax-card--link { transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease; }
+a.ax-card:hover, .ax-card--link:hover { transform: translateY(-3px); box-shadow: var(--ax-shadow-lg); border-color: color-mix(in srgb, var(--ax-accent) 40%, var(--ax-line)); text-decoration: none; }
+
+.ax-card__media { aspect-ratio: 16 / 10; border-radius: var(--ax-radius-sm); overflow: hidden; margin: -.25rem 0 1rem; background: var(--ax-bg-alt); }
+.ax-card__media img { width: 100%; height: 100%; object-fit: cover; }
+.ax-card__title { margin: 0 0 .25rem; font-size: 1.15rem; }
+.ax-card__title a { color: inherit; }
+.ax-card__meta { color: var(--ax-muted); font-size: .88rem; margin: 0; }
+
+/* Feature tiles on the home page */
+.ax-feature { text-align: left; }
+.ax-feature__icon {
+	width: 44px; height: 44px; border-radius: 11px; margin-bottom: .9rem;
+	display: grid; place-items: center; font-size: 1.4rem;
+	background: color-mix(in srgb, var(--ax-accent) 12%, transparent); color: var(--ax-accent);
+}
+.ax-feature h3 { margin: 0 0 .35rem; }
+.ax-feature p { color: var(--ax-muted); margin: 0; font-size: .95rem; }
+
+/* ==========================================================================
+   Entry / single content
+   ========================================================================== */
+.ax-entry { max-width: 760px; margin: 0 auto; }
+.ax-entry-title { margin-bottom: .25rem; }
+.ax-entry-meta { color: var(--ax-muted); font-size: .9rem; margin-bottom: 1.5rem; }
+.ax-entry-content > * + * { margin-top: 1rem; }
+.ax-entry-content img { border-radius: var(--ax-radius-sm); }
+.ax-entry-content h2, .ax-entry-content h3 { margin-top: 2rem; }
+.ax-entry-content blockquote {
+	margin: 1.5rem 0; padding: .5rem 1.25rem; border-left: 3px solid var(--ax-accent);
+	color: var(--ax-muted); font-style: italic;
 }
 
-.ax-entry-title {
-	margin-top: 0;
-}
+.ax-page-header { margin-bottom: 2rem; }
+.ax-archive-desc { color: var(--ax-muted); max-width: 60ch; }
 
-.ax-hero {
-	text-align: center;
+/* Post navigation & pagination */
+.pagination, .nav-links { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: 2rem; }
+.pagination .page-numbers, .nav-links .page-numbers {
+	display: inline-grid; place-items: center; min-width: 2.4rem; height: 2.4rem; padding: 0 .6rem;
+	border: 1px solid var(--ax-line); border-radius: 9px; color: var(--ax-ink); font-weight: 600;
 }
+.pagination .current { background: var(--ax-accent); color: #fff; border-color: var(--ax-accent); }
+.pagination a:hover { border-color: var(--ax-accent); text-decoration: none; }
 
-.ax-hero img {
-	max-width: 160px;
-	height: auto;
-	border-radius: 8px;
-}
+/* ==========================================================================
+   Plugin view polish (complements the plugin's own athletix.css)
+   ========================================================================== */
+.ax-plugin-embed { background: var(--ax-card); border: 1px solid var(--ax-line); border-radius: var(--ax-radius); padding: 1.25rem; box-shadow: var(--ax-shadow); overflow-x: auto; }
+.athletix-standings, .athletix-table { width: 100%; }
 
-.ax-section {
-	margin: 2rem 0;
-}
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.ax-site-footer { border-top: 1px solid var(--ax-line); background: var(--ax-bg-alt); margin-top: 2rem; }
+.ax-site-footer__inner { display: grid; grid-template-columns: 1.5fr repeat(auto-fit, minmax(160px, 1fr)); gap: 2rem; padding: 3rem 0 2rem; }
+.ax-site-footer h4 { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ax-muted); margin: 0 0 .8rem; }
+.ax-site-footer .widget ul, .ax-footer-brand + nav ul { list-style: none; margin: 0; padding: 0; }
+.ax-site-footer li { margin: 0 0 .5rem; }
+.ax-footer-brand p { color: var(--ax-muted); max-width: 40ch; }
+.ax-colophon { border-top: 1px solid var(--ax-line); padding: 1.25rem 0; color: var(--ax-muted); font-size: .85rem; text-align: center; }
 
-.ax-section > h2 {
-	border-bottom: 2px solid var(--ax-line);
-	padding-bottom: 0.4rem;
-}
-
-/* Footer */
-.ax-site-footer {
-	background: var(--ax-bg);
-	border-top: 1px solid var(--ax-line);
-	padding: 1.5rem 0;
-	color: var(--ax-muted);
-	text-align: center;
-	font-size: 0.9rem;
-}
-
-@media ( max-width: 640px ) {
-	.ax-site-header__inner { flex-direction: column; align-items: flex-start; }
-}
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+.ax-stack > * + * { margin-top: 1rem; }
+.ax-center { text-align: center; }
+.ax-muted { color: var(--ax-muted); }
