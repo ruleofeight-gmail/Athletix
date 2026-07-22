@@ -36,7 +36,8 @@ class AdminModule implements Module {
 	 */
 	public function register( Plugin $plugin ) {
 		if ( is_admin() ) {
-			( new AdminMenu( $plugin ) )->register();
+			( new Hub( $plugin ) )->register();
+			( new LeagueTablesPage( $plugin ) )->register();
 		}
 	}
 }

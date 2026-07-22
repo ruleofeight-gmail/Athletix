@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Athletix\Admin\Hub;
 use Athletix\Admin\Tables\FilterableTable;
 use Athletix\Plugin;
 use Athletix\Support\Keys;
@@ -47,25 +48,26 @@ class RegistrationAdmin {
 	 * @return void
 	 */
 	public function register() {
-		add_action( 'admin_menu', array( $this, 'menu' ) );
+		add_filter( 'athletix/admin_tabs', array( $this, 'tab' ) );
 		add_action( 'admin_post_' . self::ACTION_APPROVE, array( $this, 'handle_approve' ) );
 		add_action( 'admin_post_' . self::ACTION_REJECT, array( $this, 'handle_reject' ) );
 	}
 
 	/**
-	 * Add the submenu.
+	 * Contribute the Registrations tab to the hub.
 	 *
-	 * @return void
+	 * @param array $tabs Tabs.
+	 * @return array
 	 */
-	public function menu() {
-		add_submenu_page(
-			Keys::MENU,
-			__( 'Registrations', 'athletix' ),
-			__( 'Registrations', 'athletix' ),
-			Keys::capability(),
-			self::PAGE,
-			array( $this, 'render' )
+	public function tab( array $tabs ) {
+		$tabs['registrations'] = array(
+			'label'    => __( 'Registrations', 'athletix' ),
+			'cap'      => Keys::capability(),
+			'order'    => 40,
+			'callback' => array( $this, 'render' ),
 		);
+
+		return $tabs;
 	}
 
 	/**
@@ -89,7 +91,7 @@ class RegistrationAdmin {
 				'sortable'   => array( 'team', 'contact' ),
 				'searchable' => array( 'team', 'contact' ),
 				'per_page'   => 20,
-				'base_url'   => admin_url( 'admin.php?page=' . self::PAGE ),
+				'base_url'   => Hub::tab_url( 'registrations' ),
 				'rows'       => array( $this, 'rows' ),
 				'render'     => array(
 					'eligibility' => array( $this, 'render_eligibility' ),
@@ -98,10 +100,8 @@ class RegistrationAdmin {
 			)
 		);
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Pending Registrations', 'athletix' ); ?></h1>
-			<?php $table->render(); ?>
-		</div>
+		<h2><?php esc_html_e( 'Pending Registrations', 'athletix' ); ?></h2>
+		<?php $table->render(); ?>
 		<?php
 	}
 
@@ -251,14 +251,7 @@ class RegistrationAdmin {
 	 * @return void
 	 */
 	private function redirect() {
-		wp_safe_redirect(
-			add_query_arg(
-				array(
-					'page' => self::PAGE,
-				),
-				admin_url( 'admin.php' )
-			)
-		);
+		wp_safe_redirect( Hub::tab_url( 'registrations' ) );
 		exit;
 	}
 }

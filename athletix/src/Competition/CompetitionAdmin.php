@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Athletix\Admin\Hub;
 use Athletix\Data\Repositories\LeagueRepository;
 use Athletix\Data\Repositories\SeasonRepository;
 use Athletix\Data\Repositories\TeamRepository;
@@ -85,25 +86,26 @@ class CompetitionAdmin {
 	 * @return void
 	 */
 	public function register() {
-		add_action( 'admin_menu', array( $this, 'menu' ) );
+		add_filter( 'athletix/admin_tabs', array( $this, 'tab' ) );
 		add_action( 'admin_post_' . self::ACTION_SCHEDULE, array( $this, 'handle_schedule' ) );
 		add_action( 'admin_post_' . self::ACTION_PLAYOFFS, array( $this, 'handle_playoffs' ) );
 	}
 
 	/**
-	 * Add the submenu page.
+	 * Contribute the Competitions tab to the hub.
 	 *
-	 * @return void
+	 * @param array $tabs Tabs.
+	 * @return array
 	 */
-	public function menu() {
-		add_submenu_page(
-			Keys::MENU,
-			__( 'Competitions', 'athletix' ),
-			__( 'Competitions', 'athletix' ),
-			Keys::capability(),
-			self::PAGE,
-			array( $this, 'render' )
+	public function tab( array $tabs ) {
+		$tabs['competitions'] = array(
+			'label'    => __( 'Competitions', 'athletix' ),
+			'cap'      => Keys::capability(),
+			'order'    => 30,
+			'callback' => array( $this, 'render' ),
 		);
+
+		return $tabs;
 	}
 
 	/**
@@ -120,9 +122,8 @@ class CompetitionAdmin {
 		$seasons = $this->seasons->all( array( 'posts_per_page' => 200 ) );
 		$action  = esc_url( admin_url( 'admin-post.php' ) );
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Competition Manager', 'athletix' ); ?></h1>
-			<?php $this->notice(); ?>
+		<h2><?php esc_html_e( 'Competition Manager', 'athletix' ); ?></h2>
+		<?php $this->notice(); ?>
 
 			<h2><?php esc_html_e( 'Generate Round-Robin Schedule', 'athletix' ); ?></h2>
 			<p class="description"><?php esc_html_e( 'Creates fixtures for every team in the selected league.', 'athletix' ); ?></p>
@@ -172,7 +173,6 @@ class CompetitionAdmin {
 				</tbody></table>
 				<?php submit_button( __( 'Generate Playoffs', 'athletix' ) ); ?>
 			</form>
-		</div>
 		<?php
 	}
 
@@ -304,17 +304,7 @@ class CompetitionAdmin {
 	 * @return void
 	 */
 	private function redirect( array $args ) {
-		$url = add_query_arg(
-			array_merge(
-				array(
-					'page' => self::PAGE,
-				),
-				$args
-			),
-			admin_url( 'admin.php' )
-		);
-
-		wp_safe_redirect( $url );
+		wp_safe_redirect( add_query_arg( $args, Hub::tab_url( 'competitions' ) ) );
 		exit;
 	}
 

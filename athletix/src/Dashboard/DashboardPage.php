@@ -37,10 +37,10 @@ class DashboardPage {
 	}
 
 	/**
-	 * Render the page.
+	 * Render the Dashboard tab of the Athletix hub.
 	 *
-	 * The menu (and its capability) is owned by Admin\AdminMenu; this method is
-	 * the landing-page callback.
+	 * The hub owns the outer wrap, heading and capability check; this outputs the
+	 * panel content only.
 	 *
 	 * @return void
 	 */
@@ -56,21 +56,21 @@ class DashboardPage {
 			__( 'Matches', 'athletix' ) => wp_count_posts( Keys::MATCH )->publish,
 		);
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Athletix Dashboard', 'athletix' ); ?></h1>
+		<div class="athletix-stats">
+			<?php foreach ( $counts as $label => $count ) : ?>
+				<div class="athletix-stat">
+					<div class="athletix-stat__num"><?php echo esc_html( (int) $count ); ?></div>
+					<div class="athletix-stat__label"><?php echo esc_html( $label ); ?></div>
+				</div>
+			<?php endforeach; ?>
+		</div>
 
-			<div style="display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0;">
-				<?php foreach ( $counts as $label => $count ) : ?>
-					<div style="background:#fff;border:1px solid #dcdcde;border-radius:6px;padding:1rem 1.5rem;min-width:120px;">
-						<div style="font-size:2rem;font-weight:700;"><?php echo esc_html( (int) $count ); ?></div>
-						<div style="color:#646970;"><?php echo esc_html( $label ); ?></div>
-					</div>
-				<?php endforeach; ?>
-			</div>
-
+		<div class="athletix-card">
 			<h2><?php esc_html_e( 'Recent Matches', 'athletix' ); ?></h2>
 			<?php $this->recent_matches(); ?>
+		</div>
 
+		<div class="athletix-card">
 			<h2><?php esc_html_e( 'Recent Activity', 'athletix' ); ?></h2>
 			<?php $this->recent_activity(); ?>
 		</div>

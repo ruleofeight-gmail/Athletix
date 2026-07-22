@@ -14,7 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Athletix\Admin\Tables\ListTable;
 use Athletix\Plugin;
 use Athletix\Security\Capabilities;
-use Athletix\Support\Keys;
 
 /**
  * Summarizes payments collected per team with a grand total.
@@ -54,23 +53,24 @@ class FinancialReport {
 	 * @return void
 	 */
 	public function register() {
-		add_action( 'admin_menu', array( $this, 'menu' ) );
+		add_filter( 'athletix/admin_tabs', array( $this, 'tab' ) );
 	}
 
 	/**
-	 * Add the submenu (only for users who may manage payments).
+	 * Contribute the Financials tab to the hub.
 	 *
-	 * @return void
+	 * @param array $tabs Tabs.
+	 * @return array
 	 */
-	public function menu() {
-		add_submenu_page(
-			Keys::MENU,
-			__( 'Financials', 'athletix' ),
-			__( 'Financials', 'athletix' ),
-			Capabilities::MANAGE_PAYMENTS,
-			self::PAGE,
-			array( $this, 'render' )
+	public function tab( array $tabs ) {
+		$tabs['financials'] = array(
+			'label'    => __( 'Financials', 'athletix' ),
+			'cap'      => Capabilities::MANAGE_PAYMENTS,
+			'order'    => 50,
+			'callback' => array( $this, 'render' ),
 		);
+
+		return $tabs;
 	}
 
 	/**
@@ -106,14 +106,12 @@ class FinancialReport {
 			)
 		);
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Financial Report', 'athletix' ); ?></h1>
-			<?php $table->render(); ?>
-			<p class="athletix-grand-total">
-				<strong><?php esc_html_e( 'Grand total:', 'athletix' ); ?></strong>
-				<?php echo esc_html( number_format_i18n( $grand, 2 ) ); ?>
-			</p>
-		</div>
+		<h2><?php esc_html_e( 'Financial Report', 'athletix' ); ?></h2>
+		<?php $table->render(); ?>
+		<p class="athletix-grand-total">
+			<strong><?php esc_html_e( 'Grand total:', 'athletix' ); ?></strong>
+			<?php echo esc_html( number_format_i18n( $grand, 2 ) ); ?>
+		</p>
 		<?php
 	}
 

@@ -1,9 +1,80 @@
 /**
- * Athletix admin styles.
- *
- * Currently limited to the relationship picker combobox used on the post
- * editor for large leagues.
+ * Athletix admin styles: the tabbed hub, dashboard tiles, and the relationship
+ * picker combobox used on the post editor for large leagues.
  */
+
+/* --- Tabbed hub ---------------------------------------------------------- */
+.athletix-hub__title {
+	display: flex;
+	align-items: center;
+	gap: .4rem;
+}
+.athletix-hub__title .dashicons {
+	color: #2271b1;
+	font-size: 26px;
+	width: 26px;
+	height: 26px;
+}
+.athletix-hub__tabs {
+	margin-top: .5rem;
+}
+.athletix-hub__panel {
+	margin-top: 1.5rem;
+}
+.athletix-card {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	padding: 1rem 1.25rem;
+	margin: 0 0 1.25rem;
+	box-shadow: 0 1px 1px rgba( 0, 0, 0, 0.04 );
+}
+.athletix-card > h2:first-child {
+	margin-top: 0;
+}
+
+/* Dashboard stat tiles */
+.athletix-stats {
+	display: grid;
+	grid-template-columns: repeat( auto-fill, minmax( 150px, 1fr ) );
+	gap: 1rem;
+	margin: 0 0 1.5rem;
+}
+.athletix-stat {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-left: 4px solid #2271b1;
+	border-radius: 8px;
+	padding: 1rem 1.25rem;
+}
+.athletix-stat__num {
+	font-size: 2rem;
+	font-weight: 700;
+	line-height: 1.1;
+}
+.athletix-stat__label {
+	color: #646970;
+	text-transform: uppercase;
+	font-size: .72rem;
+	letter-spacing: .04em;
+	font-weight: 600;
+}
+
+/* Settings sections rendered SportsPress-style as cards */
+.athletix-settings h2 {
+	margin: 1.5rem 0 .5rem;
+	padding-bottom: .4rem;
+	border-bottom: 1px solid #dcdcde;
+	font-size: 1.05rem;
+}
+.athletix-settings h2:first-of-type {
+	margin-top: 0;
+}
+
+.athletix-grand-total {
+	font-size: 1.05rem;
+	margin-top: 1rem;
+}
 
 .athletix-picker {
 	position: relative;

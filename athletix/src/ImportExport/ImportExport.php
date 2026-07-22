@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Athletix\Admin\Hub;
 use Athletix\Plugin;
 use Athletix\Support\Keys;
 
@@ -46,25 +47,26 @@ class ImportExport {
 	 * @return void
 	 */
 	public function register() {
-		add_action( 'admin_menu', array( $this, 'menu' ) );
+		add_filter( 'athletix/admin_tabs', array( $this, 'tab' ) );
 		add_action( 'admin_post_' . self::ACTION_IMPORT, array( $this, 'handle_import' ) );
 		add_action( 'admin_post_' . self::ACTION_EXPORT, array( $this, 'handle_export' ) );
 	}
 
 	/**
-	 * Add the submenu.
+	 * Contribute the Tools (Import / Export) tab to the hub.
 	 *
-	 * @return void
+	 * @param array $tabs Tabs.
+	 * @return array
 	 */
-	public function menu() {
-		add_submenu_page(
-			Keys::MENU,
-			__( 'Import / Export', 'athletix' ),
-			__( 'Import / Export', 'athletix' ),
-			Keys::capability(),
-			self::PAGE,
-			array( $this, 'render' )
+	public function tab( array $tabs ) {
+		$tabs['tools'] = array(
+			'label'    => __( 'Import / Export', 'athletix' ),
+			'cap'      => Keys::capability(),
+			'order'    => 70,
+			'callback' => array( $this, 'render' ),
 		);
+
+		return $tabs;
 	}
 
 	/**
@@ -80,8 +82,7 @@ class ImportExport {
 		$action  = esc_url( admin_url( 'admin-post.php' ) );
 		$leagues = $this->plugin->make( 'repo.league' )->all( array( 'posts_per_page' => 200 ) );
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Import / Export', 'athletix' ); ?></h1>
+		<h2><?php esc_html_e( 'Import / Export', 'athletix' ); ?></h2>
 			<?php if ( isset( $_GET['ax_restored'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
 				<div class="notice notice-success is-dismissible"><p>
 				<?php
@@ -160,7 +161,6 @@ class ImportExport {
 				<input type="file" name="backup" accept=".json,application/json" required />
 				<?php submit_button( __( 'Restore Backup', 'athletix' ), 'secondary', 'submit', false ); ?>
 			</form>
-		</div>
 		<?php
 	}
 
@@ -301,17 +301,7 @@ class ImportExport {
 	 * @return void
 	 */
 	private function redirect( array $args ) {
-		wp_safe_redirect(
-			add_query_arg(
-				array_merge(
-					array(
-						'page' => self::PAGE,
-					),
-					$args
-				),
-				admin_url( 'admin.php' )
-			)
-		);
+		wp_safe_redirect( add_query_arg( $args, Hub::tab_url( 'tools' ) ) );
 		exit;
 	}
 }

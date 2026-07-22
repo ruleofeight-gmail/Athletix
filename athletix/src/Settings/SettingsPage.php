@@ -29,24 +29,25 @@ class SettingsPage {
 	 * @return void
 	 */
 	public function register() {
-		add_action( 'admin_menu', array( $this, 'menu' ) );
+		add_filter( 'athletix/admin_tabs', array( $this, 'tab' ) );
 		add_action( 'admin_init', array( $this, 'settings' ) );
 	}
 
 	/**
-	 * Add the submenu.
+	 * Contribute the Settings tab to the hub.
 	 *
-	 * @return void
+	 * @param array $tabs Tabs.
+	 * @return array
 	 */
-	public function menu() {
-		add_submenu_page(
-			Keys::MENU,
-			__( 'Athletix Settings', 'athletix' ),
-			__( 'Settings', 'athletix' ),
-			Keys::capability(),
-			self::PAGE,
-			array( $this, 'render' )
+	public function tab( array $tabs ) {
+		$tabs['settings'] = array(
+			'label'    => __( 'Settings', 'athletix' ),
+			'cap'      => Keys::capability(),
+			'order'    => 20,
+			'callback' => array( $this, 'render' ),
 		);
+
+		return $tabs;
 	}
 
 	/**
@@ -206,16 +207,13 @@ class SettingsPage {
 			return;
 		}
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Athletix Settings', 'athletix' ); ?></h1>
-			<form method="post" action="options.php">
-				<?php
-				settings_fields( self::GROUP );
-				do_settings_sections( self::PAGE );
-				submit_button();
-				?>
-			</form>
-		</div>
+		<form method="post" action="options.php" class="athletix-settings">
+			<?php
+			settings_fields( self::GROUP );
+			do_settings_sections( self::PAGE );
+			submit_button();
+			?>
+		</form>
 		<?php
 	}
 }

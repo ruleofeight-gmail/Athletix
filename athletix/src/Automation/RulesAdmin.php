@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Athletix\Admin\Hub;
 use Athletix\Admin\Tables\FilterableTable;
 use Athletix\Support\Keys;
 
@@ -45,25 +46,26 @@ class RulesAdmin {
 	 * @return void
 	 */
 	public function register() {
-		add_action( 'admin_menu', array( $this, 'menu' ) );
+		add_filter( 'athletix/admin_tabs', array( $this, 'tab' ) );
 		add_action( 'admin_post_' . self::ACTION_ADD, array( $this, 'handle_add' ) );
 		add_action( 'admin_post_' . self::ACTION_DELETE, array( $this, 'handle_delete' ) );
 	}
 
 	/**
-	 * Add the submenu.
+	 * Contribute the Automation tab to the hub.
 	 *
-	 * @return void
+	 * @param array $tabs Tabs.
+	 * @return array
 	 */
-	public function menu() {
-		add_submenu_page(
-			Keys::MENU,
-			__( 'Automation Rules', 'athletix' ),
-			__( 'Automation', 'athletix' ),
-			Keys::capability(),
-			self::PAGE,
-			array( $this, 'render' )
+	public function tab( array $tabs ) {
+		$tabs['automation'] = array(
+			'label'    => __( 'Automation', 'athletix' ),
+			'cap'      => Keys::capability(),
+			'order'    => 60,
+			'callback' => array( $this, 'render' ),
 		);
+
+		return $tabs;
 	}
 
 	/**
@@ -97,7 +99,7 @@ class RulesAdmin {
 					),
 				),
 				'per_page'   => 20,
-				'base_url'   => admin_url( 'admin.php?page=' . self::PAGE ),
+				'base_url'   => Hub::tab_url( 'automation' ),
 				'rows'       => array( $this, 'rows' ),
 				'render'     => array(
 					'actions' => array( $this, 'render_actions' ),
@@ -105,13 +107,12 @@ class RulesAdmin {
 			)
 		);
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Automation Rules', 'athletix' ); ?></h1>
-			<p class="description"><?php esc_html_e( 'Run an action when a plugin event occurs. Templates support {placeholders} such as {home}, {away}, {home_score}, {away_score}, {team_id}.', 'athletix' ); ?></p>
+		<h2><?php esc_html_e( 'Automation Rules', 'athletix' ); ?></h2>
+		<p class="description"><?php esc_html_e( 'Run an action when a plugin event occurs. Templates support {placeholders} such as {home}, {away}, {home_score}, {away_score}, {team_id}.', 'athletix' ); ?></p>
 
-			<?php $table->render(); ?>
+		<?php $table->render(); ?>
 
-			<h2><?php esc_html_e( 'Add Rule', 'athletix' ); ?></h2>
+		<h2><?php esc_html_e( 'Add Rule', 'athletix' ); ?></h2>
 			<form method="post" action="<?php echo esc_url( $action ); ?>">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACTION_ADD ); ?>" />
 				<?php wp_nonce_field( self::ACTION_ADD ); ?>
@@ -151,7 +152,6 @@ class RulesAdmin {
 				</tbody></table>
 				<?php submit_button( __( 'Add Rule', 'athletix' ) ); ?>
 			</form>
-		</div>
 		<?php
 	}
 
@@ -260,14 +260,7 @@ class RulesAdmin {
 	 * @return void
 	 */
 	private function redirect() {
-		wp_safe_redirect(
-			add_query_arg(
-				array(
-					'page' => self::PAGE,
-				),
-				admin_url( 'admin.php' )
-			)
-		);
+		wp_safe_redirect( Hub::tab_url( 'automation' ) );
 		exit;
 	}
 }

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Athletix 2.0.0\n"
 "Report-Msgid-Bugs-To: https://example.com/support\n"
-"POT-Creation-Date: 2026-07-22 07:56+0000\n"
+"POT-Creation-Date: 2026-07-22 08:19+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -63,10 +63,6 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: src/PostTypes/PostTypes.php
-msgid "All %s"
-msgstr ""
-
 #: src/Taxonomies/Taxonomies.php
 msgid "All Sports"
 msgstr ""
@@ -91,12 +87,16 @@ msgstr ""
 msgid "Approve"
 msgstr ""
 
-#: src/Admin/AdminMenu.php src/Elementor/ElementorModule.php
+#: src/Admin/Hub.php src/Elementor/ElementorModule.php
 msgid "Athletix"
 msgstr ""
 
-#: src/Dashboard/DashboardPage.php
-msgid "Athletix Dashboard"
+#: src/PostTypes/PostTypes.php
+msgid "Athletix - %s"
+msgstr ""
+
+#: src/Notifications/Announcements.php
+msgid "Athletix - Announcements"
 msgstr ""
 
 #: src/Elementor/ElementorModule.php
@@ -127,10 +127,6 @@ msgstr ""
 msgid "Athletix Schedule"
 msgstr ""
 
-#: src/Settings/SettingsPage.php
-msgid "Athletix Settings"
-msgstr ""
-
 #: assets/js/blocks.js
 msgid "Athletix Standings"
 msgstr ""
@@ -143,6 +139,10 @@ msgstr ""
 msgid "Athletix requires Elementor %s or newer."
 msgstr ""
 
+#: src/Admin/Hub.php
+msgid "Athletix sections"
+msgstr ""
+
 #: src/Dashboard/Widgets.php
 msgid "Athletix — Recent Matches"
 msgstr ""
@@ -153,10 +153,6 @@ msgstr ""
 
 #: src/Automation/RulesAdmin.php
 msgid "Automation"
-msgstr ""
-
-#: src/Admin/AdminMenu.php
-msgid "Automation & Tools"
 msgstr ""
 
 #: src/Automation/RulesAdmin.php
@@ -195,14 +191,6 @@ msgstr ""
 msgid "Columns"
 msgstr ""
 
-#: src/Admin/AdminMenu.php
-msgid "Communication"
-msgstr ""
-
-#: src/Admin/AdminMenu.php
-msgid "Competition"
-msgstr ""
-
 #: src/Competition/CompetitionAdmin.php
 msgid "Competition Manager"
 msgstr ""
@@ -231,6 +219,10 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
+#: src/Admin/LeagueTablesPage.php
+msgid "Create a league first to see its table."
+msgstr ""
+
 #: src/Competition/CompetitionAdmin.php
 msgid "Creates fixtures for every team in the selected league."
 msgstr ""
@@ -239,7 +231,7 @@ msgstr ""
 msgid "D"
 msgstr ""
 
-#: src/Admin/AdminMenu.php
+#: src/Admin/Hub.php
 msgid "Dashboard"
 msgstr ""
 
@@ -515,6 +507,14 @@ msgstr ""
 msgid "League Table"
 msgstr ""
 
+#: src/Admin/LeagueTablesPage.php
+msgid "League Tables"
+msgstr ""
+
+#: src/Admin/LeagueTablesPage.php
+msgid "League:"
+msgstr ""
+
 #: src/Dashboard/DashboardPage.php src/Dashboard/Widgets.php src/PostTypes/PostTypes.php
 msgid "Leagues"
 msgstr ""
@@ -717,10 +717,6 @@ msgstr ""
 
 #: src/Membership/RegistrationAdmin.php
 msgid "Pending Registrations"
-msgstr ""
-
-#: src/Admin/AdminMenu.php
-msgid "People & Payments"
 msgstr ""
 
 #: src/Analytics/PlayerAnalytics.php
@@ -985,10 +981,6 @@ msgstr ""
 
 #: src/Meta/MetaBoxManager.php
 msgid "Status"
-msgstr ""
-
-#: src/Admin/AdminMenu.php
-msgid "Structure"
 msgstr ""
 
 #: src/Automation/RulesAdmin.php

@@ -25,54 +25,19 @@ class PostTypes {
 	 * @return void
 	 */
 	public function register() {
-		// Every post type lives under the single top-level Athletix menu.
-		$parent = Keys::MENU;
-
-		$this->register_type(
-			Keys::TEAM,
-			__( 'Teams', 'athletix' ),
-			__( 'Team', 'athletix' ),
-			array(
-				'show_in_menu' => $parent,
-				'has_archive'  => true,
-				'rewrite'      => array( 'slug' => 'teams' ),
-				'supports'     => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
-			)
-		);
-
-		$this->register_type(
-			Keys::PLAYER,
-			__( 'Players', 'athletix' ),
-			__( 'Player', 'athletix' ),
-			array(
-				'show_in_menu' => $parent,
-				'has_archive'  => true,
-				'rewrite'      => array( 'slug' => 'players' ),
-				'supports'     => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
-			)
-		);
-
-		$this->register_type(
-			Keys::MATCH,
-			__( 'Matches', 'athletix' ),
-			__( 'Match', 'athletix' ),
-			array(
-				'show_in_menu' => $parent,
-				'has_archive'  => true,
-				'rewrite'      => array( 'slug' => 'matches' ),
-				'supports'     => array( 'title', 'editor', 'thumbnail' ),
-			)
-		);
-
+		// Each content type is its own top-level "Athletix - X" menu. Consecutive
+		// positions keep them lined up together in the admin sidebar, just below
+		// the "Athletix" hub (position 30).
 		$this->register_type(
 			Keys::LEAGUE,
 			__( 'Leagues', 'athletix' ),
 			__( 'League', 'athletix' ),
 			array(
-				'show_in_menu' => $parent,
-				'has_archive'  => true,
-				'rewrite'      => array( 'slug' => 'leagues' ),
-				'supports'     => array( 'title', 'editor', 'thumbnail' ),
+				'menu_position' => 31,
+				'menu_icon'     => 'dashicons-awards',
+				'has_archive'   => true,
+				'rewrite'       => array( 'slug' => 'leagues' ),
+				'supports'      => array( 'title', 'editor', 'thumbnail' ),
 			)
 		);
 
@@ -81,10 +46,11 @@ class PostTypes {
 			__( 'Seasons', 'athletix' ),
 			__( 'Season', 'athletix' ),
 			array(
-				'show_in_menu' => $parent,
-				'has_archive'  => false,
-				'rewrite'      => array( 'slug' => 'seasons' ),
-				'supports'     => array( 'title' ),
+				'menu_position' => 32,
+				'menu_icon'     => 'dashicons-calendar-alt',
+				'has_archive'   => false,
+				'rewrite'       => array( 'slug' => 'seasons' ),
+				'supports'      => array( 'title' ),
 			)
 		);
 
@@ -93,10 +59,50 @@ class PostTypes {
 			__( 'Divisions', 'athletix' ),
 			__( 'Division', 'athletix' ),
 			array(
-				'public'       => false,
-				'show_ui'      => true,
-				'show_in_menu' => $parent,
-				'supports'     => array( 'title' ),
+				'public'        => false,
+				'show_ui'       => true,
+				'menu_position' => 33,
+				'menu_icon'     => 'dashicons-networking',
+				'supports'      => array( 'title' ),
+			)
+		);
+
+		$this->register_type(
+			Keys::TEAM,
+			__( 'Teams', 'athletix' ),
+			__( 'Team', 'athletix' ),
+			array(
+				'menu_position' => 34,
+				'menu_icon'     => 'dashicons-groups',
+				'has_archive'   => true,
+				'rewrite'       => array( 'slug' => 'teams' ),
+				'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+			)
+		);
+
+		$this->register_type(
+			Keys::PLAYER,
+			__( 'Players', 'athletix' ),
+			__( 'Player', 'athletix' ),
+			array(
+				'menu_position' => 35,
+				'menu_icon'     => 'dashicons-admin-users',
+				'has_archive'   => true,
+				'rewrite'       => array( 'slug' => 'players' ),
+				'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+			)
+		);
+
+		$this->register_type(
+			Keys::MATCH,
+			__( 'Matches', 'athletix' ),
+			__( 'Match', 'athletix' ),
+			array(
+				'menu_position' => 36,
+				'menu_icon'     => 'dashicons-clipboard',
+				'has_archive'   => true,
+				'rewrite'       => array( 'slug' => 'matches' ),
+				'supports'      => array( 'title', 'editor', 'thumbnail' ),
 			)
 		);
 	}
@@ -114,6 +120,10 @@ class PostTypes {
 		$labels = array(
 			'name'          => $plural,
 			'singular_name' => $singular,
+			/* translators: %s: plural post type name. */
+			'menu_name'     => sprintf( __( 'Athletix - %s', 'athletix' ), $plural ),
+			/* translators: %s: singular post type name. */
+			'add_new'       => sprintf( __( 'Add New %s', 'athletix' ), $singular ),
 			/* translators: %s: singular post type name. */
 			'add_new_item'  => sprintf( __( 'Add New %s', 'athletix' ), $singular ),
 			/* translators: %s: singular post type name. */
@@ -124,8 +134,9 @@ class PostTypes {
 			'view_item'     => sprintf( __( 'View %s', 'athletix' ), $singular ),
 			/* translators: %s: plural post type name. */
 			'search_items'  => sprintf( __( 'Search %s', 'athletix' ), $plural ),
-			/* translators: %s: plural post type name. */
-			'all_items'     => sprintf( __( 'All %s', 'athletix' ), $plural ),
+			// The top-level menu carries the "Athletix - " prefix, so the list
+			// submenu drops "All" and just reads the plural name.
+			'all_items'     => $plural,
 			/* translators: %s: plural post type name. */
 			'not_found'     => sprintf( __( 'No %s found', 'athletix' ), strtolower( $plural ) ),
 		);
@@ -134,7 +145,6 @@ class PostTypes {
 			'labels'       => $labels,
 			'public'       => true,
 			'show_in_rest' => true,
-			'menu_icon'    => null,
 		);
 
 		register_post_type( $slug, array_merge( $defaults, $args ) );

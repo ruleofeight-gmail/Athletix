@@ -36,7 +36,7 @@ class DashboardModule implements Module {
 	 */
 	public function register( Plugin $plugin ) {
 		// The dashboard page itself is registered as the Athletix menu's landing
-		// page by Admin\AdminMenu; here we only add the wp-admin dashboard widgets.
+		// page by Admin\Hub (Dashboard tab); here we only add the wp-admin widgets.
 		if ( is_admin() ) {
 			( new Widgets( $plugin ) )->register();
 		}

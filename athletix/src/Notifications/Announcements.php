@@ -11,7 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Athletix\Support\Keys;
 
 /**
  * A lightweight announcements post type with a shortcode to list the latest
@@ -41,20 +40,22 @@ class Announcements {
 		register_post_type(
 			self::POST_TYPE,
 			array(
-				'labels'       => array(
+				'labels'        => array(
 					'name'          => _x( 'Announcements', 'post type general name', 'athletix' ),
 					'singular_name' => _x( 'Announcement', 'post type singular name', 'athletix' ),
+					'menu_name'     => __( 'Athletix - Announcements', 'athletix' ),
+					'add_new'       => __( 'Add New Announcement', 'athletix' ),
 					'add_new_item'  => __( 'Add New Announcement', 'athletix' ),
 					'edit_item'     => __( 'Edit Announcement', 'athletix' ),
 					'all_items'     => __( 'Announcements', 'athletix' ),
 				),
-				'public'       => true,
-				'has_archive'  => true,
-				'show_in_menu' => Keys::MENU,
-				'show_in_rest' => true,
-				'menu_icon'    => 'dashicons-megaphone',
-				'supports'     => array( 'title', 'editor', 'thumbnail', 'author' ),
-				'rewrite'      => array( 'slug' => 'announcements' ),
+				'public'        => true,
+				'has_archive'   => true,
+				'menu_position' => 37,
+				'show_in_rest'  => true,
+				'menu_icon'     => 'dashicons-megaphone',
+				'supports'      => array( 'title', 'editor', 'thumbnail', 'author' ),
+				'rewrite'       => array( 'slug' => 'announcements' ),
 			)
 		);
 	}
