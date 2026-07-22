@@ -124,6 +124,19 @@ class BlocksModule implements Module {
 				),
 				'render'     => array( $this, 'render_schedule' ),
 			),
+			'bracket'   => array(
+				'attributes' => array(
+					'league' => array(
+						'type'    => 'number',
+						'default' => 0,
+					),
+					'season' => array(
+						'type'    => 'number',
+						'default' => 0,
+					),
+				),
+				'render'     => array( $this, 'render_bracket' ),
+			),
 			'match'     => array(
 				'attributes' => array(
 					'id' => array(
@@ -232,6 +245,21 @@ class BlocksModule implements Module {
 				'league' => (int) ( $attributes['league'] ?? 0 ),
 				'season' => (int) ( $attributes['season'] ?? 0 ),
 				'limit'  => (int) ( $attributes['limit'] ?? 20 ),
+			)
+		);
+	}
+
+	/**
+	 * Render the bracket block.
+	 *
+	 * @param array $attributes Block attributes.
+	 * @return string
+	 */
+	public function render_bracket( $attributes ) {
+		return $this->shortcodes->bracket(
+			array(
+				'league' => (int) ( $attributes['league'] ?? 0 ),
+				'season' => (int) ( $attributes['season'] ?? 0 ),
 			)
 		);
 	}

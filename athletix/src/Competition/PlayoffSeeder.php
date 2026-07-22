@@ -102,7 +102,7 @@ class PlayoffSeeder {
 			);
 
 			if ( $match_id ) {
-				update_post_meta( $match_id, '_ax_playoff', 1 );
+				update_post_meta( $match_id, \Athletix\Support\Keys::MATCH_PLAYOFF, 1 );
 				$result['matches'][] = $match_id;
 			}
 		}

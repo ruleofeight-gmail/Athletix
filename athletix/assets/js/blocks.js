@@ -213,6 +213,13 @@
 		];
 	} );
 
+	register( 'bracket', __( 'Athletix Bracket', 'athletix' ), function ( props ) {
+		return [
+			termField( props, 'league', __( 'League', 'athletix' ), 'ax_league', __( '— Select a league —', 'athletix' ) ),
+			termField( props, 'season', __( 'Season', 'athletix' ), 'ax_season', __( 'All seasons', 'athletix' ), props.attributes.league ),
+		];
+	} );
+
 	register( 'match', __( 'Athletix Match', 'athletix' ), function ( props ) {
 		return [ numberField( props, 'id', __( 'Match ID', 'athletix' ) ) ];
 	} );

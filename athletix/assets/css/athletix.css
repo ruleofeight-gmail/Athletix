@@ -517,3 +517,93 @@
 .athletix-archive__nav {
 	margin-top: 1.5rem;
 }
+
+/* Playoff Bracket */
+.athletix-bracket {
+	display: flex;
+	gap: 2.5rem;
+	overflow-x: auto;
+	padding: 0.5rem 0.25rem 1rem;
+	align-items: stretch;
+}
+
+.athletix-bracket__round {
+	display: flex;
+	flex-direction: column;
+	min-width: 200px;
+	flex: 0 0 auto;
+}
+
+.athletix-bracket__round-title {
+	margin: 0 0 0.75rem;
+	font-size: 0.8rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: #6b7280;
+}
+
+.athletix-bracket__matches {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	flex: 1 1 auto;
+	gap: 1.25rem;
+}
+
+.athletix-bracket__match {
+	border: 1px solid rgba( 0, 0, 0, 0.12 );
+	border-radius: 8px;
+	overflow: hidden;
+	background: #fff;
+	box-shadow: 0 1px 2px rgba( 0, 0, 0, 0.06 );
+}
+
+.athletix-bracket__team {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.55rem 0.85rem;
+	font-size: 0.95rem;
+}
+
+.athletix-bracket__team + .athletix-bracket__team {
+	border-top: 1px solid rgba( 0, 0, 0, 0.08 );
+}
+
+.athletix-bracket__team.is-winner {
+	font-weight: 700;
+	background: #ecfdf5;
+}
+
+.athletix-bracket__name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.athletix-bracket__score {
+	font-variant-numeric: tabular-nums;
+	font-weight: 700;
+	color: #111827;
+}
+
+@media ( prefers-color-scheme: dark ) {
+	.athletix-bracket__match {
+		background: #1f2430;
+		border-color: rgba( 255, 255, 255, 0.14 );
+	}
+
+	.athletix-bracket__team + .athletix-bracket__team {
+		border-top-color: rgba( 255, 255, 255, 0.1 );
+	}
+
+	.athletix-bracket__team.is-winner {
+		background: rgba( 16, 185, 129, 0.18 );
+	}
+
+	.athletix-bracket__score {
+		color: #f3f4f6;
+	}
+}

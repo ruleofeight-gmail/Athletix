@@ -58,6 +58,7 @@ final class Keys {
 	const MATCH_DATE       = '_ax_match_date';
 	const MATCH_STATUS     = '_ax_match_status';
 	const MATCH_ROUND      = '_ax_match_round';
+	const MATCH_PLAYOFF    = '_ax_playoff';
 
 	/* Season meta. */
 	const SEASON_LEAGUE = '_ax_season_league';

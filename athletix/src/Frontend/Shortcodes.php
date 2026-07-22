@@ -47,6 +47,7 @@ class Shortcodes {
 		add_shortcode( 'athletix_schedule', array( $this, 'schedule' ) );
 		add_shortcode( 'athletix_match', array( $this, 'match_card' ) );
 		add_shortcode( 'athletix_player', array( $this, 'player' ) );
+		add_shortcode( 'athletix_bracket', array( $this, 'bracket' ) );
 	}
 
 	/**
@@ -268,6 +269,77 @@ class Shortcodes {
 				'repo'    => $matches,
 			)
 		);
+	}
+
+	/**
+	 * [athletix_bracket league="12" season="3"]
+	 *
+	 * Renders the playoff bracket for a league/season: the seeded knockout
+	 * matches (flagged by the PlayoffSeeder) laid out round by round, with the
+	 * winner of each decided match highlighted.
+	 *
+	 * @param array $atts Attributes.
+	 * @return string
+	 */
+	public function bracket( $atts ) {
+		$atts = shortcode_atts(
+			array(
+				'league' => 0,
+				'season' => 0,
+			),
+			$atts,
+			'athletix_bracket'
+		);
+
+		$league = $this->term_id( $atts['league'], Keys::LEAGUE );
+		$season = $this->term_id( $atts['season'], Keys::SEASON );
+
+		if ( ! $league ) {
+			return '';
+		}
+
+		$tax = array(
+			array(
+				'taxonomy' => Keys::LEAGUE,
+				'field'    => 'term_id',
+				'terms'    => $league,
+			),
+		);
+		if ( $season ) {
+			$tax[] = array(
+				'taxonomy' => Keys::SEASON,
+				'field'    => 'term_id',
+				'terms'    => $season,
+			);
+		}
+
+		$repo    = $this->plugin->make( 'repo.match' );
+		$matches = $repo->all(
+			array(
+				'posts_per_page' => -1,
+				'orderby'        => 'meta_value_num',
+				'meta_key'       => Keys::MATCH_ROUND, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+				'order'          => 'ASC',
+				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					array(
+						'key'   => Keys::MATCH_PLAYOFF,
+						'value' => 1,
+					),
+				),
+				'tax_query'      => $tax, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+			)
+		);
+
+		$rows = array();
+		foreach ( $matches as $match ) {
+			$details          = $repo->details( $match->ID );
+			$details['round'] = (int) get_post_meta( $match->ID, Keys::MATCH_ROUND, true );
+			$rows[]           = $details;
+		}
+
+		$rounds = ( new \Athletix\Competition\BracketBuilder() )->build( $rows );
+
+		return $this->render( 'bracket', array( 'rounds' => $rounds ) );
 	}
 
 	/**

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Athletix 2.0.0\n"
 "Report-Msgid-Bugs-To: https://example.com/support\n"
-"POT-Creation-Date: 2026-07-22 20:21+0000\n"
+"POT-Creation-Date: 2026-07-22 20:31+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -105,6 +105,10 @@ msgstr ""
 
 #: src/Notifications/Announcements.php
 msgid "Athletix - Announcements"
+msgstr ""
+
+#: assets/js/blocks.js
+msgid "Athletix Bracket"
 msgstr ""
 
 #: src/Elementor/ElementorModule.php
@@ -337,6 +341,10 @@ msgstr ""
 
 #: src/Admin/Tables/FilterableTable.php src/Search/Directory.php
 msgid "Filter"
+msgstr ""
+
+#: src/Competition/BracketBuilder.php
+msgid "Final"
 msgstr ""
 
 #: src/Payments/FinancialReport.php
@@ -651,6 +659,10 @@ msgstr ""
 msgid "No players."
 msgstr ""
 
+#: templates/bracket.php
+msgid "No playoff matches yet."
+msgstr ""
+
 #: src/Dashboard/DashboardPage.php
 msgid "No recent activity."
 msgstr ""
@@ -751,6 +763,10 @@ msgstr ""
 msgid "Players"
 msgstr ""
 
+#: templates/bracket.php
+msgid "Playoff bracket"
+msgstr ""
+
 #: src/Membership/Registration.php
 msgid "Please enter a team name."
 msgstr ""
@@ -803,6 +819,10 @@ msgstr ""
 msgid "Qualifying Teams"
 msgstr ""
 
+#: src/Competition/BracketBuilder.php
+msgid "Quarterfinals"
+msgstr ""
+
 #: src/Dashboard/DashboardPage.php
 msgid "Recent Activity"
 msgstr ""
@@ -849,6 +869,10 @@ msgstr ""
 
 #: src/ImportExport/ImportExport.php
 msgid "Restore Backup"
+msgstr ""
+
+#: src/Competition/BracketBuilder.php
+msgid "Round of %d"
 msgstr ""
 
 #: src/Automation/RulesAdmin.php
@@ -939,6 +963,10 @@ msgstr ""
 msgid "Select a team to display its roster."
 msgstr ""
 
+#: src/Competition/BracketBuilder.php
+msgid "Semifinals"
+msgstr ""
+
 #: src/Automation/RuleManager.php
 msgid "Send email"
 msgstr ""
@@ -1013,6 +1041,10 @@ msgstr ""
 
 #: src/Calendar/CalendarView.php
 msgid "Sun"
+msgstr ""
+
+#: templates/bracket.php
+msgid "TBD"
 msgstr ""
 
 #: src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/ScheduleWidget.php
