@@ -37,6 +37,7 @@ class AdminModule implements Module {
 	public function register( Plugin $plugin ) {
 		if ( is_admin() ) {
 			( new Hub( $plugin ) )->register();
+			( new StandingsTab( $plugin ) )->register();
 		}
 	}
 }

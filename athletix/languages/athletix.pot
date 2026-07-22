@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Athletix 2.0.0\n"
 "Report-Msgid-Bugs-To: https://example.com/support\n"
-"POT-Creation-Date: 2026-07-22 13:06+0000\n"
+"POT-Creation-Date: 2026-07-22 13:20+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -49,6 +49,10 @@ msgstr ""
 
 #: src/Automation/RulesAdmin.php
 msgid "Add Rule"
+msgstr ""
+
+#: src/Admin/StandingsTab.php
+msgid "Add a league (Athletix → Leagues) to see its table."
 msgstr ""
 
 #: src/Settings/SettingsPage.php
@@ -303,6 +307,10 @@ msgstr ""
 msgid "Email recipient"
 msgstr ""
 
+#: src/Taxonomies/TermFields.php
+msgid "End date"
+msgstr ""
+
 #: src/ImportExport/ImportExport.php
 msgid "Export Standings"
 msgstr ""
@@ -467,7 +475,7 @@ msgstr ""
 msgid "L"
 msgstr ""
 
-#: src/Competition/CompetitionAdmin.php src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/ScheduleWidget.php
+#: src/Admin/StandingsTab.php src/Competition/CompetitionAdmin.php src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/ScheduleWidget.php src/Taxonomies/TermFields.php
 msgid "League"
 msgstr ""
 
@@ -755,6 +763,10 @@ msgstr ""
 msgid "Position %1$d — %2$d pts from %3$d games"
 msgstr ""
 
+#: src/Taxonomies/TermFields.php
+msgid "Primary colour"
+msgstr ""
+
 #: src/Elementor/Widgets/PlayerProfileWidget.php
 msgid "Profile"
 msgstr ""
@@ -923,6 +935,10 @@ msgstr ""
 msgid "Sorry, your registration could not be saved."
 msgstr ""
 
+#: src/Taxonomies/TermFields.php
+msgid "Sport"
+msgstr ""
+
 #: src/Admin/Hub.php
 msgid "Sports"
 msgstr ""
@@ -941,6 +957,10 @@ msgstr ""
 
 #: src/Competition/CompetitionAdmin.php
 msgid "Start Date"
+msgstr ""
+
+#: src/Taxonomies/TermFields.php
+msgid "Start date"
 msgstr ""
 
 #: src/Elementor/Widgets/StatisticsWidget.php
@@ -965,6 +985,10 @@ msgstr ""
 
 #: src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/ScheduleWidget.php
 msgid "Table"
+msgstr ""
+
+#: src/Admin/StandingsTab.php
+msgid "Tables"
 msgstr ""
 
 #: src/Elementor/Widgets/TeamRosterWidget.php src/Membership/RegistrationAdmin.php src/Meta/MetaBoxManager.php src/Payments/FinancialReport.php src/PostTypes/PostTypes.php src/Search/Directory.php src/Search/Search.php templates/standings.php
@@ -1115,7 +1139,7 @@ msgstr ""
 msgid "—"
 msgstr ""
 
-#: src/Competition/CompetitionAdmin.php
+#: src/Competition/CompetitionAdmin.php src/Taxonomies/TermFields.php
 msgid "— None —"
 msgstr ""
 

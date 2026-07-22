@@ -55,6 +55,7 @@ class PostTypesModule implements Module {
 
 		if ( is_admin() ) {
 			( new \Athletix\Meta\MatchStatsMetaBox( $plugin ) )->register();
+			( new \Athletix\Taxonomies\TermFields() )->register();
 		}
 	}
 }

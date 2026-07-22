@@ -67,6 +67,10 @@ final class Keys {
 	/* Division meta. */
 	const DIVISION_LEAGUE = '_ax_division_league';
 
+	/* League term meta. */
+	const LEAGUE_SPORT = '_ax_league_sport';
+	const LEAGUE_COLOR = '_ax_league_color';
+
 	/* Match status values. */
 	const STATUS_SCHEDULED = 'scheduled';
 	const STATUS_COMPLETED = 'completed';
