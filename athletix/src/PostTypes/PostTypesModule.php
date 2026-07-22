@@ -51,6 +51,9 @@ class PostTypesModule implements Module {
 		// Also register during activation so rewrite rules flush correctly.
 		add_action( 'athletix/activate', $register );
 
+		// Scope the Seasons REST endpoint to a league (dependent editor pickers).
+		( new \Athletix\Taxonomies\SeasonRestFilter() )->register();
+
 		$meta_boxes->register();
 
 		if ( is_admin() ) {

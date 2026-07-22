@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Athletix 2.0.0\n"
 "Report-Msgid-Bugs-To: https://example.com/support\n"
-"POT-Creation-Date: 2026-07-22 13:46+0000\n"
+"POT-Creation-Date: 2026-07-22 20:21+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -525,6 +525,10 @@ msgstr ""
 
 #: src/Elementor/Widgets/PlayerProfileWidget.php
 msgid "Leave empty to use the current player on a single player page."
+msgstr ""
+
+#: src/Taxonomies/SeasonRestFilter.php
+msgid "Limit result set to seasons belonging to the given league term id."
 msgstr ""
 
 #: src/Elementor/Widgets/StatisticsWidget.php

@@ -56,26 +56,35 @@
 	 * A term dropdown that loads its options from the taxonomy REST endpoint,
 	 * so editors pick a League/Season by name instead of typing a term id.
 	 *
-	 * @param {Object} props { taxonomy, label, value, onChange, allLabel }.
+	 * When `filterLeague` is a truthy league id, the request is scoped to that
+	 * league (via the athletix_league query arg) and re-runs whenever the league
+	 * changes — so, e.g., the Season list only shows that league's seasons.
+	 *
+	 * @param {Object} props { taxonomy, label, value, onChange, allLabel, filterLeague }.
 	 * @return {Object} Control element.
 	 */
 	function TermSelect( props ) {
 		var state = useState( [] );
 		var terms = state[ 0 ];
 		var setTerms = state[ 1 ];
+		var league = parseInt( props.filterLeague, 10 ) || 0;
 
 		useEffect( function () {
 			if ( ! apiFetch ) {
 				return;
 			}
-			apiFetch( {
-				path: '/wp/v2/' + props.taxonomy + '?per_page=100&hide_empty=false&_fields=id,name',
-			} ).then( function ( items ) {
+			var path = '/wp/v2/' + props.taxonomy + '?per_page=100&hide_empty=false&_fields=id,name';
+			if ( league ) {
+				path += '&athletix_league=' + league;
+			}
+			apiFetch( { path: path } ).then( function ( items ) {
 				setTerms( ( items || [] ).map( function ( t ) {
 					return { label: t.name, value: String( t.id ) };
 				} ) );
-			} ).catch( function () {} );
-		}, [] );
+			} ).catch( function () {
+				setTerms( [] );
+			} );
+		}, [ props.taxonomy, league ] );
 
 		var options = [ { label: props.allLabel, value: '0' } ].concat( terms );
 
@@ -92,19 +101,21 @@
 	/**
 	 * Build a term-picker control for an attribute.
 	 *
-	 * @param {Object} props    Block props.
-	 * @param {string} key      Attribute name.
-	 * @param {string} label    Field label.
-	 * @param {string} taxonomy Taxonomy REST base.
-	 * @param {string} allLabel Label for the "any" option.
+	 * @param {Object} props        Block props.
+	 * @param {string} key          Attribute name.
+	 * @param {string} label        Field label.
+	 * @param {string} taxonomy     Taxonomy REST base.
+	 * @param {string} allLabel     Label for the "any" option.
+	 * @param {number} filterLeague Optional league id to scope options to.
 	 * @return {Object} Control element.
 	 */
-	function termField( props, key, label, taxonomy, allLabel ) {
+	function termField( props, key, label, taxonomy, allLabel, filterLeague ) {
 		return el( TermSelect, {
-			key: key,
+			key: key + ':' + ( parseInt( filterLeague, 10 ) || 0 ),
 			taxonomy: taxonomy,
 			label: label,
 			allLabel: allLabel,
+			filterLeague: filterLeague,
 			value: props.attributes[ key ],
 			onChange: function ( value ) {
 				var next = {};
@@ -182,7 +193,7 @@
 	register( 'standings', __( 'Athletix Standings', 'athletix' ), function ( props ) {
 		return [
 			termField( props, 'league', __( 'League', 'athletix' ), 'ax_league', __( '— Select a league —', 'athletix' ) ),
-			termField( props, 'season', __( 'Season', 'athletix' ), 'ax_season', __( 'All seasons', 'athletix' ) ),
+			termField( props, 'season', __( 'Season', 'athletix' ), 'ax_season', __( 'All seasons', 'athletix' ), props.attributes.league ),
 		];
 	} );
 
@@ -197,7 +208,7 @@
 	register( 'schedule', __( 'Athletix Schedule', 'athletix' ), function ( props ) {
 		return [
 			termField( props, 'league', __( 'League', 'athletix' ), 'ax_league', __( 'Any league', 'athletix' ) ),
-			termField( props, 'season', __( 'Season', 'athletix' ), 'ax_season', __( 'All seasons', 'athletix' ) ),
+			termField( props, 'season', __( 'Season', 'athletix' ), 'ax_season', __( 'All seasons', 'athletix' ), props.attributes.league ),
 			numberField( props, 'limit', __( 'Max matches', 'athletix' ) ),
 		];
 	} );
