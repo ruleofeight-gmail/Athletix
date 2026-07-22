@@ -82,6 +82,31 @@ class SportEngine {
 	}
 
 	/**
+	 * The sport slug a team plays: its own Sport term if set, otherwise the sport
+	 * of the league it belongs to, otherwise the active sport.
+	 *
+	 * @param int $team_id Team post id.
+	 * @return string
+	 */
+	public function for_team( $team_id ) {
+		$team_id = absint( $team_id );
+
+		if ( $team_id ) {
+			$sports = get_the_terms( $team_id, Keys::TAX_SPORT );
+			if ( is_array( $sports ) && $sports ) {
+				return $sports[0]->slug;
+			}
+
+			$leagues = get_the_terms( $team_id, Keys::LEAGUE );
+			if ( is_array( $leagues ) && $leagues ) {
+				return $this->for_league( $leagues[0]->term_id );
+			}
+		}
+
+		return $this->active();
+	}
+
+	/**
 	 * The profile for a sport slug (empty = active sport).
 	 *
 	 * @param string $sport Sport slug.

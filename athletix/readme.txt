@@ -43,6 +43,11 @@ Blocks: the same views are available as server-rendered Gutenberg blocks in the
 Player), each registered from block.json metadata with League/Season pickers —
 the Season picker is scoped to the chosen League.
 
+Guided add screens: under the Athletix menu, "Add Team" ties a new team to a
+sport (plus optional league/division), and "Add Player" binds a player to a
+team and offers the position list that belongs to that team's sport — so the
+form always matches the sport being entered.
+
 Elementor: a dedicated "Athletix" category with League Table, Team Roster and
 Match Schedule widgets, plus a Player Field dynamic tag. The Elementor layer
 loads only when a compatible Elementor (3.5+) is active; without it the rest of

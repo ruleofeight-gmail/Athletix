@@ -57,6 +57,52 @@ class SportEngineTest extends IntegrationTestCase {
 	}
 
 	/**
+	 * A team's sport is read from its own Sport term when set — this drives the
+	 * sport-aware position list on the Add Player screen.
+	 *
+	 * @return void
+	 */
+	public function test_for_team_reads_team_sport_term() {
+		$sport = wp_insert_term( 'Soccer', Keys::TAX_SPORT, array( 'slug' => 'soccer' ) );
+		$this->assertNotWPError( $sport );
+
+		$team = self::factory()->post->create( array( 'post_type' => Keys::TEAM ) );
+		wp_set_object_terms( $team, array( (int) $sport['term_id'] ), Keys::TAX_SPORT, false );
+
+		$this->assertSame( 'soccer', $this->engine()->for_team( $team ) );
+		$this->assertNotEmpty( $this->engine()->profile( $this->engine()->for_team( $team ) )->positions() );
+	}
+
+	/**
+	 * With no Sport term, a team inherits the sport of the league it belongs to.
+	 *
+	 * @return void
+	 */
+	public function test_for_team_falls_back_to_league_sport() {
+		$sport = wp_insert_term( 'Soccer', Keys::TAX_SPORT, array( 'slug' => 'soccer' ) );
+		$this->assertNotWPError( $sport );
+
+		$league = $this->make_term( Keys::LEAGUE, 'Div One' );
+		update_term_meta( $league, Keys::LEAGUE_SPORT, (int) $sport['term_id'] );
+
+		$team = self::factory()->post->create( array( 'post_type' => Keys::TEAM ) );
+		wp_set_object_terms( $team, array( (int) $league ), Keys::LEAGUE, false );
+
+		$this->assertSame( 'soccer', $this->engine()->for_team( $team ) );
+	}
+
+	/**
+	 * A team with neither a Sport term nor a league falls back to the active sport.
+	 *
+	 * @return void
+	 */
+	public function test_for_team_defaults_to_active_sport() {
+		$team = self::factory()->post->create( array( 'post_type' => Keys::TEAM ) );
+
+		$this->assertSame( $this->engine()->active(), $this->engine()->for_team( $team ) );
+	}
+
+	/**
 	 * Points for a non-primary sport come straight from its profile, untouched by
 	 * the settings-page overrides that only apply to the active sport.
 	 *
