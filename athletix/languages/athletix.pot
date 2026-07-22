@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Athletix 2.0.0\n"
 "Report-Msgid-Bugs-To: https://example.com/support\n"
-"POT-Creation-Date: 2026-07-22 13:31+0000\n"
+"POT-Creation-Date: 2026-07-22 13:46+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -91,7 +91,11 @@ msgstr ""
 msgid "Approve"
 msgstr ""
 
-#: src/Admin/Hub.php src/Elementor/ElementorModule.php
+#: src/Sports/Profiles/SoccerProfile.php
+msgid "Assists"
+msgstr ""
+
+#: src/Admin/Hub.php src/Blocks/BlocksModule.php src/Elementor/ElementorModule.php
 msgid "Athletix"
 msgstr ""
 
@@ -395,8 +399,16 @@ msgstr ""
 msgid "Generate Schedule"
 msgstr ""
 
+#: src/Sports/Profiles/GenericProfile.php
+msgid "Generic"
+msgstr ""
+
 #: templates/standings.php
 msgid "Goal Difference"
+msgstr ""
+
+#: src/Sports/Profiles/SoccerProfile.php
+msgid "Goals"
 msgstr ""
 
 #: templates/standings.php
@@ -531,7 +543,7 @@ msgstr ""
 msgid "Manual entry only — no card data is processed or stored."
 msgstr ""
 
-#: src/Elementor/Widgets/MatchCardWidget.php src/PostTypes/PostTypes.php
+#: src/Elementor/Widgets/MatchCardWidget.php src/PostTypes/PostTypes.php src/Sports/Profiles/GenericProfile.php src/Sports/Profiles/SoccerProfile.php
 msgid "Match"
 msgstr ""
 
@@ -577,6 +589,10 @@ msgstr ""
 
 #: src/Elementor/Widgets/StatisticsWidget.php src/Meta/MatchStatsMetaBox.php
 msgid "Metric"
+msgstr ""
+
+#: src/Sports/Profiles/SoccerProfile.php
+msgid "Minutes"
 msgstr ""
 
 #: src/Calendar/CalendarView.php
@@ -739,7 +755,7 @@ msgstr ""
 msgid "Please select a league."
 msgstr ""
 
-#: templates/standings.php
+#: src/Sports/Profiles/GenericProfile.php templates/standings.php
 msgid "Points"
 msgstr ""
 
@@ -799,6 +815,10 @@ msgstr ""
 msgid "Record Payment"
 msgstr ""
 
+#: src/Sports/Profiles/SoccerProfile.php
+msgid "Red Cards"
+msgstr ""
+
 #: src/Payments/Ledger.php
 msgid "Refund"
 msgstr ""
@@ -835,6 +855,10 @@ msgstr ""
 msgid "Sat"
 msgstr ""
 
+#: src/Sports/Profiles/SoccerProfile.php
+msgid "Saves"
+msgstr ""
+
 #: src/Meta/MetaBoxManager.php templates/match-card.php
 msgid "Scheduled"
 msgstr ""
@@ -843,7 +867,7 @@ msgstr ""
 msgid "Scheduling conflict on this date with:"
 msgstr ""
 
-#: templates/schedule.php
+#: src/Sports/Profiles/GenericProfile.php templates/schedule.php
 msgid "Score"
 msgstr ""
 
@@ -929,6 +953,10 @@ msgstr ""
 
 #: assets/js/blocks.js
 msgid "Show statistics"
+msgstr ""
+
+#: src/Sports/Profiles/SoccerProfile.php
+msgid "Soccer"
 msgstr ""
 
 #: src/Membership/Registration.php
@@ -1107,6 +1135,10 @@ msgstr ""
 msgid "Write to activity log"
 msgstr ""
 
+#: src/Sports/Profiles/SoccerProfile.php
+msgid "Yellow Cards"
+msgstr ""
+
 #: src/Automation/RulesAdmin.php src/Competition/CompetitionAdmin.php src/ImportExport/Backup.php src/ImportExport/ImportExport.php src/Membership/RegistrationAdmin.php src/Payments/PaymentsAdmin.php
 msgid "You are not allowed to do this."
 msgstr ""
@@ -1202,6 +1234,11 @@ msgstr ""
 #: src/Taxonomies/Taxonomies.php
 msgctxt "Leagues"
 msgid "taxonomy general name"
+msgstr ""
+
+#: src/Cli/Commands.php
+msgctxt "Recomputed %d leagues."
+msgid "Recomputed %d league."
 msgstr ""
 
 #: src/ImportExport/ImportExport.php

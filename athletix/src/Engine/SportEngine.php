@@ -12,11 +12,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Athletix\Core\Config;
+use Athletix\Sports\SportRegistry;
+use Athletix\Support\Keys;
 
 /**
- * Supplies sport-specific scoring rules. Points come from configuration and
- * can be overridden per sport via the `athletix/sport_points` filter, so a new
- * sport never requires touching the standings math.
+ * Supplies sport-specific scoring rules. Defaults now come from the resolved
+ * sport profile (SportRegistry); the settings page still overrides them for the
+ * site's primary sport, and the `athletix/sport_*` filters still apply. A league
+ * can declare its own sport (League term meta), so multi-sport installs get
+ * per-league scoring without touching the standings math.
  */
 class SportEngine {
 
@@ -28,21 +32,63 @@ class SportEngine {
 	private $config;
 
 	/**
+	 * Sport profile registry.
+	 *
+	 * @var SportRegistry
+	 */
+	private $registry;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param Config $config Configuration.
+	 * @param Config        $config   Configuration.
+	 * @param SportRegistry $registry Sport profile registry.
 	 */
-	public function __construct( Config $config ) {
-		$this->config = $config;
+	public function __construct( Config $config, SportRegistry $registry ) {
+		$this->config   = $config;
+		$this->registry = $registry;
 	}
 
 	/**
-	 * The currently active sport slug.
+	 * The site's primary (active) sport slug.
 	 *
 	 * @return string
 	 */
 	public function active() {
 		return (string) $this->config->get( 'active_sport', 'soccer' );
+	}
+
+	/**
+	 * The sport slug a league runs (from the League term's sport meta), falling
+	 * back to the active sport.
+	 *
+	 * @param int $league_id League term id.
+	 * @return string
+	 */
+	public function for_league( $league_id ) {
+		$league_id = absint( $league_id );
+
+		if ( $league_id ) {
+			$sport_term = (int) get_term_meta( $league_id, Keys::LEAGUE_SPORT, true );
+			if ( $sport_term ) {
+				$term = get_term( $sport_term, Keys::TAX_SPORT );
+				if ( $term && ! is_wp_error( $term ) ) {
+					return $term->slug;
+				}
+			}
+		}
+
+		return $this->active();
+	}
+
+	/**
+	 * The profile for a sport slug (empty = active sport).
+	 *
+	 * @param string $sport Sport slug.
+	 * @return \Athletix\Contracts\SportProfile
+	 */
+	public function profile( $sport = '' ) {
+		return $this->registry->get( $sport ? $sport : $this->active() );
 	}
 
 	/**
@@ -52,12 +98,22 @@ class SportEngine {
 	 * @return array{win:int,draw:int,loss:int}
 	 */
 	public function points( $sport = '' ) {
-		$sport = $sport ? $sport : $this->active();
+		$slug    = $sport ? $sport : $this->active();
+		$scoring = $this->registry->get( $slug )->scoring();
+
+		// The primary sport still honours the settings-page point overrides.
+		if ( $slug === $this->active() ) {
+			$scoring = array(
+				'win'  => (int) $this->config->get( 'points_win', isset( $scoring['win'] ) ? $scoring['win'] : 3 ),
+				'draw' => (int) $this->config->get( 'points_draw', isset( $scoring['draw'] ) ? $scoring['draw'] : 1 ),
+				'loss' => (int) $this->config->get( 'points_loss', isset( $scoring['loss'] ) ? $scoring['loss'] : 0 ),
+			);
+		}
 
 		$points = array(
-			'win'  => (int) $this->config->get( 'points_win', 3 ),
-			'draw' => (int) $this->config->get( 'points_draw', 1 ),
-			'loss' => (int) $this->config->get( 'points_loss', 0 ),
+			'win'  => (int) ( isset( $scoring['win'] ) ? $scoring['win'] : 3 ),
+			'draw' => (int) ( isset( $scoring['draw'] ) ? $scoring['draw'] : 1 ),
+			'loss' => (int) ( isset( $scoring['loss'] ) ? $scoring['loss'] : 0 ),
 		);
 
 		/**
@@ -66,7 +122,7 @@ class SportEngine {
 		 * @param array  $points Win/draw/loss points.
 		 * @param string $sport  Sport slug.
 		 */
-		return apply_filters( 'athletix/sport_points', $points, $sport );
+		return apply_filters( 'athletix/sport_points', $points, $slug );
 	}
 
 	/**
@@ -76,9 +132,16 @@ class SportEngine {
 	 * @return string[] Field names in priority order.
 	 */
 	public function tiebreakers( $sport = '' ) {
-		$sport = $sport ? $sport : $this->active();
+		$slug  = $sport ? $sport : $this->active();
+		$chain = $this->registry->get( $slug )->tiebreakers();
 
-		$chain = $this->config->get( 'tiebreakers', StandingsSorter::DEFAULT_CHAIN );
+		// The primary sport still honours the settings-page tie-break chain.
+		if ( $slug === $this->active() ) {
+			$configured = $this->config->get( 'tiebreakers', $chain );
+			if ( is_array( $configured ) && $configured ) {
+				$chain = $configured;
+			}
+		}
 
 		if ( ! is_array( $chain ) || ! $chain ) {
 			$chain = StandingsSorter::DEFAULT_CHAIN;
@@ -90,6 +153,6 @@ class SportEngine {
 		 * @param string[] $chain Ordered field names.
 		 * @param string   $sport Sport slug.
 		 */
-		return (array) apply_filters( 'athletix/sport_tiebreakers', $chain, $sport );
+		return (array) apply_filters( 'athletix/sport_tiebreakers', $chain, $slug );
 	}
 }

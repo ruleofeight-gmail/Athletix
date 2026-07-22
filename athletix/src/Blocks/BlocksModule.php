@@ -48,6 +48,26 @@ class BlocksModule implements Module {
 		$this->shortcodes = new Shortcodes( $plugin );
 
 		add_action( 'init', array( $this, 'register_blocks' ) );
+		add_filter( 'block_categories_all', array( $this, 'block_category' ) );
+	}
+
+	/**
+	 * Register an "Athletix" block category so the blocks group in the inserter.
+	 *
+	 * @param array $categories Existing categories.
+	 * @return array
+	 */
+	public function block_category( $categories ) {
+		array_unshift(
+			$categories,
+			array(
+				'slug'  => 'athletix',
+				'title' => __( 'Athletix', 'athletix' ),
+				'icon'  => null,
+			)
+		);
+
+		return $categories;
 	}
 
 	/**
@@ -158,6 +178,7 @@ class BlocksModule implements Module {
 				'athletix/' . $name,
 				array(
 					'api_version'     => 2,
+					'category'        => 'athletix',
 					'editor_script'   => 'athletix-blocks',
 					'style'           => 'athletix',
 					'editor_style'    => 'athletix',

@@ -212,6 +212,7 @@ final class Plugin {
 			\Athletix\Automation\AutomationModule::class,
 			\Athletix\Membership\MembershipModule::class,
 			\Athletix\Payments\PaymentsModule::class,
+			\Athletix\Cli\CliModule::class,
 		);
 	}
 

@@ -93,6 +93,14 @@ class Taxonomies {
 				'show_in_rest'      => true,
 				'show_in_menu'      => false,
 				'rewrite'           => array( 'slug' => $rewrite ),
+				// Managing the terms is a league-manager job; assigning them to a
+				// post only needs the post-editing capability.
+				'capabilities'      => array(
+					'manage_terms' => Keys::capability(),
+					'edit_terms'   => Keys::capability(),
+					'delete_terms' => Keys::capability(),
+					'assign_terms' => 'edit_posts',
+				),
 			)
 		);
 	}

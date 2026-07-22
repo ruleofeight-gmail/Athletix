@@ -115,7 +115,8 @@ class StandingsEngine {
 			$details[] = $this->matches->details( $match->ID );
 		}
 
-		$calculator = new StandingsCalculator( $this->sport->points() );
+		$sport      = $this->sport->for_league( $league_id );
+		$calculator = new StandingsCalculator( $this->sport->points( $sport ) );
 		$rows       = $calculator->compute( $details );
 
 		$this->standings->clear( $league_id, $season_id );
@@ -152,7 +153,8 @@ class StandingsEngine {
 			$this->cache_key( $league_id, $season_id ),
 			function () use ( $league_id, $season_id ) {
 				$rows   = $this->standings->table( $league_id, $season_id );
-				$sorter = new StandingsSorter( $this->sport->tiebreakers() );
+				$sport  = $this->sport->for_league( $league_id );
+				$sorter = new StandingsSorter( $this->sport->tiebreakers( $sport ) );
 
 				return $sorter->sort( $rows );
 			}

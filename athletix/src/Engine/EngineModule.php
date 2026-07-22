@@ -38,9 +38,16 @@ class EngineModule implements Module {
 		$c = $plugin->container();
 
 		$c->bind(
+			'sports.registry',
+			static function () {
+				return new \Athletix\Sports\SportRegistry();
+			}
+		);
+
+		$c->bind(
 			'engine.sport',
 			static function () use ( $plugin ) {
-				return new SportEngine( $plugin->config() );
+				return new SportEngine( $plugin->config(), $plugin->make( 'sports.registry' ) );
 			}
 		);
 
