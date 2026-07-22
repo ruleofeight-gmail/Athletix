@@ -109,7 +109,7 @@ if ( ! function_exists( 'athletix_theme_assets' ) ) {
 	 * @return void
 	 */
 	function athletix_theme_assets() {
-		wp_enqueue_style( 'athletix-theme', get_stylesheet_uri(), array(), '1.1.0' );
+		wp_enqueue_style( 'athletix-theme', get_stylesheet_uri(), array(), '1.2.0' );
 
 		wp_enqueue_script(
 			'athletix-theme-nav',
