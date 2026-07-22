@@ -7,12 +7,31 @@
  * @var \WP_Term[]                 $leagues   League terms.
  * @var \WP_Term[]                 $divisions Division terms.
  * @var string                     $action    admin-post action.
+ * @var array<string,int>          $preset    Carried-over context ids.
  * @var array{type:string,message:string,link:string}|null $notice Notice.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+/**
+ * Render the <option> list for a term dropdown, preselecting a carried id.
+ *
+ * @param \WP_Term[] $terms    Terms.
+ * @param int        $selected Preselected term id.
+ * @return void
+ */
+$athletix_term_options = static function ( $terms, $selected ) {
+	foreach ( $terms as $term ) {
+		printf(
+			'<option value="%d" %s>%s</option>',
+			(int) $term->term_id,
+			selected( (int) $selected, (int) $term->term_id, false ),
+			esc_html( $term->name )
+		);
+	}
+};
 ?>
 <div class="wrap athletix-quick-add">
 	<h1><?php esc_html_e( 'Add Team', 'athletix' ); ?></h1>
@@ -28,7 +47,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	<?php endif; ?>
 
-	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+	<div id="athletix-quick-notice" class="notice" hidden></div>
+
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="athletix-quick-add__form">
 		<input type="hidden" name="action" value="<?php echo esc_attr( $action ); ?>" />
 		<?php wp_nonce_field( $action ); ?>
 
@@ -43,9 +64,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<td>
 						<select name="athletix_sport" id="athletix_sport">
 							<option value="0"><?php esc_html_e( '— Select a sport —', 'athletix' ); ?></option>
-							<?php foreach ( $sports as $athletix_term ) : ?>
-								<option value="<?php echo esc_attr( $athletix_term->term_id ); ?>"><?php echo esc_html( $athletix_term->name ); ?></option>
-							<?php endforeach; ?>
+							<?php $athletix_term_options( $sports, $preset['sport'] ); ?>
 						</select>
 						<p class="description"><?php esc_html_e( 'The sport this team plays. Players added to it inherit its positions.', 'athletix' ); ?></p>
 					</td>
@@ -55,9 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<td>
 						<select name="athletix_league" id="athletix_league">
 							<option value="0"><?php esc_html_e( '— None —', 'athletix' ); ?></option>
-							<?php foreach ( $leagues as $athletix_term ) : ?>
-								<option value="<?php echo esc_attr( $athletix_term->term_id ); ?>"><?php echo esc_html( $athletix_term->name ); ?></option>
-							<?php endforeach; ?>
+							<?php $athletix_term_options( $leagues, $preset['league'] ); ?>
 						</select>
 					</td>
 				</tr>
@@ -66,9 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<td>
 						<select name="athletix_division" id="athletix_division">
 							<option value="0"><?php esc_html_e( '— None —', 'athletix' ); ?></option>
-							<?php foreach ( $divisions as $athletix_term ) : ?>
-								<option value="<?php echo esc_attr( $athletix_term->term_id ); ?>"><?php echo esc_html( $athletix_term->name ); ?></option>
-							<?php endforeach; ?>
+							<?php $athletix_term_options( $divisions, $preset['division'] ); ?>
 						</select>
 					</td>
 				</tr>
@@ -87,6 +102,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</tbody>
 		</table>
 
-		<?php submit_button( __( 'Add Team', 'athletix' ) ); ?>
+		<p class="submit athletix-quick-add__actions">
+			<button type="submit" class="button button-primary"><?php esc_html_e( 'Add Team', 'athletix' ); ?></button>
+			<button type="submit" name="athletix_add_another" value="1" class="button"><?php esc_html_e( 'Add Another', 'athletix' ); ?></button>
+		</p>
 	</form>
+
+	<div id="athletix-added" class="athletix-added" hidden>
+		<h2><?php esc_html_e( 'Added this session', 'athletix' ); ?> (<span id="athletix-added-count">0</span>)</h2>
+		<ul id="athletix-added-list"></ul>
+	</div>
 </div>

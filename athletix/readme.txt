@@ -46,7 +46,11 @@ the Season picker is scoped to the chosen League.
 Guided add screens: under the Athletix menu, "Add Team" ties a new team to a
 sport (plus optional league/division), and "Add Player" binds a player to a
 team and offers the position list that belongs to that team's sport — so the
-form always matches the sport being entered.
+form always matches the sport being entered. Both have an "Add Another" button
+for fast batch entry: it saves over AJAX (no reload), keeps the shared context
+(Add Team → sport/league/division; Add Player → team) while clearing the
+per-item fields, and builds a running "added this session" list. With
+JavaScript off the form posts normally and carries the context back.
 
 Elementor: a dedicated "Athletix" category with League Table, Team Roster and
 Match Schedule widgets, plus a Player Field dynamic tag. The Elementor layer

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Athletix 2.0.0\n"
 "Report-Msgid-Bugs-To: https://example.com/support\n"
-"POT-Creation-Date: 2026-07-22 21:45+0000\n"
+"POT-Creation-Date: 2026-07-22 22:57+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -39,6 +39,10 @@ msgstr ""
 msgid "Activity logging is not available."
 msgstr ""
 
+#: templates/admin/add-player.php templates/admin/add-team.php
+msgid "Add Another"
+msgstr ""
+
 #: src/PostTypes/PostTypes.php src/Taxonomies/Taxonomies.php
 msgid "Add New %s"
 msgstr ""
@@ -65,6 +69,14 @@ msgstr ""
 
 #: src/Admin/StandingsTab.php
 msgid "Add a league (Athletix → Leagues) to see its table."
+msgstr ""
+
+#: templates/admin/add-player.php templates/admin/add-team.php
+msgid "Added this session"
+msgstr ""
+
+#: src/Admin/QuickAdd.php
+msgid "Added this session (%d)"
 msgstr ""
 
 #: src/Settings/SettingsPage.php
@@ -311,7 +323,7 @@ msgstr ""
 msgid "Drawn"
 msgstr ""
 
-#: templates/admin/add-player.php templates/admin/add-team.php
+#: src/Admin/QuickAdd.php templates/admin/add-player.php templates/admin/add-team.php
 msgid "Edit"
 msgstr ""
 
@@ -800,6 +812,10 @@ msgid "Player Statistics"
 msgstr ""
 
 #: src/Admin/QuickAdd.php
+msgid "Player added."
+msgstr ""
+
+#: src/Admin/QuickAdd.php
 msgid "Player created."
 msgstr ""
 
@@ -1047,7 +1063,7 @@ msgstr ""
 msgid "Sport"
 msgstr ""
 
-#: templates/admin/add-player.php
+#: src/Admin/QuickAdd.php
 msgid "Sport: %s"
 msgstr ""
 
@@ -1127,6 +1143,10 @@ msgstr ""
 msgid "Team Roster"
 msgstr ""
 
+#: src/Admin/QuickAdd.php
+msgid "Team added."
+msgstr ""
+
 #: templates/admin/add-team.php
 msgid "Team color"
 msgstr ""
@@ -1171,7 +1191,7 @@ msgstr ""
 msgid "This match has no teams assigned yet."
 msgstr ""
 
-#: templates/admin/add-player.php
+#: src/Admin/QuickAdd.php
 msgid "This sport has no fixed positions — enter one if you like."
 msgstr ""
 
@@ -1287,7 +1307,7 @@ msgstr ""
 msgid "—"
 msgstr ""
 
-#: src/Competition/CompetitionAdmin.php src/Taxonomies/TermFields.php templates/admin/add-player.php templates/admin/add-team.php
+#: src/Admin/QuickAdd.php src/Competition/CompetitionAdmin.php src/Taxonomies/TermFields.php templates/admin/add-team.php
 msgid "— None —"
 msgstr ""
 

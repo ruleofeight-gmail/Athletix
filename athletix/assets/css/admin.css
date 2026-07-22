@@ -119,3 +119,32 @@
 	color: #fff;
 	outline: none;
 }
+
+/* Quick-add batch screens */
+.athletix-quick-add__actions .button {
+	margin-right: 8px;
+}
+
+.athletix-added {
+	margin-top: 24px;
+	padding: 4px 16px 12px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	max-width: 520px;
+}
+
+.athletix-added h2 {
+	font-size: 14px;
+}
+
+.athletix-added ul {
+	margin: 0;
+	max-height: 260px;
+	overflow-y: auto;
+}
+
+.athletix-added li {
+	padding: 4px 0;
+	border-bottom: 1px solid #f0f0f1;
+}
