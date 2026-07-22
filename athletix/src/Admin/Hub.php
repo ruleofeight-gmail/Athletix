@@ -48,10 +48,36 @@ class Hub {
 	 */
 	public function register() {
 		add_action( 'admin_menu', array( $this, 'menu' ), 9 );
+		add_action( 'admin_menu', array( $this, 'taxonomy_menus' ), 11 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'assets' ) );
 
 		// The hub always ships its own Dashboard tab first.
 		add_filter( 'athletix/admin_tabs', array( $this, 'dashboard_tab' ), 0 );
+	}
+
+	/**
+	 * Surface the organizing taxonomies (Leagues, Seasons, Divisions, Sports) as
+	 * submenus of Athletix — the single place they are managed.
+	 *
+	 * @return void
+	 */
+	public function taxonomy_menus() {
+		$taxonomies = array(
+			Keys::LEAGUE    => __( 'Leagues', 'athletix' ),
+			Keys::SEASON    => __( 'Seasons', 'athletix' ),
+			Keys::DIVISION  => __( 'Divisions', 'athletix' ),
+			Keys::TAX_SPORT => __( 'Sports', 'athletix' ),
+		);
+
+		foreach ( $taxonomies as $slug => $label ) {
+			add_submenu_page(
+				self::SLUG,
+				$label,
+				$label,
+				'manage_categories',
+				'edit-tags.php?taxonomy=' . $slug . '&post_type=' . Keys::TEAM
+			);
+		}
 	}
 
 	/**

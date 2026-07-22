@@ -1,6 +1,6 @@
 <?php
 /**
- * League repository.
+ * League repository (taxonomy term).
  *
  * @package Athletix
  */
@@ -14,14 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Athletix\Support\Keys;
 
 /**
- * Data access for leagues.
+ * Data access for leagues, stored as terms of the ax_league taxonomy.
  */
-class LeagueRepository extends BaseRepository {
+class LeagueRepository extends TermRepository {
 
 	/**
-	 * Post type.
+	 * Taxonomy.
 	 *
 	 * @var string
 	 */
-	protected $post_type = Keys::LEAGUE;
+	protected $taxonomy = Keys::LEAGUE;
 }

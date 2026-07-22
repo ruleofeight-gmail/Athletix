@@ -207,21 +207,23 @@ class Shortcodes {
 			'order'          => 'ASC',
 		);
 
-		$meta = array();
+		$tax = array();
 		if ( $atts['league'] ) {
-			$meta[] = array(
-				'key'   => Keys::MATCH_LEAGUE,
-				'value' => absint( $atts['league'] ),
+			$tax[] = array(
+				'taxonomy' => Keys::LEAGUE,
+				'field'    => 'term_id',
+				'terms'    => absint( $atts['league'] ),
 			);
 		}
 		if ( $atts['season'] ) {
-			$meta[] = array(
-				'key'   => Keys::MATCH_SEASON,
-				'value' => absint( $atts['season'] ),
+			$tax[] = array(
+				'taxonomy' => Keys::SEASON,
+				'field'    => 'term_id',
+				'terms'    => absint( $atts['season'] ),
 			);
 		}
-		if ( $meta ) {
-			$args['meta_query'] = $meta; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+		if ( $tax ) {
+			$args['tax_query'] = $tax; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 		}
 
 		$matches = $this->plugin->make( 'repo.match' );

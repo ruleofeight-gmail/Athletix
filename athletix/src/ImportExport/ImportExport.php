@@ -140,7 +140,7 @@ class ImportExport {
 				<select name="league_id" required>
 					<option value=""><?php esc_html_e( '— Select league —', 'athletix' ); ?></option>
 					<?php foreach ( $leagues as $league ) : ?>
-						<option value="<?php echo esc_attr( $league->ID ); ?>"><?php echo esc_html( $league->post_title ); ?></option>
+						<option value="<?php echo esc_attr( $league->term_id ); ?>"><?php echo esc_html( $league->name ); ?></option>
 					<?php endforeach; ?>
 				</select>
 				<?php submit_button( __( 'Download CSV', 'athletix' ), 'secondary', 'submit', false ); ?>

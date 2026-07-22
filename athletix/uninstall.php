@@ -23,8 +23,9 @@ if ( empty( $athletix_settings['delete_data'] ) ) {
 
 global $wpdb;
 
-// Delete plugin post types and their meta.
-$athletix_post_types = array( 'ax_league', 'ax_season', 'ax_team', 'ax_player', 'ax_match', 'ax_division', 'ax_announcement' );
+// Delete plugin post types and their meta. League/Season/Division are
+// taxonomies (removed below), not post types.
+$athletix_post_types = array( 'ax_team', 'ax_player', 'ax_match', 'ax_announcement' );
 
 foreach ( $athletix_post_types as $athletix_type ) {
 	$athletix_ids = get_posts(
@@ -42,8 +43,8 @@ foreach ( $athletix_post_types as $athletix_type ) {
 	}
 }
 
-// Delete the plugin's taxonomy terms (sport, venue).
-foreach ( array( 'ax_sport', 'ax_venue' ) as $athletix_tax ) {
+// Delete the plugin's taxonomy terms (sport, venue, league, season, division).
+foreach ( array( 'ax_sport', 'ax_venue', 'ax_league', 'ax_season', 'ax_division' ) as $athletix_tax ) {
 	$athletix_terms = get_terms(
 		array(
 			'taxonomy'   => $athletix_tax,

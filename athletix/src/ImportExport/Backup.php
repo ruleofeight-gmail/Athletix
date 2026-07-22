@@ -49,15 +49,12 @@ class Backup {
 	 * @return string[]
 	 */
 	private function relational_meta() {
+		// League/Season/Division are taxonomies now (handled as term names in the
+		// export), so only the remaining post-id relationships are remapped here.
 		return array(
-			Keys::TEAM_LEAGUE,
 			Keys::PLAYER_TEAM,
-			Keys::MATCH_LEAGUE,
-			Keys::MATCH_SEASON,
 			Keys::MATCH_HOME_TEAM,
 			Keys::MATCH_AWAY_TEAM,
-			Keys::SEASON_LEAGUE,
-			Keys::DIVISION_LEAGUE,
 		);
 	}
 
@@ -104,7 +101,7 @@ class Backup {
 					'excerpt' => $post->post_excerpt,
 					'status'  => $post->post_status,
 					'meta'    => $this->export_meta( $post->ID ),
-					'sports'  => wp_get_object_terms( $post->ID, Keys::TAX_SPORT, array( 'fields' => 'names' ) ),
+					'terms'   => $this->export_terms( $post->ID ),
 				);
 			}
 		}//end foreach
@@ -138,6 +135,25 @@ class Backup {
 		}
 
 		return $keep;
+	}
+
+	/**
+	 * The Athletix taxonomy terms (by name) assigned to a post.
+	 *
+	 * @param int $post_id Post id.
+	 * @return array<string,string[]> Taxonomy slug => term names.
+	 */
+	private function export_terms( $post_id ) {
+		$terms = array();
+
+		foreach ( Keys::taxonomies() as $taxonomy ) {
+			$names = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'names' ) );
+			if ( ! is_wp_error( $names ) && $names ) {
+				$terms[ $taxonomy ] = $names;
+			}
+		}
+
+		return $terms;
 	}
 
 	/**
@@ -189,8 +205,10 @@ class Backup {
 				update_post_meta( $new_id, $key, $value );
 			}
 
-			if ( ! empty( $entry['sports'] ) ) {
-				wp_set_object_terms( $new_id, array_map( 'sanitize_text_field', (array) $entry['sports'] ), Keys::TAX_SPORT );
+			foreach ( (array) ( isset( $entry['terms'] ) ? $entry['terms'] : array() ) as $taxonomy => $names ) {
+				if ( in_array( $taxonomy, Keys::taxonomies(), true ) && $names ) {
+					wp_set_object_terms( $new_id, array_map( 'sanitize_text_field', (array) $names ), sanitize_key( $taxonomy ) );
+				}
 			}
 		}
 

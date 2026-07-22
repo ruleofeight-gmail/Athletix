@@ -163,21 +163,23 @@ class ContentController extends AbstractController {
 		$season = (int) $request['season'];
 
 		$args = array( 'posts_per_page' => 100 );
-		$meta = array();
+		$tax  = array();
 		if ( $league ) {
-			$meta[] = array(
-				'key'   => Keys::MATCH_LEAGUE,
-				'value' => $league,
+			$tax[] = array(
+				'taxonomy' => Keys::LEAGUE,
+				'field'    => 'term_id',
+				'terms'    => $league,
 			);
 		}
 		if ( $season ) {
-			$meta[] = array(
-				'key'   => Keys::MATCH_SEASON,
-				'value' => $season,
+			$tax[] = array(
+				'taxonomy' => Keys::SEASON,
+				'field'    => 'term_id',
+				'terms'    => $season,
 			);
 		}
-		if ( $meta ) {
-			$args['meta_query'] = $meta; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+		if ( $tax ) {
+			$args['tax_query'] = $tax; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 		}
 
 		$data = array();

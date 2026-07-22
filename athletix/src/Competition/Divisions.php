@@ -39,22 +39,28 @@ class Divisions {
 	}
 
 	/**
-	 * Divisions in a league (by division meta league link).
+	 * Divisions in a league (by the division term's league meta link).
 	 *
-	 * @param int $league_id League id.
-	 * @return \WP_Post[]
+	 * @param int $league_id League term id.
+	 * @return \WP_Term[]
 	 */
 	public function in_league( $league_id ) {
-		return get_posts(
+		$terms = get_terms(
 			array(
-				'post_type'      => Keys::DIVISION,
-				'posts_per_page' => 100,
-				'orderby'        => 'title',
-				'order'          => 'ASC',
-				'meta_key'       => Keys::DIVISION_LEAGUE, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-				'meta_value'     => absint( $league_id ), // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+				'taxonomy'   => Keys::DIVISION,
+				'hide_empty' => false,
+				'orderby'    => 'name',
+				'order'      => 'ASC',
+				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					array(
+						'key'   => Keys::DIVISION_LEAGUE,
+						'value' => absint( $league_id ),
+					),
+				),
 			)
 		);
+
+		return is_array( $terms ) ? $terms : array();
 	}
 
 	/**

@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Athletix\Engine\StandingsEngine;
 use Athletix\Data\Repositories\MatchRepository;
 use Athletix\Support\Keys;
+use Athletix\Support\Terms;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -98,14 +99,16 @@ class MobileController extends AbstractController {
 				'meta_key'       => Keys::MATCH_DATE, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				'order'          => 'ASC',
 				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-					'relation' => 'AND',
-					array(
-						'key'   => Keys::MATCH_LEAGUE,
-						'value' => $league,
-					),
 					array(
 						'key'   => Keys::MATCH_STATUS,
 						'value' => Keys::STATUS_SCHEDULED,
+					),
+				),
+				'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+					array(
+						'taxonomy' => Keys::LEAGUE,
+						'field'    => 'term_id',
+						'terms'    => $league,
 					),
 				),
 			)
@@ -122,7 +125,7 @@ class MobileController extends AbstractController {
 
 		return new WP_REST_Response(
 			array(
-				'league'    => get_the_title( $league ),
+				'league'    => Terms::name( $league, Keys::LEAGUE ),
 				'standings' => $top,
 				'upcoming'  => $upcoming,
 			),

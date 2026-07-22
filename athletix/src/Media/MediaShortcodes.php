@@ -133,9 +133,12 @@ class MediaShortcodes {
 		);
 
 		if ( $atts['league'] ) {
-			$args['meta_query'][] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-				'key'   => Keys::MATCH_LEAGUE,
-				'value' => absint( $atts['league'] ),
+			$args['tax_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => Keys::LEAGUE,
+					'field'    => 'term_id',
+					'terms'    => absint( $atts['league'] ),
+				),
 			);
 		}
 

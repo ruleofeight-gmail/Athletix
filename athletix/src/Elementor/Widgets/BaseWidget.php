@@ -70,7 +70,35 @@ abstract class BaseWidget extends Widget_Base {
 	 * @return array<int,string>
 	 */
 	protected function league_options() {
-		return $this->post_options( Keys::LEAGUE );
+		return $this->term_options( Keys::LEAGUE );
+	}
+
+	/**
+	 * Options list of taxonomy terms for a control.
+	 *
+	 * @param string $taxonomy Taxonomy slug.
+	 * @return array<int,string>
+	 */
+	protected function term_options( $taxonomy ) {
+		$options = array( 0 => __( '— Select —', 'athletix' ) );
+
+		$terms = get_terms(
+			array(
+				'taxonomy'   => $taxonomy,
+				'hide_empty' => false,
+				'number'     => 200,
+				'orderby'    => 'name',
+				'order'      => 'ASC',
+			)
+		);
+
+		if ( is_array( $terms ) ) {
+			foreach ( $terms as $term ) {
+				$options[ $term->term_id ] = $term->name;
+			}
+		}
+
+		return $options;
 	}
 
 	/**

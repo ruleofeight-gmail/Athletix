@@ -132,19 +132,22 @@ class CalendarView {
 			),
 		);
 
+		$query = array(
+			'posts_per_page' => 200,
+			'meta_query'     => $meta, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+		);
+
 		if ( $league_id ) {
-			$meta[] = array(
-				'key'   => Keys::MATCH_LEAGUE,
-				'value' => $league_id,
+			$query['tax_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => Keys::LEAGUE,
+					'field'    => 'term_id',
+					'terms'    => absint( $league_id ),
+				),
 			);
 		}
 
-		$posts  = $repo->all(
-			array(
-				'posts_per_page' => 200,
-				'meta_query'     => $meta, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-			)
-		);
+		$posts  = $repo->all( $query );
 		$by_day = array();
 
 		foreach ( $posts as $post ) {

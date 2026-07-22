@@ -25,48 +25,9 @@ class PostTypes {
 	 * @return void
 	 */
 	public function register() {
-		// Each content type is its own top-level "Athletix - X" menu. Consecutive
-		// positions keep them lined up together in the admin sidebar, just below
-		// the "Athletix" hub (position 30).
-		$this->register_type(
-			Keys::LEAGUE,
-			__( 'Leagues', 'athletix' ),
-			__( 'League', 'athletix' ),
-			array(
-				'menu_position' => 31,
-				'menu_icon'     => 'dashicons-awards',
-				'has_archive'   => true,
-				'rewrite'       => array( 'slug' => 'leagues' ),
-				'supports'      => array( 'title', 'editor', 'thumbnail' ),
-			)
-		);
-
-		$this->register_type(
-			Keys::SEASON,
-			__( 'Seasons', 'athletix' ),
-			__( 'Season', 'athletix' ),
-			array(
-				'menu_position' => 32,
-				'menu_icon'     => 'dashicons-calendar-alt',
-				'has_archive'   => false,
-				'rewrite'       => array( 'slug' => 'seasons' ),
-				'supports'      => array( 'title' ),
-			)
-		);
-
-		$this->register_type(
-			Keys::DIVISION,
-			__( 'Divisions', 'athletix' ),
-			__( 'Division', 'athletix' ),
-			array(
-				'public'        => false,
-				'show_ui'       => true,
-				'menu_position' => 33,
-				'menu_icon'     => 'dashicons-networking',
-				'supports'      => array( 'title' ),
-			)
-		);
-
+		// Team, Player and Match are content (post types); each is its own
+		// top-level "Athletix - X" menu. League, Season and Division are
+		// taxonomies (see Taxonomies), managed under the Athletix hub.
 		$this->register_type(
 			Keys::TEAM,
 			__( 'Teams', 'athletix' ),

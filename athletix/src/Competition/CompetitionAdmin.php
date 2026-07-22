@@ -190,7 +190,7 @@ class CompetitionAdmin {
 				<select id="ax-league" name="league_id" required>
 					<option value=""><?php esc_html_e( '— Select —', 'athletix' ); ?></option>
 					<?php foreach ( $leagues as $league ) : ?>
-						<option value="<?php echo esc_attr( $league->ID ); ?>"><?php echo esc_html( $league->post_title ); ?></option>
+						<option value="<?php echo esc_attr( $league->term_id ); ?>"><?php echo esc_html( $league->name ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</td>
@@ -212,7 +212,7 @@ class CompetitionAdmin {
 				<select id="ax-season" name="season_id">
 					<option value="0"><?php esc_html_e( '— None —', 'athletix' ); ?></option>
 					<?php foreach ( $seasons as $season ) : ?>
-						<option value="<?php echo esc_attr( $season->ID ); ?>"><?php echo esc_html( $season->post_title ); ?></option>
+						<option value="<?php echo esc_attr( $season->term_id ); ?>"><?php echo esc_html( $season->name ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</td>

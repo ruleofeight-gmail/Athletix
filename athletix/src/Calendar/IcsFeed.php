@@ -87,10 +87,11 @@ class IcsFeed {
 				'orderby'        => 'meta_value',
 				'meta_key'       => Keys::MATCH_DATE, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				'order'          => 'ASC',
-				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 					array(
-						'key'   => Keys::MATCH_LEAGUE,
-						'value' => $league_id,
+						'taxonomy' => Keys::LEAGUE,
+						'field'    => 'term_id',
+						'terms'    => absint( $league_id ),
 					),
 				),
 			)

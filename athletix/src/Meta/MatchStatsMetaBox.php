@@ -181,8 +181,9 @@ class MatchStatsMetaBox {
 			return;
 		}
 
-		$stats  = $this->plugin->make( 'repo.player_stats' );
-		$season = (int) get_post_meta( $post_id, Keys::MATCH_SEASON, true );
+		$stats        = $this->plugin->make( 'repo.player_stats' );
+		$season_terms = get_the_terms( $post_id, Keys::SEASON );
+		$season       = ( is_array( $season_terms ) && $season_terms ) ? (int) $season_terms[0]->term_id : 0;
 
 		// Replace this match's statistics wholesale.
 		$stats->clear_match( $post_id );

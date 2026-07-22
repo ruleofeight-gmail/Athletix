@@ -64,9 +64,10 @@ class TeamReport {
 			return '';
 		}
 
-		$league  = (int) get_post_meta( $team_id, Keys::TEAM_LEAGUE, true );
-		$players = $this->plugin->make( 'repo.player' )->for_team( $team_id );
-		$row     = $this->standings_row( $league, $team_id );
+		$league_terms = get_the_terms( $team_id, Keys::LEAGUE );
+		$league       = ( is_array( $league_terms ) && $league_terms ) ? (int) $league_terms[0]->term_id : 0;
+		$players      = $this->plugin->make( 'repo.player' )->for_team( $team_id );
+		$row          = $this->standings_row( $league, $team_id );
 
 		wp_enqueue_style( 'athletix' );
 

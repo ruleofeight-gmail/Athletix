@@ -1,6 +1,6 @@
 <?php
 /**
- * Season repository.
+ * Season repository (taxonomy term).
  *
  * @package Athletix
  */
@@ -14,31 +14,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 use Athletix\Support\Keys;
 
 /**
- * Data access for seasons.
+ * Data access for seasons, stored as terms of the ax_season taxonomy. A season
+ * may reference the league it belongs to via the `_ax_season_league` term meta.
  */
-class SeasonRepository extends BaseRepository {
+class SeasonRepository extends TermRepository {
 
 	/**
-	 * Post type.
+	 * Taxonomy.
 	 *
 	 * @var string
 	 */
-	protected $post_type = Keys::SEASON;
+	protected $taxonomy = Keys::SEASON;
 
 	/**
-	 * Seasons for a league, newest start first.
+	 * Seasons belonging to a league (via term meta).
 	 *
-	 * @param int $league_id League id.
-	 * @return \WP_Post[]
+	 * @param int $league_id League term id.
+	 * @return \WP_Term[]
 	 */
 	public function for_league( $league_id ) {
-		return $this->find_by_meta(
-			Keys::SEASON_LEAGUE,
-			absint( $league_id ),
+		return $this->all(
 			array(
-				'orderby'  => 'meta_value',
-				'meta_key' => Keys::SEASON_START, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-				'order'    => 'DESC',
+				'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					array(
+						'key'   => Keys::SEASON_LEAGUE,
+						'value' => absint( $league_id ),
+					),
+				),
 			)
 		);
 	}

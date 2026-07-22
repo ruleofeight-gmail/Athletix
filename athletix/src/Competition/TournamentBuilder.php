@@ -67,13 +67,13 @@ class TournamentBuilder {
 			return new \WP_Error( 'athletix_no_name', __( 'A tournament name is required.', 'athletix' ) );
 		}
 
-		$league_id = $this->leagues->create( array( 'post_title' => $name ) );
+		$league_id = $this->leagues->create( array( 'name' => $name ) );
 
 		if ( is_wp_error( $league_id ) ) {
 			return $league_id;
 		}
 
-		update_post_meta( $league_id, self::META_TOURNAMENT, 1 );
+		update_term_meta( $league_id, self::META_TOURNAMENT, 1 );
 
 		foreach ( array_filter( array_map( 'absint', $team_ids ) ) as $team_id ) {
 			$this->relationships->add( $league_id, $team_id, self::REL_LEAGUE_TEAM );

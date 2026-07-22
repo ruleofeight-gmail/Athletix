@@ -125,8 +125,7 @@ class CompetitionScheduler {
 			return 0;
 		}
 
-		$this->matches->set_meta( $match_id, Keys::MATCH_LEAGUE, $league_id );
-		$this->matches->set_meta( $match_id, Keys::MATCH_SEASON, absint( $season_id ) );
+		$this->matches->set_scope( $match_id, $league_id, absint( $season_id ) );
 		$this->matches->set_meta( $match_id, Keys::MATCH_HOME_TEAM, $home );
 		$this->matches->set_meta( $match_id, Keys::MATCH_AWAY_TEAM, $away );
 		$this->matches->set_meta( $match_id, Keys::MATCH_ROUND, absint( $round ) );

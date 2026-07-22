@@ -23,15 +23,15 @@ final class Keys {
 	const MENU = 'athletix';
 
 	/* Post types. */
-	const LEAGUE   = 'ax_league';
-	const SEASON   = 'ax_season';
-	const TEAM     = 'ax_team';
-	const PLAYER   = 'ax_player';
-	const MATCH    = 'ax_match';
-	const DIVISION = 'ax_division';
+	const TEAM   = 'ax_team';
+	const PLAYER = 'ax_player';
+	const MATCH  = 'ax_match';
 
-	/* Taxonomies. */
+	/* Taxonomies. League, Season and Division are taxonomies (SportsPress model). */
 	const TAX_SPORT = 'ax_sport';
+	const LEAGUE    = 'ax_league';
+	const SEASON    = 'ax_season';
+	const DIVISION  = 'ax_division';
 
 	/* Team meta. */
 	const TEAM_LEAGUE  = '_ax_team_league';
@@ -77,7 +77,16 @@ final class Keys {
 	 * @return string[]
 	 */
 	public static function post_types() {
-		return array( self::LEAGUE, self::SEASON, self::TEAM, self::PLAYER, self::MATCH, self::DIVISION );
+		return array( self::TEAM, self::PLAYER, self::MATCH );
+	}
+
+	/**
+	 * All plugin taxonomy slugs (Sport, League, Season, Division).
+	 *
+	 * @return string[]
+	 */
+	public static function taxonomies() {
+		return array( self::TAX_SPORT, self::LEAGUE, self::SEASON, self::DIVISION );
 	}
 
 	/**

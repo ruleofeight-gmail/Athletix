@@ -93,13 +93,8 @@ class MetaBoxManager {
 	 */
 	private function schemas() {
 		return array(
-			Keys::TEAM     => array(
-				Keys::TEAM_LEAGUE  => array(
-					'label'     => __( 'League', 'athletix' ),
-					'type'      => 'post',
-					'sanitize'  => 'int',
-					'post_type' => Keys::LEAGUE,
-				),
+			Keys::TEAM   => array(
+				// League and Division are assigned via the native taxonomy boxes.
 				Keys::TEAM_VENUE   => array(
 					'label'    => __( 'Home Venue', 'athletix' ),
 					'type'     => 'text',
@@ -116,7 +111,7 @@ class MetaBoxManager {
 					'sanitize' => 'text',
 				),
 			),
-			Keys::PLAYER   => array(
+			Keys::PLAYER => array(
 				Keys::PLAYER_TEAM     => array(
 					'label'     => __( 'Team', 'athletix' ),
 					'type'      => 'post',
@@ -154,19 +149,8 @@ class MetaBoxManager {
 					'sanitize' => 'date',
 				),
 			),
-			Keys::MATCH    => array(
-				Keys::MATCH_LEAGUE     => array(
-					'label'     => __( 'League', 'athletix' ),
-					'type'      => 'post',
-					'sanitize'  => 'int',
-					'post_type' => Keys::LEAGUE,
-				),
-				Keys::MATCH_SEASON     => array(
-					'label'     => __( 'Season', 'athletix' ),
-					'type'      => 'post',
-					'sanitize'  => 'int',
-					'post_type' => Keys::SEASON,
-				),
+			Keys::MATCH  => array(
+				// League and Season are assigned via the native taxonomy boxes.
 				Keys::MATCH_HOME_TEAM  => array(
 					'label'     => __( 'Home Team', 'athletix' ),
 					'type'      => 'post',
@@ -204,32 +188,8 @@ class MetaBoxManager {
 					),
 				),
 			),
-			Keys::SEASON   => array(
-				Keys::SEASON_LEAGUE => array(
-					'label'     => __( 'League', 'athletix' ),
-					'type'      => 'post',
-					'sanitize'  => 'int',
-					'post_type' => Keys::LEAGUE,
-				),
-				Keys::SEASON_START  => array(
-					'label'    => __( 'Start Date', 'athletix' ),
-					'type'     => 'date',
-					'sanitize' => 'date',
-				),
-				Keys::SEASON_END    => array(
-					'label'    => __( 'End Date', 'athletix' ),
-					'type'     => 'date',
-					'sanitize' => 'date',
-				),
-			),
-			Keys::DIVISION => array(
-				Keys::DIVISION_LEAGUE => array(
-					'label'     => __( 'League', 'athletix' ),
-					'type'      => 'post',
-					'sanitize'  => 'int',
-					'post_type' => Keys::LEAGUE,
-				),
-			),
+			// Season and Division are taxonomies now; they are managed on the
+			// native term-edit screens under the Athletix menu, not here.
 		);
 	}
 

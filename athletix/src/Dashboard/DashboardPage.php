@@ -50,7 +50,12 @@ class DashboardPage {
 		}
 
 		$counts = array(
-			__( 'Leagues', 'athletix' ) => wp_count_posts( Keys::LEAGUE )->publish,
+			__( 'Leagues', 'athletix' ) => (int) wp_count_terms(
+				array(
+					'taxonomy'   => Keys::LEAGUE,
+					'hide_empty' => false,
+				)
+			),
 			__( 'Teams', 'athletix' )   => wp_count_posts( Keys::TEAM )->publish,
 			__( 'Players', 'athletix' ) => wp_count_posts( Keys::PLAYER )->publish,
 			__( 'Matches', 'athletix' ) => wp_count_posts( Keys::MATCH )->publish,
