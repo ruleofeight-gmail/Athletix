@@ -130,9 +130,39 @@ class Shortcodes {
 			'athletix_standings'
 		);
 
-		$rows = $this->plugin->make( 'engine.standings' )->table( absint( $atts['league'] ), absint( $atts['season'] ) );
+		$league = $this->term_id( $atts['league'], Keys::LEAGUE );
+		$season = $this->term_id( $atts['season'], Keys::SEASON );
+
+		$rows = $this->plugin->make( 'engine.standings' )->table( $league, $season );
 
 		return $this->render( 'standings', array( 'rows' => $rows ) );
+	}
+
+	/**
+	 * Resolve a shortcode league/season value to a term id. Accepts a numeric
+	 * id, a term slug, or a term name — so `league="premier"` works as well as
+	 * `league="12"`.
+	 *
+	 * @param mixed  $value    Attribute value.
+	 * @param string $taxonomy Taxonomy slug.
+	 * @return int
+	 */
+	private function term_id( $value, $taxonomy ) {
+		if ( is_numeric( $value ) ) {
+			return absint( $value );
+		}
+
+		$value = trim( (string) $value );
+		if ( '' === $value ) {
+			return 0;
+		}
+
+		$term = get_term_by( 'slug', sanitize_title( $value ), $taxonomy );
+		if ( ! $term ) {
+			$term = get_term_by( 'name', $value, $taxonomy );
+		}
+
+		return ( $term && ! is_wp_error( $term ) ) ? (int) $term->term_id : 0;
 	}
 
 	/**
@@ -157,7 +187,7 @@ class Shortcodes {
 		if ( $atts['team'] ) {
 			$posts = $players->for_team( absint( $atts['team'] ) );
 		} elseif ( $atts['league'] ) {
-			$teams = wp_list_pluck( $this->plugin->make( 'repo.team' )->for_league( absint( $atts['league'] ) ), 'ID' );
+			$teams = wp_list_pluck( $this->plugin->make( 'repo.team' )->for_league( $this->term_id( $atts['league'], Keys::LEAGUE ) ), 'ID' );
 			$posts = empty( $teams ) ? array() : $players->all(
 				array(
 					'posts_per_page' => -1,
@@ -207,19 +237,22 @@ class Shortcodes {
 			'order'          => 'ASC',
 		);
 
+		$league = $this->term_id( $atts['league'], Keys::LEAGUE );
+		$season = $this->term_id( $atts['season'], Keys::SEASON );
+
 		$tax = array();
-		if ( $atts['league'] ) {
+		if ( $league ) {
 			$tax[] = array(
 				'taxonomy' => Keys::LEAGUE,
 				'field'    => 'term_id',
-				'terms'    => absint( $atts['league'] ),
+				'terms'    => $league,
 			);
 		}
-		if ( $atts['season'] ) {
+		if ( $season ) {
 			$tax[] = array(
 				'taxonomy' => Keys::SEASON,
 				'field'    => 'term_id',
-				'terms'    => absint( $atts['season'] ),
+				'terms'    => $season,
 			);
 		}
 		if ( $tax ) {

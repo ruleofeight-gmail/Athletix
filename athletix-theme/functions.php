@@ -141,3 +141,54 @@ if ( ! function_exists( 'athletix_theme_shortcode' ) ) {
 		}
 	}
 }
+
+if ( ! function_exists( 'athletix_theme_taxonomy_teams' ) ) {
+	/**
+	 * Render the teams belonging to a league/division term as a card grid.
+	 *
+	 * @param int    $term_id  Term id.
+	 * @param string $heading  Section heading.
+	 * @param string $taxonomy Taxonomy slug (default league).
+	 * @return void
+	 */
+	function athletix_theme_taxonomy_teams( $term_id, $heading, $taxonomy = 'ax_league' ) {
+		if ( ! $term_id || ! post_type_exists( 'ax_team' ) ) {
+			return;
+		}
+
+		$athletix_teams = new WP_Query(
+			array(
+				'post_type'      => 'ax_team',
+				'posts_per_page' => 100,
+				'orderby'        => 'title',
+				'order'          => 'ASC',
+				'no_found_rows'  => true,
+				'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+					array(
+						'taxonomy' => $taxonomy,
+						'field'    => 'term_id',
+						'terms'    => (int) $term_id,
+					),
+				),
+			)
+		);
+
+		if ( ! $athletix_teams->have_posts() ) {
+			wp_reset_postdata();
+			return;
+		}
+
+		echo '<section class="ax-section"><div class="ax-section__head"><h2>' . esc_html( $heading ) . '</h2></div><div class="ax-grid ax-grid--3">';
+		while ( $athletix_teams->have_posts() ) {
+			$athletix_teams->the_post();
+			printf( '<a class="ax-card ax-card--link" href="%s">', esc_url( get_permalink() ) );
+			if ( has_post_thumbnail() ) {
+				echo '<span class="ax-card__media">' . get_the_post_thumbnail( get_the_ID(), 'medium_large' ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+			echo '<h3 class="ax-card__title">' . esc_html( get_the_title() ) . '</h3></a>';
+		}
+		echo '</div></section>';
+
+		wp_reset_postdata();
+	}
+}

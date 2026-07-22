@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Athletix 2.0.0\n"
 "Report-Msgid-Bugs-To: https://example.com/support\n"
-"POT-Creation-Date: 2026-07-22 13:20+0000\n"
+"POT-Creation-Date: 2026-07-22 13:31+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -67,12 +67,20 @@ msgstr ""
 msgid "All events"
 msgstr ""
 
+#: assets/js/blocks.js
+msgid "All seasons"
+msgstr ""
+
 #: src/Payments/Invoice.php src/Payments/PaymentsAdmin.php
 msgid "Amount"
 msgstr ""
 
 #: src/Notifications/Announcements.php
 msgid "Announcements"
+msgstr ""
+
+#: assets/js/blocks.js
+msgid "Any league"
 msgstr ""
 
 #: src/Search/Directory.php
@@ -475,12 +483,8 @@ msgstr ""
 msgid "L"
 msgstr ""
 
-#: src/Admin/StandingsTab.php src/Competition/CompetitionAdmin.php src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/ScheduleWidget.php src/Taxonomies/TermFields.php
+#: assets/js/blocks.js src/Admin/StandingsTab.php src/Competition/CompetitionAdmin.php src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/ScheduleWidget.php src/Taxonomies/TermFields.php
 msgid "League"
-msgstr ""
-
-#: assets/js/blocks.js
-msgid "League ID"
 msgstr ""
 
 #: src/Security/Roles.php
@@ -867,12 +871,8 @@ msgstr ""
 msgid "Search…"
 msgstr ""
 
-#: src/Competition/CompetitionAdmin.php
+#: assets/js/blocks.js src/Competition/CompetitionAdmin.php
 msgid "Season"
-msgstr ""
-
-#: assets/js/blocks.js
-msgid "Season ID (0 = all)"
 msgstr ""
 
 #: src/Elementor/Widgets/LeagueTableWidget.php src/Elementor/Widgets/StatisticsWidget.php
@@ -1141,6 +1141,10 @@ msgstr ""
 
 #: src/Competition/CompetitionAdmin.php src/Taxonomies/TermFields.php
 msgid "— None —"
+msgstr ""
+
+#: assets/js/blocks.js
+msgid "— Select a league —"
 msgstr ""
 
 #: src/ImportExport/ImportExport.php

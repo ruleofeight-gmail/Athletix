@@ -17,13 +17,17 @@
 
 	var el = wp.element.createElement;
 	var Fragment = wp.element.Fragment;
+	var useState = wp.element.useState;
+	var useEffect = wp.element.useEffect;
 	var registerBlockType = wp.blocks.registerBlockType;
 	var InspectorControls = wp.blockEditor.InspectorControls;
 	var useBlockProps = wp.blockEditor.useBlockProps;
 	var PanelBody = wp.components.PanelBody;
 	var TextControl = wp.components.TextControl;
+	var SelectControl = wp.components.SelectControl;
 	var ToggleControl = wp.components.ToggleControl;
 	var ServerSideRender = wp.serverSideRender;
+	var apiFetch = wp.apiFetch;
 	var __ = wp.i18n.__;
 
 	/**
@@ -43,6 +47,68 @@
 			onChange: function ( value ) {
 				var next = {};
 				next[ key ] = parseInt( value, 10 ) || 0;
+				props.setAttributes( next );
+			},
+		} );
+	}
+
+	/**
+	 * A term dropdown that loads its options from the taxonomy REST endpoint,
+	 * so editors pick a League/Season by name instead of typing a term id.
+	 *
+	 * @param {Object} props { taxonomy, label, value, onChange, allLabel }.
+	 * @return {Object} Control element.
+	 */
+	function TermSelect( props ) {
+		var state = useState( [] );
+		var terms = state[ 0 ];
+		var setTerms = state[ 1 ];
+
+		useEffect( function () {
+			if ( ! apiFetch ) {
+				return;
+			}
+			apiFetch( {
+				path: '/wp/v2/' + props.taxonomy + '?per_page=100&hide_empty=false&_fields=id,name',
+			} ).then( function ( items ) {
+				setTerms( ( items || [] ).map( function ( t ) {
+					return { label: t.name, value: String( t.id ) };
+				} ) );
+			} ).catch( function () {} );
+		}, [] );
+
+		var options = [ { label: props.allLabel, value: '0' } ].concat( terms );
+
+		return el( SelectControl, {
+			label: props.label,
+			value: String( props.value || 0 ),
+			options: options,
+			onChange: function ( value ) {
+				props.onChange( parseInt( value, 10 ) || 0 );
+			},
+		} );
+	}
+
+	/**
+	 * Build a term-picker control for an attribute.
+	 *
+	 * @param {Object} props    Block props.
+	 * @param {string} key      Attribute name.
+	 * @param {string} label    Field label.
+	 * @param {string} taxonomy Taxonomy REST base.
+	 * @param {string} allLabel Label for the "any" option.
+	 * @return {Object} Control element.
+	 */
+	function termField( props, key, label, taxonomy, allLabel ) {
+		return el( TermSelect, {
+			key: key,
+			taxonomy: taxonomy,
+			label: label,
+			allLabel: allLabel,
+			value: props.attributes[ key ],
+			onChange: function ( value ) {
+				var next = {};
+				next[ key ] = value;
 				props.setAttributes( next );
 			},
 		} );
@@ -115,23 +181,23 @@
 
 	register( 'standings', __( 'Athletix Standings', 'athletix' ), function ( props ) {
 		return [
-			numberField( props, 'league', __( 'League ID', 'athletix' ) ),
-			numberField( props, 'season', __( 'Season ID (0 = all)', 'athletix' ) ),
+			termField( props, 'league', __( 'League', 'athletix' ), 'ax_league', __( '— Select a league —', 'athletix' ) ),
+			termField( props, 'season', __( 'Season', 'athletix' ), 'ax_season', __( 'All seasons', 'athletix' ) ),
 		];
 	} );
 
 	register( 'roster', __( 'Athletix Roster', 'athletix' ), function ( props ) {
 		return [
 			numberField( props, 'team', __( 'Team ID', 'athletix' ) ),
-			numberField( props, 'league', __( 'League ID', 'athletix' ) ),
+			termField( props, 'league', __( 'League', 'athletix' ), 'ax_league', __( 'Any league', 'athletix' ) ),
 			numberField( props, 'columns', __( 'Columns', 'athletix' ) ),
 		];
 	} );
 
 	register( 'schedule', __( 'Athletix Schedule', 'athletix' ), function ( props ) {
 		return [
-			numberField( props, 'league', __( 'League ID', 'athletix' ) ),
-			numberField( props, 'season', __( 'Season ID (0 = all)', 'athletix' ) ),
+			termField( props, 'league', __( 'League', 'athletix' ), 'ax_league', __( 'Any league', 'athletix' ) ),
+			termField( props, 'season', __( 'Season', 'athletix' ), 'ax_season', __( 'All seasons', 'athletix' ) ),
 			numberField( props, 'limit', __( 'Max matches', 'athletix' ) ),
 		];
 	} );

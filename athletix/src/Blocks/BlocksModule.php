@@ -142,7 +142,7 @@ class BlocksModule implements Module {
 		wp_register_script(
 			'athletix-blocks',
 			ATHLETIX_URL . 'assets/js/blocks.js',
-			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-server-side-render', 'wp-i18n' ),
+			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-server-side-render', 'wp-i18n', 'wp-api-fetch' ),
 			ATHLETIX_VERSION,
 			true
 		);
