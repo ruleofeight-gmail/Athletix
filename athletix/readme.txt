@@ -4,7 +4,7 @@ Tags: sports, league, teams, players, standings, elementor, competition
 Requires at least: 5.8
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,6 +97,14 @@ In a dedicated custom table, recomputed from completed matches whenever a match
 changes, so the table can never drift from the results.
 
 == Changelog ==
+
+= 2.1.0 =
+* Multi-sport profiles: per-league sport resolution driving scoring and tie-breaks.
+* Playoff bracket view: [athletix_bracket] shortcode + block.
+* Guided "Add Team" / "Add Player" screens with sport-aware fields and batch "Add Another".
+* Customize area: admin-defined Standings Columns and Outcomes via a safe equation engine, plus admin-defined, sortable/filterable List Columns for the content lists.
+* WP-CLI `wp athletix recompute`; Gutenberg blocks migrated to block.json metadata.
+* Fix: grant the manage_athletix capability before the admin menus are drawn so the Customize and taxonomy screens are never hidden after an install/update.
 
 = 2.0.0 =
 * Complete rebuild on a modular, namespaced (PSR-4) architecture.
