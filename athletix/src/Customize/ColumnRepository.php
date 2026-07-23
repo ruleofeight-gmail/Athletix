@@ -20,7 +20,7 @@ use Athletix\Support\Keys;
  * for a list, it falls back to the full catalogue, so lists always show columns
  * even before anything is configured.
  */
-class ColumnRepository {
+class ColumnRepository extends ConfigRepository {
 
 	/**
 	 * The full ListScreen config for a list (columns + taxonomy filters).
@@ -52,23 +52,7 @@ class ColumnRepository {
 			return array();
 		}
 
-		$posts = get_posts(
-			array(
-				'post_type'      => Keys::LIST_COLUMN,
-				'post_status'    => 'publish',
-				'posts_per_page' => 100,
-				'orderby'        => array(
-					'menu_order' => 'ASC',
-					'title'      => 'ASC',
-				),
-				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- small bounded config set.
-					array(
-						'key'   => Keys::COL_LIST,
-						'value' => $post_type,
-					),
-				),
-			)
-		);
+		$posts = $this->fetch_by_meta( Keys::LIST_COLUMN, Keys::COL_LIST, $post_type );
 
 		if ( ! $posts ) {
 			return $this->from_catalog( $catalog );

@@ -19,7 +19,7 @@ use Athletix\Support\Keys;
  * the built-in soccer Defaults — so standings always have something to compute
  * and order by, even before anything is seeded.
  */
-class VariableRepository {
+class VariableRepository extends ConfigRepository {
 
 	/**
 	 * Ordered standings columns for a sport.
@@ -83,39 +83,12 @@ class VariableRepository {
 	 * @return \WP_Post[]
 	 */
 	private function fetch( $post_type, $sport_id ) {
-		$posts = $this->query( $post_type, $sport_id );
+		$posts = $this->fetch_by_meta( $post_type, Keys::VAR_SPORT, $sport_id );
 
 		if ( ! $posts && $sport_id ) {
-			$posts = $this->query( $post_type, 0 );
+			$posts = $this->fetch_by_meta( $post_type, Keys::VAR_SPORT, 0 );
 		}
 
 		return $posts;
-	}
-
-	/**
-	 * Query variable posts scoped to an exact sport id.
-	 *
-	 * @param string $post_type Variable post type.
-	 * @param int    $sport_id  Sport term id.
-	 * @return \WP_Post[]
-	 */
-	private function query( $post_type, $sport_id ) {
-		return get_posts(
-			array(
-				'post_type'      => $post_type,
-				'post_status'    => 'publish',
-				'posts_per_page' => 100,
-				'orderby'        => array(
-					'menu_order' => 'ASC',
-					'title'      => 'ASC',
-				),
-				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- small bounded config set.
-					array(
-						'key'   => Keys::VAR_SPORT,
-						'value' => (string) $sport_id,
-					),
-				),
-			)
-		);
 	}
 }
