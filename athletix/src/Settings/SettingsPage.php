@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Athletix\Admin\HubTab;
 use Athletix\Core\Config;
 use Athletix\Support\Keys;
 
@@ -19,6 +20,8 @@ use Athletix\Support\Keys;
  * backed by the single Config option.
  */
 class SettingsPage {
+
+	use HubTab;
 
 	const PAGE  = 'athletix-settings';
 	const GROUP = 'athletix_settings_group';
@@ -29,25 +32,8 @@ class SettingsPage {
 	 * @return void
 	 */
 	public function register() {
-		add_filter( 'athletix/admin_tabs', array( $this, 'tab' ) );
+		$this->register_hub_tab( 'settings', __( 'Settings', 'athletix' ), 20 );
 		add_action( 'admin_init', array( $this, 'settings' ) );
-	}
-
-	/**
-	 * Contribute the Settings tab to the hub.
-	 *
-	 * @param array $tabs Tabs.
-	 * @return array
-	 */
-	public function tab( array $tabs ) {
-		$tabs['settings'] = array(
-			'label'    => __( 'Settings', 'athletix' ),
-			'cap'      => Keys::capability(),
-			'order'    => 20,
-			'callback' => array( $this, 'render' ),
-		);
-
-		return $tabs;
 	}
 
 	/**

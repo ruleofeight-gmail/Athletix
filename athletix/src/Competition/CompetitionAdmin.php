@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Athletix\Admin\Hub;
+use Athletix\Admin\HubTab;
 use Athletix\Data\Repositories\LeagueRepository;
 use Athletix\Data\Repositories\SeasonRepository;
 use Athletix\Data\Repositories\TeamRepository;
@@ -23,6 +24,8 @@ use Athletix\Support\Keys;
  * guarded and reports its result.
  */
 class CompetitionAdmin {
+
+	use HubTab;
 
 	const PAGE            = 'athletix-competitions';
 	const ACTION_SCHEDULE = 'athletix_generate_schedule';
@@ -86,26 +89,9 @@ class CompetitionAdmin {
 	 * @return void
 	 */
 	public function register() {
-		add_filter( 'athletix/admin_tabs', array( $this, 'tab' ) );
+		$this->register_hub_tab( 'competitions', __( 'Competitions', 'athletix' ), 30 );
 		add_action( 'admin_post_' . self::ACTION_SCHEDULE, array( $this, 'handle_schedule' ) );
 		add_action( 'admin_post_' . self::ACTION_PLAYOFFS, array( $this, 'handle_playoffs' ) );
-	}
-
-	/**
-	 * Contribute the Competitions tab to the hub.
-	 *
-	 * @param array $tabs Tabs.
-	 * @return array
-	 */
-	public function tab( array $tabs ) {
-		$tabs['competitions'] = array(
-			'label'    => __( 'Competitions', 'athletix' ),
-			'cap'      => Keys::capability(),
-			'order'    => 30,
-			'callback' => array( $this, 'render' ),
-		);
-
-		return $tabs;
 	}
 
 	/**

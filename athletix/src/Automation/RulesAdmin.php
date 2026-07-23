@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Athletix\Admin\Hub;
+use Athletix\Admin\HubTab;
 use Athletix\Admin\Tables\FilterableTable;
 use Athletix\Support\Keys;
 
@@ -19,6 +20,8 @@ use Athletix\Support\Keys;
  * Lets an administrator create and remove automation rules.
  */
 class RulesAdmin {
+
+	use HubTab;
 
 	const PAGE          = 'athletix-rules';
 	const ACTION_ADD    = 'athletix_rule_add';
@@ -46,26 +49,9 @@ class RulesAdmin {
 	 * @return void
 	 */
 	public function register() {
-		add_filter( 'athletix/admin_tabs', array( $this, 'tab' ) );
+		$this->register_hub_tab( 'automation', __( 'Automation', 'athletix' ), 60 );
 		add_action( 'admin_post_' . self::ACTION_ADD, array( $this, 'handle_add' ) );
 		add_action( 'admin_post_' . self::ACTION_DELETE, array( $this, 'handle_delete' ) );
-	}
-
-	/**
-	 * Contribute the Automation tab to the hub.
-	 *
-	 * @param array $tabs Tabs.
-	 * @return array
-	 */
-	public function tab( array $tabs ) {
-		$tabs['automation'] = array(
-			'label'    => __( 'Automation', 'athletix' ),
-			'cap'      => Keys::capability(),
-			'order'    => 60,
-			'callback' => array( $this, 'render' ),
-		);
-
-		return $tabs;
 	}
 
 	/**

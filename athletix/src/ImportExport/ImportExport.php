@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Athletix\Admin\Hub;
+use Athletix\Admin\HubTab;
 use Athletix\Plugin;
 use Athletix\Support\Keys;
 
@@ -20,6 +21,8 @@ use Athletix\Support\Keys;
  * capability- and nonce-guarded admin screen.
  */
 class ImportExport {
+
+	use HubTab;
 
 	const PAGE          = 'athletix-import-export';
 	const ACTION_IMPORT = 'athletix_import_csv';
@@ -47,26 +50,9 @@ class ImportExport {
 	 * @return void
 	 */
 	public function register() {
-		add_filter( 'athletix/admin_tabs', array( $this, 'tab' ) );
+		$this->register_hub_tab( 'tools', __( 'Import / Export', 'athletix' ), 70 );
 		add_action( 'admin_post_' . self::ACTION_IMPORT, array( $this, 'handle_import' ) );
 		add_action( 'admin_post_' . self::ACTION_EXPORT, array( $this, 'handle_export' ) );
-	}
-
-	/**
-	 * Contribute the Tools (Import / Export) tab to the hub.
-	 *
-	 * @param array $tabs Tabs.
-	 * @return array
-	 */
-	public function tab( array $tabs ) {
-		$tabs['tools'] = array(
-			'label'    => __( 'Import / Export', 'athletix' ),
-			'cap'      => Keys::capability(),
-			'order'    => 70,
-			'callback' => array( $this, 'render' ),
-		);
-
-		return $tabs;
 	}
 
 	/**

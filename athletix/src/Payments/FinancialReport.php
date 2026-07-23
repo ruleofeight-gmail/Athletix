@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Athletix\Admin\HubTab;
 use Athletix\Admin\Tables\ListTable;
 use Athletix\Plugin;
 use Athletix\Security\Capabilities;
@@ -19,6 +20,8 @@ use Athletix\Security\Capabilities;
  * Summarizes payments collected per team with a grand total.
  */
 class FinancialReport {
+
+	use HubTab;
 
 	const PAGE = 'athletix-financials';
 
@@ -53,24 +56,7 @@ class FinancialReport {
 	 * @return void
 	 */
 	public function register() {
-		add_filter( 'athletix/admin_tabs', array( $this, 'tab' ) );
-	}
-
-	/**
-	 * Contribute the Financials tab to the hub.
-	 *
-	 * @param array $tabs Tabs.
-	 * @return array
-	 */
-	public function tab( array $tabs ) {
-		$tabs['financials'] = array(
-			'label'    => __( 'Financials', 'athletix' ),
-			'cap'      => Capabilities::MANAGE_PAYMENTS,
-			'order'    => 50,
-			'callback' => array( $this, 'render' ),
-		);
-
-		return $tabs;
+		$this->register_hub_tab( 'financials', __( 'Financials', 'athletix' ), 50, Capabilities::MANAGE_PAYMENTS );
 	}
 
 	/**

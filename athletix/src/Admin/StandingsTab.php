@@ -12,7 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Athletix\Plugin;
-use Athletix\Support\Keys;
 
 /**
  * Adds a "Tables" tab that lets a manager pick a league and see its current
@@ -20,6 +19,8 @@ use Athletix\Support\Keys;
  * matches the public table exactly.
  */
 class StandingsTab {
+
+	use HubTab;
 
 	/**
 	 * Plugin instance.
@@ -43,24 +44,7 @@ class StandingsTab {
 	 * @return void
 	 */
 	public function register() {
-		add_filter( 'athletix/admin_tabs', array( $this, 'tab' ) );
-	}
-
-	/**
-	 * Contribute the Tables tab (just after the Dashboard).
-	 *
-	 * @param array $tabs Tabs.
-	 * @return array
-	 */
-	public function tab( array $tabs ) {
-		$tabs['tables'] = array(
-			'label'    => __( 'Tables', 'athletix' ),
-			'cap'      => 'edit_posts',
-			'order'    => 10,
-			'callback' => array( $this, 'render' ),
-		);
-
-		return $tabs;
+		$this->register_hub_tab( 'tables', __( 'Tables', 'athletix' ), 10, 'edit_posts' );
 	}
 
 	/**

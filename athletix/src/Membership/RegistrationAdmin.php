@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Athletix\Admin\Hub;
+use Athletix\Admin\HubTab;
 use Athletix\Admin\Tables\FilterableTable;
 use Athletix\Plugin;
 use Athletix\Support\Keys;
@@ -21,6 +22,8 @@ use Athletix\Support\Keys;
  * or reject (trash) them.
  */
 class RegistrationAdmin {
+
+	use HubTab;
 
 	const PAGE           = 'athletix-registrations';
 	const ACTION_APPROVE = 'athletix_reg_approve';
@@ -48,26 +51,9 @@ class RegistrationAdmin {
 	 * @return void
 	 */
 	public function register() {
-		add_filter( 'athletix/admin_tabs', array( $this, 'tab' ) );
+		$this->register_hub_tab( 'registrations', __( 'Registrations', 'athletix' ), 40 );
 		add_action( 'admin_post_' . self::ACTION_APPROVE, array( $this, 'handle_approve' ) );
 		add_action( 'admin_post_' . self::ACTION_REJECT, array( $this, 'handle_reject' ) );
-	}
-
-	/**
-	 * Contribute the Registrations tab to the hub.
-	 *
-	 * @param array $tabs Tabs.
-	 * @return array
-	 */
-	public function tab( array $tabs ) {
-		$tabs['registrations'] = array(
-			'label'    => __( 'Registrations', 'athletix' ),
-			'cap'      => Keys::capability(),
-			'order'    => 40,
-			'callback' => array( $this, 'render' ),
-		);
-
-		return $tabs;
 	}
 
 	/**
