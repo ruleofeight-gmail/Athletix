@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Athletix 2.0.0\n"
 "Report-Msgid-Bugs-To: https://example.com/support\n"
-"POT-Creation-Date: 2026-07-23 01:32+0000\n"
+"POT-Creation-Date: 2026-07-23 01:56+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -215,7 +215,7 @@ msgstr ""
 msgid "Awaiting manual payment."
 msgstr ""
 
-#: templates/schedule.php
+#: src/Admin/Lists/ListConfig.php templates/schedule.php
 msgid "Away"
 msgstr ""
 
@@ -237,6 +237,10 @@ msgstr ""
 
 #: src/Elementor/Widgets/MatchCardWidget.php
 msgid "Card"
+msgstr ""
+
+#: src/Admin/Lists/ListConfig.php
+msgid "Color"
 msgstr ""
 
 #: assets/js/blocks.js src/Elementor/Widgets/TeamRosterWidget.php
@@ -439,6 +443,10 @@ msgstr ""
 msgid "Fixtures & Results"
 msgstr ""
 
+#: src/Admin/Lists/ListConfig.php
+msgid "Founded"
+msgstr ""
+
 #: src/Meta/MetaBoxManager.php templates/admin/add-team.php
 msgid "Founded (year)"
 msgstr ""
@@ -551,7 +559,7 @@ msgstr ""
 msgid "Height"
 msgstr ""
 
-#: templates/schedule.php
+#: src/Admin/Lists/ListConfig.php templates/schedule.php
 msgid "Home"
 msgstr ""
 
@@ -695,7 +703,7 @@ msgstr ""
 msgid "Match Card"
 msgstr ""
 
-#: src/Meta/MetaBoxManager.php
+#: src/Admin/Lists/ListConfig.php src/Meta/MetaBoxManager.php
 msgid "Match Date"
 msgstr ""
 
@@ -843,7 +851,7 @@ msgstr ""
 msgid "Notifications"
 msgstr ""
 
-#: templates/player.php
+#: src/Admin/Lists/ListConfig.php templates/player.php
 msgid "Number"
 msgstr ""
 
@@ -955,7 +963,7 @@ msgstr ""
 msgid "Points for a Win"
 msgstr ""
 
-#: src/Elementor/Tags/PlayerFieldTag.php src/Meta/MetaBoxManager.php src/Search/Directory.php templates/admin/add-player.php templates/player.php
+#: src/Admin/Lists/ListConfig.php src/Elementor/Tags/PlayerFieldTag.php src/Meta/MetaBoxManager.php src/Search/Directory.php templates/admin/add-player.php templates/player.php
 msgid "Position"
 msgstr ""
 
@@ -1033,6 +1041,10 @@ msgstr ""
 
 #: src/ImportExport/ImportExport.php
 msgid "Restore Backup"
+msgstr ""
+
+#: src/Admin/Lists/ListConfig.php
+msgid "Round"
 msgstr ""
 
 #: src/Competition/BracketBuilder.php
@@ -1207,7 +1219,7 @@ msgstr ""
 msgid "Statistics Leaderboard"
 msgstr ""
 
-#: src/Meta/MetaBoxManager.php
+#: src/Admin/Lists/ListConfig.php src/Meta/MetaBoxManager.php
 msgid "Status"
 msgstr ""
 
@@ -1235,7 +1247,7 @@ msgstr ""
 msgid "Tables"
 msgstr ""
 
-#: src/Elementor/Widgets/TeamRosterWidget.php src/Membership/RegistrationAdmin.php src/Meta/MetaBoxManager.php src/Payments/FinancialReport.php src/PostTypes/PostTypes.php src/Search/Directory.php src/Search/Search.php templates/admin/add-player.php templates/standings.php
+#: src/Admin/Lists/ListConfig.php src/Elementor/Widgets/TeamRosterWidget.php src/Membership/RegistrationAdmin.php src/Meta/MetaBoxManager.php src/Payments/FinancialReport.php src/PostTypes/PostTypes.php src/Search/Directory.php src/Search/Search.php templates/admin/add-player.php templates/standings.php
 msgid "Team"
 msgstr ""
 
@@ -1353,6 +1365,10 @@ msgstr ""
 
 #: src/Customize/VariableFields.php
 msgid "Variable"
+msgstr ""
+
+#: src/Admin/Lists/ListConfig.php
+msgid "Venue"
 msgstr ""
 
 #: src/PostTypes/PostTypes.php

@@ -11,6 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+use Athletix\Admin\Lists\ListConfig;
+use Athletix\Admin\Lists\ListScreen;
 use Athletix\Contracts\Module;
 use Athletix\Plugin;
 
@@ -39,6 +41,12 @@ class AdminModule implements Module {
 			( new Hub( $plugin ) )->register();
 			( new StandingsTab( $plugin ) )->register();
 			( new QuickAdd( $plugin ) )->register();
+
+			// Sortable + filterable meta columns on the content list screens,
+			// driven by config through the standard WordPress list-table hooks.
+			foreach ( ListConfig::all() as $config ) {
+				( new ListScreen( $config ) )->register();
+			}
 		}
 	}
 }

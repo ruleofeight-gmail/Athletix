@@ -43,6 +43,13 @@ Blocks: the same views are available as server-rendered Gutenberg blocks in the
 Player), each registered from block.json metadata with League/Season pickers —
 the Season picker is scoped to the chosen League.
 
+List screens: the Teams, Players and Matches admin lists gain sortable,
+filterable meta columns (venue/founded/colour, team/position/number,
+date/home/away/round/status) through the standard WordPress list-table hooks —
+so they sort natively, filter by Sport/League/Season/Division from dropdowns,
+and toggle via Screen Options. Driven by one generic, config-described engine
+that any list can reuse.
+
 Customize (Phase 1): an Athletix → Customize area where admins define the maths
 behind the standings. "Standings Columns" and "Outcomes" are variables you
 create with a free-form equation (e.g. Points `($w * 3) + $d`, Goal Difference
