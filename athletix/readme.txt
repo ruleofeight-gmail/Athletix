@@ -43,6 +43,16 @@ Blocks: the same views are available as server-rendered Gutenberg blocks in the
 Player), each registered from block.json metadata with League/Season pickers —
 the Season picker is scoped to the chosen League.
 
+Customize (Phase 1): an Athletix → Customize area where admins define the maths
+behind the standings. "Standings Columns" and "Outcomes" are variables you
+create with a free-form equation (e.g. Points `($w * 3) + $d`, Goal Difference
+`$gf - $ga`, Win `$gf > $ga`) validated when saved. A column's sort priority
+sets the default table order — every column is sortable — and a variable can be
+scoped to one sport or left as the default for all. The soccer rules are seeded
+on activation, so standings look and sort exactly as before until you change
+them. Equations are evaluated by a safe built-in parser (arithmetic,
+comparisons, round/min/max/abs) — never PHP eval().
+
 Guided add screens: under the Athletix menu, "Add Team" ties a new team to a
 sport (plus optional league/division), and "Add Player" binds a player to a
 team and offers the position list that belongs to that team's sport — so the

@@ -66,6 +66,7 @@ class EngineModule implements Module {
 					$plugin->make( 'repo.match' ),
 					$plugin->make( 'repo.standings' ),
 					$plugin->make( 'engine.sport' ),
+					new \Athletix\Customize\VariableRepository(),
 					$plugin->cache()
 				);
 			}

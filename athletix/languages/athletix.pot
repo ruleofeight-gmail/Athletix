@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Athletix 2.0.0\n"
 "Report-Msgid-Bugs-To: https://example.com/support\n"
-"POT-Creation-Date: 2026-07-22 22:57+0000\n"
+"POT-Creation-Date: 2026-07-23 01:32+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,6 +17,10 @@ msgstr ""
 
 #: src/Notifications/Notifier.php
 msgid "%1$s vs %2$s finished %3$s."
+msgstr ""
+
+#: src/Customize/VariableFields.php
+msgid "0 = display only. 1, 2, 3… form the default table sort order (1 first)."
 msgstr ""
 
 #: src/Admin/QuickAdd.php
@@ -43,7 +47,7 @@ msgstr ""
 msgid "Add Another"
 msgstr ""
 
-#: src/PostTypes/PostTypes.php src/Taxonomies/Taxonomies.php
+#: src/Customize/Variables.php src/PostTypes/PostTypes.php src/Taxonomies/Taxonomies.php
 msgid "Add New %s"
 msgstr ""
 
@@ -95,6 +99,10 @@ msgstr ""
 msgid "All seasons"
 msgstr ""
 
+#: src/Customize/VariableFields.php
+msgid "All sports (default)"
+msgstr ""
+
 #: src/Payments/Invoice.php src/Payments/PaymentsAdmin.php
 msgid "Amount"
 msgstr ""
@@ -113,6 +121,10 @@ msgstr ""
 
 #: src/Membership/RegistrationAdmin.php
 msgid "Approve"
+msgstr ""
+
+#: src/Customize/VariableFields.php
+msgid "Ascending (low to high)"
 msgstr ""
 
 #: src/Sports/Profiles/SoccerProfile.php
@@ -193,6 +205,10 @@ msgstr ""
 
 #: src/Automation/RulesAdmin.php
 msgid "Automation Rules"
+msgstr ""
+
+#: src/Customize/VariableFields.php
+msgid "Available variables:"
 msgstr ""
 
 #: src/Payments/OfflineGateway.php
@@ -287,12 +303,20 @@ msgstr ""
 msgid "Days between rounds"
 msgstr ""
 
+#: src/Customize/VariableFields.php
+msgid "Decimal places."
+msgstr ""
+
 #: src/Automation/RulesAdmin.php
 msgid "Delete"
 msgstr ""
 
 #: src/Settings/SettingsPage.php
 msgid "Delete all data on uninstall"
+msgstr ""
+
+#: src/Customize/VariableFields.php
+msgid "Descending (high to low)"
 msgstr ""
 
 #: src/Automation/RulesAdmin.php src/Meta/MetaBoxManager.php
@@ -319,15 +343,27 @@ msgstr ""
 msgid "Download CSV"
 msgstr ""
 
-#: templates/standings.php
+#: src/Customize/Defaults.php
+msgid "Draw"
+msgstr ""
+
+#: src/Customize/Defaults.php templates/standings.php
 msgid "Drawn"
+msgstr ""
+
+#: src/Customize/Defaults.php
+msgid "Draws"
+msgstr ""
+
+#: src/Customize/Defaults.php
+msgid "Draws (alias)"
 msgstr ""
 
 #: src/Admin/QuickAdd.php templates/admin/add-player.php templates/admin/add-team.php
 msgid "Edit"
 msgstr ""
 
-#: src/PostTypes/PostTypes.php src/Taxonomies/Taxonomies.php
+#: src/Customize/Variables.php src/PostTypes/PostTypes.php src/Taxonomies/Taxonomies.php
 msgid "Edit %s"
 msgstr ""
 
@@ -365,6 +401,10 @@ msgstr ""
 
 #: src/Taxonomies/TermFields.php
 msgid "End date"
+msgstr ""
+
+#: src/Customize/VariableFields.php
+msgid "Equation"
 msgstr ""
 
 #: src/ImportExport/ImportExport.php
@@ -451,7 +491,7 @@ msgstr ""
 msgid "Generic"
 msgstr ""
 
-#: templates/standings.php
+#: src/Customize/Defaults.php templates/standings.php
 msgid "Goal Difference"
 msgstr ""
 
@@ -459,12 +499,36 @@ msgstr ""
 msgid "Goals"
 msgstr ""
 
-#: templates/standings.php
+#: src/Customize/Defaults.php templates/standings.php
 msgid "Goals Against"
 msgstr ""
 
-#: templates/standings.php
+#: src/Customize/Defaults.php templates/standings.php
 msgid "Goals For"
+msgstr ""
+
+#: src/Customize/Defaults.php
+msgid "Goals against"
+msgstr ""
+
+#: src/Customize/Defaults.php
+msgid "Goals against (alias)"
+msgstr ""
+
+#: src/Customize/Defaults.php
+msgid "Goals against (this match)"
+msgstr ""
+
+#: src/Customize/Defaults.php
+msgid "Goals for"
+msgstr ""
+
+#: src/Customize/Defaults.php
+msgid "Goals for (alias)"
+msgstr ""
+
+#: src/Customize/Defaults.php
+msgid "Goals for (this match)"
 msgstr ""
 
 #: src/Payments/FinancialReport.php
@@ -543,6 +607,10 @@ msgstr ""
 msgid "Jersey number"
 msgstr ""
 
+#: src/Customize/VariableFields.php
+msgid "Key"
+msgstr ""
+
 #: src/Search/Directory.php
 msgid "Keyword…"
 msgstr ""
@@ -587,11 +655,27 @@ msgstr ""
 msgid "Limit result set to seasons belonging to the given league term id."
 msgstr ""
 
+#: src/Customize/VariableFields.php
+msgid "Limit this variable to one sport, or leave as the default for all."
+msgstr ""
+
 #: src/Elementor/Widgets/StatisticsWidget.php
 msgid "List"
 msgstr ""
 
-#: templates/standings.php
+#: src/Customize/Defaults.php
+msgid "Loss"
+msgstr ""
+
+#: src/Customize/Defaults.php
+msgid "Losses"
+msgstr ""
+
+#: src/Customize/Defaults.php
+msgid "Losses (alias)"
+msgstr ""
+
+#: src/Customize/Defaults.php templates/standings.php
 msgid "Lost"
 msgstr ""
 
@@ -633,6 +717,10 @@ msgstr ""
 
 #: src/Dashboard/DashboardPage.php src/Dashboard/Widgets.php src/PostTypes/PostTypes.php
 msgid "Matches"
+msgstr ""
+
+#: src/Customize/Defaults.php
+msgid "Matches played"
 msgstr ""
 
 #: src/Elementor/Widgets/ScheduleWidget.php
@@ -763,8 +851,16 @@ msgstr ""
 msgid "Offline / Manual"
 msgstr ""
 
+#: src/Customize/VariableFields.php
+msgid "Operators: + - * / ( ) and > < >= <= == != · Functions: round(x,p), min(a,b), max(a,b), abs(x)"
+msgstr ""
+
 #: src/Competition/CompetitionAdmin.php
 msgid "Options"
+msgstr ""
+
+#: src/Customize/CustomizeModule.php
+msgid "Outcomes"
 msgstr ""
 
 #: templates/standings.php
@@ -787,7 +883,7 @@ msgstr ""
 msgid "Pick a team to load its sport’s positions."
 msgstr ""
 
-#: templates/standings.php
+#: src/Customize/Defaults.php templates/standings.php
 msgid "Played"
 msgstr ""
 
@@ -839,7 +935,7 @@ msgstr ""
 msgid "Please select a league."
 msgstr ""
 
-#: src/Sports/Profiles/GenericProfile.php templates/standings.php
+#: src/Customize/Defaults.php src/Sports/Profiles/GenericProfile.php templates/standings.php
 msgid "Points"
 msgstr ""
 
@@ -865,6 +961,10 @@ msgstr ""
 
 #: src/Reports/TeamReport.php
 msgid "Position %1$d — %2$d pts from %3$d games"
+msgstr ""
+
+#: src/Customize/VariableFields.php
+msgid "Precision"
 msgstr ""
 
 #: src/Taxonomies/TermFields.php
@@ -1059,7 +1159,15 @@ msgstr ""
 msgid "Sorry, your registration could not be saved."
 msgstr ""
 
-#: src/Taxonomies/TermFields.php templates/admin/add-team.php
+#: src/Customize/VariableFields.php
+msgid "Sort direction"
+msgstr ""
+
+#: src/Customize/VariableFields.php
+msgid "Sort priority"
+msgstr ""
+
+#: src/Customize/VariableFields.php src/Taxonomies/TermFields.php templates/admin/add-team.php
 msgid "Sport"
 msgstr ""
 
@@ -1077,6 +1185,10 @@ msgstr ""
 
 #: src/Reports/ReportBuilder.php
 msgid "Standings"
+msgstr ""
+
+#: src/Customize/CustomizeModule.php
+msgid "Standings Columns"
 msgstr ""
 
 #: src/Automation/RuleManager.php
@@ -1179,12 +1291,20 @@ msgstr ""
 msgid "That league needs at least two teams."
 msgstr ""
 
+#: src/Customize/VariableFields.php
+msgid "The equation could not be validated and will evaluate to 0 until fixed:"
+msgstr ""
+
 #: templates/admin/add-team.php
 msgid "The sport this team plays. Players added to it inherit its positions."
 msgstr ""
 
 #: src/Elementor/Widgets/StatisticsWidget.php
 msgid "The stat slug to rank by, e.g. goals or assists."
+msgstr ""
+
+#: src/Customize/VariableFields.php
+msgid "The token other equations reference, e.g. points → $points. Lowercase letters, numbers and underscores."
 msgstr ""
 
 #: src/Rest/MatchController.php
@@ -1231,6 +1351,10 @@ msgstr ""
 msgid "Value Color"
 msgstr ""
 
+#: src/Customize/VariableFields.php
+msgid "Variable"
+msgstr ""
+
 #: src/PostTypes/PostTypes.php
 msgid "View %s"
 msgstr ""
@@ -1255,7 +1379,19 @@ msgstr ""
 msgid "When"
 msgstr ""
 
-#: templates/standings.php
+#: src/Customize/Defaults.php
+msgid "Win"
+msgstr ""
+
+#: src/Customize/Defaults.php
+msgid "Wins"
+msgstr ""
+
+#: src/Customize/Defaults.php
+msgid "Wins (alias)"
+msgstr ""
+
+#: src/Customize/Defaults.php templates/standings.php
 msgid "Won"
 msgstr ""
 
@@ -1380,6 +1516,16 @@ msgctxt "Leagues"
 msgid "taxonomy general name"
 msgstr ""
 
+#: src/Customize/Variables.php
+msgctxt "Outcome"
+msgid "post type singular name"
+msgstr ""
+
+#: src/Customize/Variables.php
+msgctxt "Outcomes"
+msgid "post type general name"
+msgstr ""
+
 #: src/Cli/Commands.php
 msgctxt "Recomputed %d leagues."
 msgid "Recomputed %d league."
@@ -1408,6 +1554,16 @@ msgstr ""
 #: src/Taxonomies/Taxonomies.php
 msgctxt "Sports"
 msgid "taxonomy general name"
+msgstr ""
+
+#: src/Customize/Variables.php
+msgctxt "Standings Column"
+msgid "post type singular name"
+msgstr ""
+
+#: src/Customize/Variables.php
+msgctxt "Standings Columns"
+msgid "post type general name"
 msgstr ""
 
 #: src/Calendar/Venues.php

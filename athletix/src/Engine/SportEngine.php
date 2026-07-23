@@ -107,6 +107,19 @@ class SportEngine {
 	}
 
 	/**
+	 * The Sport term id assigned to a league (0 when none) — used to resolve the
+	 * league's configured Customize variables.
+	 *
+	 * @param int $league_id League term id.
+	 * @return int
+	 */
+	public function sport_term_for_league( $league_id ) {
+		$league_id = absint( $league_id );
+
+		return $league_id ? (int) get_term_meta( $league_id, Keys::LEAGUE_SPORT, true ) : 0;
+	}
+
+	/**
 	 * The profile for a sport slug (empty = active sport).
 	 *
 	 * @param string $sport Sport slug.

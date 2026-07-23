@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Athletix\Core\Cache;
 use Athletix\Core\Events;
+use Athletix\Customize\VariableRepository;
 use Athletix\Data\Repositories\MatchRepository;
 use Athletix\Data\Repositories\StandingsRepository;
 
@@ -52,6 +53,13 @@ class StandingsEngine {
 	private $sport;
 
 	/**
+	 * Customize variable repository (columns + outcomes).
+	 *
+	 * @var VariableRepository
+	 */
+	private $variables;
+
+	/**
 	 * Cache.
 	 *
 	 * @var Cache
@@ -65,13 +73,15 @@ class StandingsEngine {
 	 * @param MatchRepository     $matches   Matches.
 	 * @param StandingsRepository $standings Standings storage.
 	 * @param SportEngine         $sport     Sport rules.
+	 * @param VariableRepository  $variables Configured columns + outcomes.
 	 * @param Cache               $cache     Cache.
 	 */
-	public function __construct( Events $events, MatchRepository $matches, StandingsRepository $standings, SportEngine $sport, Cache $cache ) {
+	public function __construct( Events $events, MatchRepository $matches, StandingsRepository $standings, SportEngine $sport, VariableRepository $variables, Cache $cache ) {
 		$this->events    = $events;
 		$this->matches   = $matches;
 		$this->standings = $standings;
 		$this->sport     = $sport;
+		$this->variables = $variables;
 		$this->cache     = $cache;
 	}
 
@@ -115,15 +125,21 @@ class StandingsEngine {
 			$details[] = $this->matches->details( $match->ID );
 		}
 
-		$sport      = $this->sport->for_league( $league_id );
-		$calculator = new StandingsCalculator( $this->sport->points( $sport ) );
-		$rows       = $calculator->compute( $details );
+		$sport_id = $this->sport->sport_term_for_league( $league_id );
+		$outcomes = $this->variables->outcomes( $sport_id );
+		$columns  = $this->variables->columns( $sport_id );
+
+		// Aggregate raw facts (outcomes decide win/draw/loss), then compute the
+		// configured columns so the stored 'points' reflects the admin equation.
+		$raw      = ( new StandingsAggregator( $outcomes ) )->compute( $details );
+		$computed = ( new StandingsColumns( $columns ) )->build( $raw );
 
 		$this->standings->clear( $league_id, $season_id );
 
-		foreach ( $rows as $row ) {
+		foreach ( $computed as $row ) {
 			$row['league_id'] = $league_id;
 			$row['season_id'] = $season_id;
+			$row['points']    = isset( $row['points'] ) ? $row['points'] : 0;
 			$this->standings->upsert( $row );
 		}
 
@@ -152,11 +168,11 @@ class StandingsEngine {
 		return $this->cache->remember(
 			$this->cache_key( $league_id, $season_id ),
 			function () use ( $league_id, $season_id ) {
-				$rows   = $this->standings->table( $league_id, $season_id );
-				$sport  = $this->sport->for_league( $league_id );
-				$sorter = new StandingsSorter( $this->sport->tiebreakers( $sport ) );
+				$rows     = $this->standings->table( $league_id, $season_id );
+				$sport_id = $this->sport->sport_term_for_league( $league_id );
+				$columns  = $this->variables->columns( $sport_id );
 
-				return $sorter->sort( $rows );
+				return ( new StandingsColumns( $columns ) )->build( $rows );
 			}
 		);
 	}
