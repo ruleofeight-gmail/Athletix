@@ -46,6 +46,32 @@ class CapabilityMappingTest extends IntegrationTestCase {
 	}
 
 	/**
+	 * A competing filter that strips the cap cannot beat our max-priority grant.
+	 *
+	 * @return void
+	 */
+	public function test_grant_wins_over_a_stripping_filter() {
+		get_role( 'administrator' )->remove_cap( Roles::CAP );
+
+		// Simulate a role/security plugin removing the capability at a normal
+		// priority; ours runs at PHP_INT_MAX and must still win.
+		$stripper = static function ( $allcaps ) {
+			unset( $allcaps[ Roles::CAP ] );
+			return $allcaps;
+		};
+		add_filter( 'user_has_cap', $stripper, 10 );
+
+		$admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $admin_id );
+
+		$result = current_user_can( Roles::CAP );
+
+		remove_filter( 'user_has_cap', $stripper, 10 );
+
+		$this->assertTrue( $result, 'The max-priority mapping overrides a later stripping filter.' );
+	}
+
+	/**
 	 * The mapping itself only adds the cap when manage_options is present.
 	 *
 	 * @return void

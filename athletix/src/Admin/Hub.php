@@ -151,10 +151,15 @@ class Hub {
 			return;
 		}
 
+		// A full administrator (manage_options) always sees every tab, even if a
+		// role/security plugin interferes with the custom manage_athletix
+		// capability; other roles fall back to each tab's declared capability.
+		$is_admin = current_user_can( 'manage_options' );
+
 		$tabs = array_filter(
 			$this->tabs(),
-			static function ( $tab ) {
-				return current_user_can( isset( $tab['cap'] ) ? $tab['cap'] : 'edit_posts' );
+			static function ( $tab ) use ( $is_admin ) {
+				return $is_admin || current_user_can( isset( $tab['cap'] ) ? $tab['cap'] : 'edit_posts' );
 			}
 		);
 

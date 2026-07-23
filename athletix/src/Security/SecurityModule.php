@@ -61,8 +61,10 @@ class SecurityModule implements Module {
 
 		// Make manage_athletix reliable for every administrator, independent of
 		// whether the role grant above ever persisted, so the capability-gated
-		// menus and hub tabs are never hidden from an admin.
-		add_filter( 'user_has_cap', array( $roles, 'grant_to_admins' ) );
+		// menus and hub tabs are never hidden from an admin. Runs at the highest
+		// priority so it wins over any role/security plugin that also filters
+		// user_has_cap and would otherwise strip the capability.
+		add_filter( 'user_has_cap', array( $roles, 'grant_to_admins' ), PHP_INT_MAX );
 
 		$audit->register();
 	}
