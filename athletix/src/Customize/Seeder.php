@@ -28,6 +28,48 @@ class Seeder {
 	public function seed() {
 		$this->seed_type( Keys::STANDING, Defaults::columns() );
 		$this->seed_type( Keys::OUTCOME, Defaults::outcomes() );
+		$this->seed_columns();
+	}
+
+	/**
+	 * Seed the default List Columns for each content list, once.
+	 *
+	 * @return void
+	 */
+	private function seed_columns() {
+		$existing = get_posts(
+			array(
+				'post_type'      => Keys::LIST_COLUMN,
+				'post_status'    => 'any',
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+			)
+		);
+
+		if ( $existing ) {
+			return;
+		}
+
+		$order = 0;
+		foreach ( ColumnCatalog::sources() as $list => $fields ) {
+			foreach ( $fields as $source => $field ) {
+				$post_id = wp_insert_post(
+					array(
+						'post_type'   => Keys::LIST_COLUMN,
+						'post_status' => 'publish',
+						'post_title'  => (string) $field['label'],
+						'menu_order'  => $order,
+					)
+				);
+
+				if ( $post_id && ! is_wp_error( $post_id ) ) {
+					update_post_meta( $post_id, Keys::COL_LIST, $list );
+					update_post_meta( $post_id, Keys::COL_SOURCE, $source );
+				}
+
+				++$order;
+			}
+		}
 	}
 
 	/**

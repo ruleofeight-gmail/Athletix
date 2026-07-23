@@ -11,9 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Athletix\Admin\Lists\ListConfig;
 use Athletix\Admin\Lists\ListScreen;
 use Athletix\Contracts\Module;
+use Athletix\Customize\ColumnCatalog;
+use Athletix\Customize\ColumnRepository;
 use Athletix\Plugin;
 
 /**
@@ -43,9 +44,12 @@ class AdminModule implements Module {
 			( new QuickAdd( $plugin ) )->register();
 
 			// Sortable + filterable meta columns on the content list screens,
-			// driven by config through the standard WordPress list-table hooks.
-			foreach ( ListConfig::all() as $config ) {
-				( new ListScreen( $config ) )->register();
+			// resolved from the admin-defined List Columns (with a catalogue
+			// fallback) and rendered through the standard WordPress list-table
+			// hooks.
+			$columns = new ColumnRepository();
+			foreach ( ColumnCatalog::lists() as $post_type ) {
+				( new ListScreen( $columns->config( $post_type ) ) )->register();
 			}
 		}
 	}

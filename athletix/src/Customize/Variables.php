@@ -38,6 +38,12 @@ class Variables {
 			_x( 'Outcomes', 'post type general name', 'athletix' ),
 			_x( 'Outcome', 'post type singular name', 'athletix' )
 		);
+
+		$this->register_type(
+			Keys::LIST_COLUMN,
+			_x( 'List Columns', 'post type general name', 'athletix' ),
+			_x( 'List Column', 'post type singular name', 'athletix' )
+		);
 	}
 
 	/**

@@ -58,8 +58,16 @@ class CustomizeModule implements Module {
 			}
 		);
 
+		$plugin->container()->bind(
+			'customize.columns',
+			static function () {
+				return new ColumnRepository();
+			}
+		);
+
 		if ( is_admin() ) {
 			( new VariableFields() )->register();
+			( new ColumnFields() )->register();
 			add_action( 'admin_menu', array( $this, 'menu' ), 13 );
 		}
 	}
@@ -71,8 +79,9 @@ class CustomizeModule implements Module {
 	 */
 	public function menu() {
 		$items = array(
-			Keys::STANDING => __( 'Standings Columns', 'athletix' ),
-			Keys::OUTCOME  => __( 'Outcomes', 'athletix' ),
+			Keys::STANDING    => __( 'Standings Columns', 'athletix' ),
+			Keys::OUTCOME     => __( 'Outcomes', 'athletix' ),
+			Keys::LIST_COLUMN => __( 'List Columns', 'athletix' ),
 		);
 
 		foreach ( $items as $post_type => $label ) {

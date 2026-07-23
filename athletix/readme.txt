@@ -47,8 +47,11 @@ List screens: the Teams, Players and Matches admin lists gain sortable,
 filterable meta columns (venue/founded/colour, team/position/number,
 date/home/away/round/status) through the standard WordPress list-table hooks —
 so they sort natively, filter by Sport/League/Season/Division from dropdowns,
-and toggle via Screen Options. Driven by one generic, config-described engine
-that any list can reuse.
+and toggle via Screen Options. The columns themselves are admin-defined under
+Athletix → Customize → List Columns: each column picks a list and a source
+field, is renamed by its title and reordered by its Order attribute, so you
+control which columns show and in what order — with the built-in field
+catalogue used as the default until you change it.
 
 Customize (Phase 1): an Athletix → Customize area where admins define the maths
 behind the standings. "Standings Columns" and "Outcomes" are variables you

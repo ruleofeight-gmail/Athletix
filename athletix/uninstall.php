@@ -25,7 +25,7 @@ global $wpdb;
 
 // Delete plugin post types and their meta. League/Season/Division are
 // taxonomies (removed below), not post types.
-$athletix_post_types = array( 'ax_team', 'ax_player', 'ax_match', 'ax_announcement', 'ax_standing', 'ax_outcome' );
+$athletix_post_types = array( 'ax_team', 'ax_player', 'ax_match', 'ax_announcement', 'ax_standing', 'ax_outcome', 'ax_column' );
 
 foreach ( $athletix_post_types as $athletix_type ) {
 	$athletix_ids = get_posts(

@@ -28,8 +28,9 @@ final class Keys {
 	const MATCH  = 'ax_match';
 
 	/* Customize variable post types (admin-defined standings columns + outcomes). */
-	const STANDING = 'ax_standing';
-	const OUTCOME  = 'ax_outcome';
+	const STANDING    = 'ax_standing';
+	const OUTCOME     = 'ax_outcome';
+	const LIST_COLUMN = 'ax_column';
 
 	/* Customize variable meta. */
 	const VAR_KEY       = '_ax_var_key';
@@ -38,6 +39,10 @@ final class Keys {
 	const VAR_SORT      = '_ax_var_sort';
 	const VAR_ORDER     = '_ax_var_order';
 	const VAR_SPORT     = '_ax_var_sport';
+
+	/* List Column meta (which admin list + which source field). */
+	const COL_LIST   = '_ax_col_list';
+	const COL_SOURCE = '_ax_col_source';
 
 	/* Taxonomies. League, Season and Division are taxonomies (SportsPress model). */
 	const TAX_SPORT = 'ax_sport';
