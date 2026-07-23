@@ -18,6 +18,7 @@ use Athletix\Data\Repositories\PlayerRepository;
 use Athletix\Data\Repositories\PlayerStatsRepository;
 use Athletix\Data\Repositories\RelationshipRepository;
 use Athletix\Data\Repositories\SeasonRepository;
+use Athletix\Data\Repositories\StaffRepository;
 use Athletix\Data\Repositories\StandingsRepository;
 use Athletix\Data\Repositories\TeamRepository;
 use Athletix\Plugin;
@@ -68,6 +69,12 @@ class DataModule implements Module {
 			'repo.match',
 			static function () {
 				return new MatchRepository();
+			}
+		);
+		$container->bind(
+			'repo.staff',
+			static function () {
+				return new StaffRepository();
 			}
 		);
 		$container->bind(

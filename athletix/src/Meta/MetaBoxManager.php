@@ -149,6 +149,30 @@ class MetaBoxManager {
 					'sanitize' => 'date',
 				),
 			),
+			Keys::STAFF  => array(
+				// Sport and League are assigned via the native taxonomy boxes.
+				Keys::STAFF_ROLE    => array(
+					'label'    => __( 'Role', 'athletix' ),
+					'type'     => 'text',
+					'sanitize' => 'text',
+				),
+				Keys::STAFF_TEAM    => array(
+					'label'     => __( 'Team', 'athletix' ),
+					'type'      => 'post',
+					'sanitize'  => 'int',
+					'post_type' => Keys::TEAM,
+				),
+				Keys::STAFF_COUNTRY => array(
+					'label'    => __( 'Nationality', 'athletix' ),
+					'type'     => 'text',
+					'sanitize' => 'text',
+				),
+				Keys::STAFF_EMAIL   => array(
+					'label'    => __( 'Email', 'athletix' ),
+					'type'     => 'text',
+					'sanitize' => 'text',
+				),
+			),
 			Keys::MATCH  => array(
 				// League and Season are assigned via the native taxonomy boxes.
 				Keys::MATCH_HOME_TEAM  => array(

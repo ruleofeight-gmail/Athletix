@@ -48,6 +48,9 @@ class Shortcodes {
 		add_shortcode( 'athletix_match', array( $this, 'match_card' ) );
 		add_shortcode( 'athletix_player', array( $this, 'player' ) );
 		add_shortcode( 'athletix_bracket', array( $this, 'bracket' ) );
+		add_shortcode( 'athletix_staff', array( $this, 'staff' ) );
+		add_shortcode( 'athletix_team_form', array( $this, 'team_form' ) );
+		add_shortcode( 'athletix_team', array( $this, 'team' ) );
 	}
 
 	/**
@@ -178,6 +181,7 @@ class Shortcodes {
 				'team'    => 0,
 				'league'  => 0,
 				'columns' => 3,
+				'group'   => '',
 			),
 			$atts,
 			'athletix_roster'
@@ -210,6 +214,7 @@ class Shortcodes {
 			array(
 				'players' => $posts,
 				'columns' => max( 1, absint( $atts['columns'] ) ),
+				'group'   => ( 'position' === $atts['group'] ) ? 'position' : '',
 			)
 		);
 	}
@@ -225,6 +230,7 @@ class Shortcodes {
 			array(
 				'league' => 0,
 				'season' => 0,
+				'team'   => 0,
 				'limit'  => 20,
 			),
 			$atts,
@@ -237,6 +243,22 @@ class Shortcodes {
 			'meta_key'       => Keys::MATCH_DATE, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 			'order'          => 'ASC',
 		);
+
+		// Scope to a single team: matches where it plays home or away.
+		$team = absint( $atts['team'] );
+		if ( $team ) {
+			$args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				'relation' => 'OR',
+				array(
+					'key'   => Keys::MATCH_HOME_TEAM,
+					'value' => $team,
+				),
+				array(
+					'key'   => Keys::MATCH_AWAY_TEAM,
+					'value' => $team,
+				),
+			);
+		}
 
 		$league = $this->term_id( $atts['league'], Keys::LEAGUE );
 		$season = $this->term_id( $atts['season'], Keys::SEASON );
@@ -340,6 +362,163 @@ class Shortcodes {
 		$rounds = ( new \Athletix\Competition\BracketBuilder() )->build( $rows );
 
 		return $this->render( 'bracket', array( 'rounds' => $rounds ) );
+	}
+
+	/**
+	 * [athletix_staff team="5"] or [athletix_staff league="12"]
+	 *
+	 * Lists the coaching/management staff for a team (or every team in a
+	 * league), the way a SportsPress team page shows its staff.
+	 *
+	 * @param array $atts Attributes.
+	 * @return string
+	 */
+	public function staff( $atts ) {
+		$atts = shortcode_atts(
+			array(
+				'team'   => 0,
+				'league' => 0,
+			),
+			$atts,
+			'athletix_staff'
+		);
+
+		$repo = $this->plugin->make( 'repo.staff' );
+
+		if ( $atts['team'] ) {
+			$posts = $repo->for_team( absint( $atts['team'] ) );
+		} elseif ( $atts['league'] ) {
+			$posts = $repo->all(
+				array(
+					'tax_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+						array(
+							'taxonomy' => Keys::LEAGUE,
+							'field'    => 'term_id',
+							'terms'    => $this->term_id( $atts['league'], Keys::LEAGUE ),
+						),
+					),
+				)
+			);
+		} else {
+			$posts = $repo->all();
+		}
+
+		return $this->render( 'staff', array( 'staff' => $posts ) );
+	}
+
+	/**
+	 * [athletix_team_form team="5" limit="5"]
+	 *
+	 * Renders a team's recent form — the last completed results as W/D/L
+	 * badges, most recent last, like the form guide on a SportsPress team page.
+	 *
+	 * @param array $atts Attributes.
+	 * @return string
+	 */
+	public function team_form( $atts ) {
+		// Accept id="" as an alias of team="" (the single-team templates pass id).
+		$atts = shortcode_atts(
+			array(
+				'team'  => 0,
+				'id'    => 0,
+				'limit' => 5,
+			),
+			$atts,
+			'athletix_team_form'
+		);
+
+		$team_id = absint( $atts['team'] ) ? absint( $atts['team'] ) : absint( $atts['id'] );
+		if ( ! $team_id ) {
+			return '';
+		}
+
+		$repo    = $this->plugin->make( 'repo.match' );
+		$matches = $repo->all(
+			array(
+				'posts_per_page' => max( 1, absint( $atts['limit'] ) ),
+				'orderby'        => 'meta_value',
+				'meta_key'       => Keys::MATCH_DATE, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+				'order'          => 'DESC',
+				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					'relation' => 'AND',
+					array(
+						'key'   => Keys::MATCH_STATUS,
+						'value' => Keys::STATUS_COMPLETED,
+					),
+					array(
+						'relation' => 'OR',
+						array(
+							'key'   => Keys::MATCH_HOME_TEAM,
+							'value' => $team_id,
+						),
+						array(
+							'key'   => Keys::MATCH_AWAY_TEAM,
+							'value' => $team_id,
+						),
+					),
+				),
+			)
+		);
+
+		// Oldest → newest so the badges read left to right chronologically.
+		$results = array();
+		foreach ( array_reverse( $matches ) as $match ) {
+			$details = $repo->details( $match->ID );
+			$is_home = ( (int) $details['home'] === $team_id );
+			$for     = $is_home ? $details['home_score'] : $details['away_score'];
+			$against = $is_home ? $details['away_score'] : $details['home_score'];
+
+			if ( $for > $against ) {
+				$outcome = 'w';
+			} elseif ( $for < $against ) {
+				$outcome = 'l';
+			} else {
+				$outcome = 'd';
+			}
+
+			$results[] = array(
+				'outcome' => $outcome,
+				'match'   => $match,
+				'label'   => strtoupper( $outcome ) . ' ' . $for . '–' . $against,
+			);
+		}
+
+		return $this->render( 'team-form', array( 'results' => $results ) );
+	}
+
+	/**
+	 * [athletix_team id="5"] (defaults to the team in the loop)
+	 *
+	 * The full SportsPress-style team page: a badge/logo header, a team-details
+	 * panel, the league table, fixtures & results for the team, the squad
+	 * grouped by position and the staff list — composed from the individual
+	 * views so a single tag drops a complete team profile onto a page.
+	 *
+	 * @param array $atts Attributes.
+	 * @return string
+	 */
+	public function team( $atts ) {
+		$atts = shortcode_atts( array( 'id' => 0 ), $atts, 'athletix_team' );
+
+		$team_id = absint( $atts['id'] );
+		if ( ! $team_id ) {
+			$team_id = (int) get_the_ID();
+		}
+
+		$post = $team_id ? get_post( $team_id ) : null;
+		if ( ! $post || Keys::TEAM !== $post->post_type ) {
+			return '';
+		}
+
+		$league = $this->plugin->make( 'repo.team' )->league_of( $team_id );
+
+		return $this->render(
+			'team-page',
+			array(
+				'team'   => $post,
+				'league' => $league,
+			)
+		);
 	}
 
 	/**

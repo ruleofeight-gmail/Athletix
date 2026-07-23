@@ -29,7 +29,7 @@ class Taxonomies {
 	public function register() {
 		$this->register_taxonomy(
 			Keys::TAX_SPORT,
-			array( Keys::TEAM, Keys::PLAYER, Keys::MATCH ),
+			array( Keys::TEAM, Keys::PLAYER, Keys::MATCH, Keys::STAFF ),
 			_x( 'Sports', 'taxonomy general name', 'athletix' ),
 			_x( 'Sport', 'taxonomy singular name', 'athletix' ),
 			'sport'
@@ -37,7 +37,7 @@ class Taxonomies {
 
 		$this->register_taxonomy(
 			Keys::LEAGUE,
-			array( Keys::TEAM, Keys::PLAYER, Keys::MATCH ),
+			array( Keys::TEAM, Keys::PLAYER, Keys::MATCH, Keys::STAFF ),
 			_x( 'Leagues', 'taxonomy general name', 'athletix' ),
 			_x( 'League', 'taxonomy singular name', 'athletix' ),
 			'leagues'

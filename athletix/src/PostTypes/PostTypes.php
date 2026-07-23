@@ -66,6 +66,19 @@ class PostTypes {
 				'supports'      => array( 'title', 'editor', 'thumbnail' ),
 			)
 		);
+
+		$this->register_type(
+			Keys::STAFF,
+			__( 'Staff', 'athletix' ),
+			__( 'Staff', 'athletix' ),
+			array(
+				'menu_position' => 37,
+				'menu_icon'     => 'dashicons-businessman',
+				'has_archive'   => true,
+				'rewrite'       => array( 'slug' => 'staff' ),
+				'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+			)
+		);
 	}
 
 	/**

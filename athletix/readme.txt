@@ -4,7 +4,7 @@ Tags: sports, league, teams, players, standings, elementor, competition
 Requires at least: 5.8
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 2.1.4
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,9 @@ Shortcodes:
 * `[athletix_match id="42"]`
 * `[athletix_player id="7" stats="yes"]`
 * `[athletix_bracket league="12" season="3"]`
+* `[athletix_staff team="5"]`
+* `[athletix_team_form team="5" limit="5"]`
+* `[athletix_team id="5"]` (the full SportsPress-style team page)
 
 Blocks: the same views are available as server-rendered Gutenberg blocks in the
 "Athletix" inserter category (Standings, Roster, Schedule, Bracket, Match,
@@ -97,6 +100,10 @@ In a dedicated custom table, recomputed from completed matches whenever a match
 changes, so the table can never drift from the results.
 
 == Changelog ==
+
+= 2.2.0 =
+* Staff: a new Staff post type (like SportsPress staff) — coaches and managers with a role, home team and nationality, assignable to a team and scoped by Sport/League. New `[athletix_staff team="5"]` shortcode and a single-staff template.
+* Teams: single team pages are rebuilt in the SportsPress style — a badge/logo header with recent-form (W/D/L) badges, a team-details panel, the league table, the team's fixtures & results, the squad grouped by position and the staff list — all from one `[athletix_team]` tag. New `[athletix_team_form]` shortcode; `[athletix_roster group="position"]` and `[athletix_schedule team="…"]` options added.
 
 = 2.1.4 =
 * Internal refactor (no behaviour change): removed the standings math superseded by the Customize engine and its orphaned Points settings; extracted the hub-tab registration into a shared HubTab trait and the Customize config-post query into a ConfigRepository base.
