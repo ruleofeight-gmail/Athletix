@@ -114,7 +114,7 @@ class CompetitionAdmin {
 	 * @return void
 	 */
 	public function render() {
-		if ( ! current_user_can( Keys::capability() ) ) {
+		if ( ! Keys::can_manage() ) {
 			return;
 		}
 
@@ -292,7 +292,7 @@ class CompetitionAdmin {
 	 * @return void
 	 */
 	private function authorize() {
-		if ( ! current_user_can( Keys::capability() ) ) {
+		if ( ! Keys::can_manage() ) {
 			wp_die( esc_html__( 'You are not allowed to do this.', 'athletix' ) );
 		}
 	}

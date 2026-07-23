@@ -203,7 +203,7 @@ class SettingsPage {
 	 * @return void
 	 */
 	public function render() {
-		if ( ! current_user_can( Keys::capability() ) ) {
+		if ( ! Keys::can_manage() ) {
 			return;
 		}
 		?>

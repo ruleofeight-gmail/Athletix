@@ -87,7 +87,7 @@ class PaymentsAdmin {
 			echo '</ul>';
 		}
 
-		if ( ! current_user_can( Keys::capability() ) ) {
+		if ( ! Keys::can_manage() ) {
 			return;
 		}
 		?>
@@ -112,7 +112,7 @@ class PaymentsAdmin {
 	 * @return void
 	 */
 	public function handle() {
-		if ( ! current_user_can( Keys::capability() ) ) {
+		if ( ! Keys::can_manage() ) {
 			wp_die( esc_html__( 'You are not allowed to do this.', 'athletix' ) );
 		}
 

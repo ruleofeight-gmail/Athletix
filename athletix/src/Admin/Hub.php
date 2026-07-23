@@ -74,7 +74,7 @@ class Hub {
 				self::SLUG,
 				$label,
 				$label,
-				Keys::capability(),
+				'edit_posts',
 				'edit-tags.php?taxonomy=' . $slug . '&post_type=' . Keys::TEAM
 			);
 		}

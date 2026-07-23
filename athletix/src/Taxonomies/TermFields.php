@@ -188,7 +188,7 @@ class TermFields {
 			return;
 		}
 		$nonce = sanitize_text_field( wp_unslash( $_POST['athletix_term_nonce'] ) );
-		if ( ! wp_verify_nonce( $nonce, 'athletix_term_fields' ) || ! current_user_can( Keys::capability() ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'athletix_term_fields' ) || ! Keys::can_manage() ) {
 			return;
 		}
 

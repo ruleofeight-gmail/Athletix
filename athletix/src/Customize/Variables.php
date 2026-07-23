@@ -55,8 +55,6 @@ class Variables {
 	 * @return void
 	 */
 	private function register_type( $slug, $plural, $singular ) {
-		$cap = Keys::capability();
-
 		register_post_type(
 			$slug,
 			array(
@@ -75,19 +73,11 @@ class Variables {
 				'show_in_rest'    => false,
 				'hierarchical'    => false,
 				'supports'        => array( 'title', 'page-attributes' ),
+				// Standard post capabilities (held by editors and admins) rather
+				// than the custom manage_athletix cap, so these editors stay
+				// reachable even if a role/security plugin strips that cap.
 				'capability_type' => 'post',
 				'map_meta_cap'    => true,
-				'capabilities'    => array(
-					'edit_post'          => $cap,
-					'read_post'          => $cap,
-					'delete_post'        => $cap,
-					'edit_posts'         => $cap,
-					'edit_others_posts'  => $cap,
-					'publish_posts'      => $cap,
-					'read_private_posts' => $cap,
-					'create_posts'       => $cap,
-					'delete_posts'       => $cap,
-				),
 			)
 		);
 	}

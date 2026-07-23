@@ -118,7 +118,7 @@ class DashboardPage {
 	 * @return void
 	 */
 	private function recent_activity() {
-		if ( ! current_user_can( Keys::capability() ) ) {
+		if ( ! Keys::can_manage() ) {
 			echo '<p>' . esc_html__( 'Activity is visible to managers only.', 'athletix' ) . '</p>';
 			return;
 		}

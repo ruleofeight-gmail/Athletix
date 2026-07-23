@@ -275,7 +275,7 @@ class Backup {
 	 * @return void
 	 */
 	public function handle_export() {
-		if ( ! current_user_can( Keys::capability() ) ) {
+		if ( ! Keys::can_manage() ) {
 			wp_die( esc_html__( 'You are not allowed to do this.', 'athletix' ) );
 		}
 		check_admin_referer( self::ACTION_EXPORT );
@@ -296,7 +296,7 @@ class Backup {
 	 * @return void
 	 */
 	public function handle_import() {
-		if ( ! current_user_can( Keys::capability() ) ) {
+		if ( ! Keys::can_manage() ) {
 			wp_die( esc_html__( 'You are not allowed to do this.', 'athletix' ) );
 		}
 		check_admin_referer( self::ACTION_IMPORT );

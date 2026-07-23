@@ -33,6 +33,31 @@ class CapabilityMappingTest extends IntegrationTestCase {
 	}
 
 	/**
+	 * Keys::can_manage() passes for an admin even with the custom cap stripped.
+	 *
+	 * @return void
+	 */
+	public function test_can_manage_falls_back_to_manage_options() {
+		// Strip the role cap and simulate a plugin removing it at every priority.
+		get_role( 'administrator' )->remove_cap( \Athletix\Support\Keys::capability() );
+		$stripper = static function ( $allcaps ) {
+			unset( $allcaps[ \Athletix\Support\Keys::capability() ] );
+			return $allcaps;
+		};
+		add_filter( 'user_has_cap', $stripper, PHP_INT_MAX );
+
+		$admin_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
+		wp_set_current_user( $admin_id );
+
+		$can = \Athletix\Support\Keys::can_manage();
+
+		remove_filter( 'user_has_cap', $stripper, PHP_INT_MAX );
+
+		$this->assertFalse( current_user_can( \Athletix\Support\Keys::capability() ), 'The custom cap is fully stripped.' );
+		$this->assertTrue( $can, 'can_manage() still passes via manage_options.' );
+	}
+
+	/**
 	 * A subscriber (no manage_options) does not gain manage_athletix.
 	 *
 	 * @return void

@@ -50,7 +50,7 @@ class Widgets {
 	 * @return void
 	 */
 	public function add() {
-		if ( ! current_user_can( Keys::capability() ) ) {
+		if ( ! Keys::can_manage() ) {
 			return;
 		}
 

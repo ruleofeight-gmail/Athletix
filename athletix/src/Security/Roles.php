@@ -32,19 +32,24 @@ class Roles {
 			$admin->add_cap( self::CAP );
 		}
 
-		if ( ! get_role( self::ROLE ) ) {
+		$manager = get_role( self::ROLE );
+		if ( ! $manager ) {
 			add_role(
 				self::ROLE,
 				__( 'League Manager', 'athletix' ),
 				array(
-					'read'          => true,
-					'upload_files'  => true,
-					self::CAP       => true,
-					'edit_posts'    => true,
-					'publish_posts' => true,
-					'delete_posts'  => true,
+					'read'              => true,
+					'upload_files'      => true,
+					self::CAP           => true,
+					'edit_posts'        => true,
+					'publish_posts'     => true,
+					'delete_posts'      => true,
+					'manage_categories' => true,
 				)
 			);
+		} elseif ( ! $manager->has_cap( 'manage_categories' ) ) {
+			// Term management moved to manage_categories; keep the role working.
+			$manager->add_cap( 'manage_categories' );
 		}
 	}
 

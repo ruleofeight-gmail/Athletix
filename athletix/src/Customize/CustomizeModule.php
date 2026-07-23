@@ -89,7 +89,7 @@ class CustomizeModule implements Module {
 				Hub::SLUG,
 				$label,
 				$label,
-				Keys::capability(),
+				'edit_posts',
 				'edit.php?post_type=' . $post_type
 			);
 		}

@@ -39,6 +39,6 @@ class Permissions {
 	 * @return bool
 	 */
 	public function can_manage() {
-		return current_user_can( Keys::capability() );
+		return Keys::can_manage();
 	}
 }

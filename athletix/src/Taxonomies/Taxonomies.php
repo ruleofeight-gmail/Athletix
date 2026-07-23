@@ -93,12 +93,15 @@ class Taxonomies {
 				'show_in_rest'      => true,
 				'show_in_menu'      => false,
 				'rewrite'           => array( 'slug' => $rewrite ),
-				// Managing the terms is a league-manager job; assigning them to a
-				// post only needs the post-editing capability.
+				// Managing terms uses the standard manage_categories capability
+				// (held by administrators and editors, and granted to the League
+				// Manager role), rather than the custom manage_athletix cap — which
+				// a role/security plugin can strip, locking admins out of the term
+				// screens. Assigning a term to a post only needs edit_posts.
 				'capabilities'      => array(
-					'manage_terms' => Keys::capability(),
-					'edit_terms'   => Keys::capability(),
-					'delete_terms' => Keys::capability(),
+					'manage_terms' => 'manage_categories',
+					'edit_terms'   => 'manage_categories',
+					'delete_terms' => 'manage_categories',
 					'assign_terms' => 'edit_posts',
 				),
 			)

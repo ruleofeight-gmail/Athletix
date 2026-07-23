@@ -122,4 +122,18 @@ final class Keys {
 	public static function capability() {
 		return 'manage_athletix';
 	}
+
+	/**
+	 * Whether the current user may manage Athletix.
+	 *
+	 * Passes for anyone holding manage_athletix (e.g. the League Manager role) or
+	 * any full administrator (manage_options). The administrator fallback makes
+	 * the check reliable even when a role/security plugin strips the custom
+	 * manage_athletix capability, so admin screens never render empty.
+	 *
+	 * @return bool
+	 */
+	public static function can_manage() {
+		return current_user_can( self::capability() ) || current_user_can( 'manage_options' );
+	}
 }

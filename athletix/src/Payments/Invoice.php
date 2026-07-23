@@ -54,7 +54,7 @@ class Invoice {
 		$atts = shortcode_atts( array( 'team' => 0 ), $atts, 'athletix_invoice' );
 
 		$team = absint( $atts['team'] );
-		if ( ! $team || ! current_user_can( Keys::capability() ) ) {
+		if ( ! $team || ! Keys::can_manage() ) {
 			return '';
 		}
 
