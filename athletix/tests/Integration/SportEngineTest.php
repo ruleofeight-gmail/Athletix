@@ -9,7 +9,6 @@ namespace Athletix\Tests\Integration;
 
 use Athletix\Engine\SportEngine;
 use Athletix\Sports\Profiles\SoccerProfile;
-use Athletix\Sports\SportRegistry;
 use Athletix\Support\Keys;
 
 /**
@@ -103,48 +102,14 @@ class SportEngineTest extends IntegrationTestCase {
 	}
 
 	/**
-	 * Points for a non-primary sport come straight from its profile, untouched by
-	 * the settings-page overrides that only apply to the active sport.
+	 * The resolved profile exposes the sport's descriptive metadata.
 	 *
 	 * @return void
 	 */
-	public function test_points_for_non_primary_sport_use_profile_defaults() {
-		$engine = $this->engine();
+	public function test_profile_exposes_sport_metadata() {
+		$profile = $this->engine()->profile( 'soccer' );
 
-		// The generic profile is never the site's active sport in these tests, so
-		// its scoring is returned verbatim (3/1/0).
-		$points = $engine->points( 'generic' );
-
-		$this->assertSame( 3, $points['win'] );
-		$this->assertSame( 1, $points['draw'] );
-		$this->assertSame( 0, $points['loss'] );
-	}
-
-	/**
-	 * The active sport still honours the settings-page point overrides.
-	 *
-	 * @return void
-	 */
-	public function test_points_for_active_sport_honour_config_overrides() {
-		$config = $this->plugin()->config();
-		$config->set( 'points_win', 2 );
-
-		$engine = new SportEngine( $config, new SportRegistry() );
-		$points = $engine->points( $engine->active() );
-
-		$this->assertSame( 2, $points['win'], 'Active sport reads the configured win points.' );
-
-		$config->set( 'points_win', 3 );
-	}
-
-	/**
-	 * Tie-breakers for a sport come from its profile chain.
-	 *
-	 * @return void
-	 */
-	public function test_tiebreakers_source_from_profile() {
-		$chain = $this->engine()->tiebreakers( 'soccer' );
-
-		$this->assertSame( array( 'points', 'goal_difference', 'goals_for', 'won' ), $chain );
+		$this->assertSame( 'soccer', $profile->slug() );
+		$this->assertNotEmpty( $profile->positions() );
 	}
 }

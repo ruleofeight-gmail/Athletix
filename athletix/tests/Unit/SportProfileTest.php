@@ -8,7 +8,6 @@
 namespace Athletix\Tests\Unit;
 
 use Athletix\Contracts\SportProfile;
-use Athletix\Engine\StandingsSorter;
 use Athletix\Sports\Profiles\GenericProfile;
 use Athletix\Sports\Profiles\SoccerProfile;
 use Athletix\Sports\SportRegistry;
@@ -20,31 +19,21 @@ use PHPUnit\Framework\TestCase;
 class SportProfileTest extends TestCase {
 
 	/**
-	 * Soccer encodes Athletix's historical 3/1/0, goal-based behaviour.
+	 * Soccer describes its metrics, positions and terminology.
 	 *
 	 * @return void
 	 */
-	public function test_soccer_profile_encodes_default_soccer_rules() {
+	public function test_soccer_profile_describes_the_sport() {
 		$soccer = new SoccerProfile();
 
 		$this->assertSame( 'soccer', $soccer->slug() );
-		$this->assertSame(
-			array(
-				'win'           => 3,
-				'draw'          => 1,
-				'loss'          => 0,
-				'draws_allowed' => true,
-			),
-			$soccer->scoring()
-		);
-		$this->assertSame( array( 'points', 'goal_difference', 'goals_for', 'won' ), $soccer->tiebreakers() );
 		$this->assertArrayHasKey( 'goals', $soccer->metrics() );
 		$this->assertSame( array( 'GK', 'DF', 'MF', 'FW' ), $soccer->positions() );
 		$this->assertSame( 'Goals', $soccer->labels()['score'] );
 	}
 
 	/**
-	 * Generic is a safe neutral Null Object with the default tie-break chain.
+	 * Generic is a safe neutral Null Object.
 	 *
 	 * @return void
 	 */
@@ -52,7 +41,6 @@ class SportProfileTest extends TestCase {
 		$generic = new GenericProfile();
 
 		$this->assertSame( 'generic', $generic->slug() );
-		$this->assertSame( StandingsSorter::DEFAULT_CHAIN, $generic->tiebreakers() );
 		$this->assertSame( array(), $generic->positions() );
 		$this->assertSame( 'Score', $generic->labels()['score'] );
 	}
@@ -67,8 +55,8 @@ class SportProfileTest extends TestCase {
 			$this->assertInstanceOf( SportProfile::class, $profile );
 			$this->assertIsString( $profile->slug() );
 			$this->assertIsString( $profile->label() );
-			$this->assertArrayHasKey( 'win', $profile->scoring() );
-			$this->assertNotEmpty( $profile->tiebreakers() );
+			$this->assertIsArray( $profile->metrics() );
+			$this->assertIsArray( $profile->positions() );
 			$this->assertArrayHasKey( 'match', $profile->labels() );
 		}
 	}

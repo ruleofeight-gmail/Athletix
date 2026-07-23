@@ -12,10 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * A sport profile declares the differences between sports — scoring, standings
- * tie-breakers, the statistics tracked, player positions and terminology — so
- * the rest of the plugin reads sport-specific behaviour from one place. Profiles
- * are registered in the SportRegistry and resolved per league.
+ * A sport profile declares the descriptive differences between sports — the
+ * statistics tracked, player positions and terminology — so the rest of the
+ * plugin reads sport-specific metadata from one place. Standings scoring and
+ * tie-breaks are configured separately (Athletix → Customize). Profiles are
+ * registered in the SportRegistry and resolved per league.
  */
 interface SportProfile {
 
@@ -32,20 +33,6 @@ interface SportProfile {
 	 * @return string
 	 */
 	public function label();
-
-	/**
-	 * Points scheme: win/draw/loss ints plus draws_allowed bool.
-	 *
-	 * @return array
-	 */
-	public function scoring();
-
-	/**
-	 * Ordered standings tie-break chain (StandingsSorter field names).
-	 *
-	 * @return string[]
-	 */
-	public function tiebreakers();
 
 	/**
 	 * Per-match statistics metrics: slug => [ 'label' => string ].

@@ -41,29 +41,6 @@ class SoccerProfile implements SportProfile {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @return array
-	 */
-	public function scoring() {
-		return array(
-			'win'           => 3,
-			'draw'          => 1,
-			'loss'          => 0,
-			'draws_allowed' => true,
-		);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @return string[]
-	 */
-	public function tiebreakers() {
-		return array( 'points', 'goal_difference', 'goals_for', 'won' );
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
 	 * @return array<string,array>
 	 */
 	public function metrics() {

@@ -12,7 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Athletix\Contracts\SportProfile;
-use Athletix\Engine\StandingsSorter;
 
 /**
  * The safe fallback returned when a requested sport slug is unknown, so no code
@@ -36,29 +35,6 @@ class GenericProfile implements SportProfile {
 	 */
 	public function label() {
 		return __( 'Generic', 'athletix' );
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @return array
-	 */
-	public function scoring() {
-		return array(
-			'win'           => 3,
-			'draw'          => 1,
-			'loss'          => 0,
-			'draws_allowed' => true,
-		);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @return string[]
-	 */
-	public function tiebreakers() {
-		return StandingsSorter::DEFAULT_CHAIN;
 	}
 
 	/**
