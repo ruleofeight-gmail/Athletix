@@ -4,7 +4,7 @@ Tags: sports, league, teams, players, standings, elementor, competition
 Requires at least: 5.8
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 2.1.3
+Stable tag: 2.1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,6 +97,9 @@ In a dedicated custom table, recomputed from completed matches whenever a match
 changes, so the table can never drift from the results.
 
 == Changelog ==
+
+= 2.1.4 =
+* Internal refactor (no behaviour change): removed the standings math superseded by the Customize engine and its orphaned Points settings; extracted the hub-tab registration into a shared HubTab trait and the Customize config-post query into a ConfigRepository base.
 
 = 2.1.3 =
 * Fix: tab panels rendered empty when a role/security plugin stripped manage_athletix. All admin screens, the taxonomy (Leagues/Seasons/Divisions/Sports) management and the Customize editors now also accept a manage_options administrator, and term management uses the standard manage_categories capability — so an administrator can never be locked out of the content.

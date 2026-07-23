@@ -3,7 +3,7 @@
  * Plugin Name:       Athletix
  * Plugin URI:        https://github.com/ruleofeight-gmail/athletix
  * Description:       Modular sports-league management for WordPress — teams, players, matches, standings, competitions and a full Elementor integration.
- * Version:           2.1.3
+ * Version:           2.1.4
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            Athletix
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 | Constants
 |--------------------------------------------------------------------------
 */
-define( 'ATHLETIX_VERSION', '2.1.3' );
+define( 'ATHLETIX_VERSION', '2.1.4' );
 define( 'ATHLETIX_FILE', __FILE__ );
 define( 'ATHLETIX_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ATHLETIX_URL', plugin_dir_url( __FILE__ ) );
