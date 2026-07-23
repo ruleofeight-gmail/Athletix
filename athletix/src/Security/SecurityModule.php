@@ -43,13 +43,21 @@ class SecurityModule implements Module {
 		$plugin->container()->instance( 'security.audit', $audit );
 		$plugin->container()->instance( 'security.access', new AccessControl() );
 
-		// Ensure roles and capabilities exist on activation and self-heal on admin load.
+		// Ensure roles and capabilities exist on activation and self-heal on load.
+		// This runs on `init` (not `admin_init`) because `admin_menu` — where the
+		// capability-gated Athletix menus are drawn — fires before `admin_init`;
+		// granting on `init` guarantees the manage_athletix capability is present
+		// before the menus are built, so a freshly installed or updated site never
+		// hides the Leagues/Seasons/Divisions/Sports and Customize screens.
 		$ensure = static function () use ( $roles, $caps ) {
+			if ( ! is_admin() ) {
+				return;
+			}
 			$roles->ensure();
 			$caps->ensure();
 		};
 		add_action( 'athletix/activate', $ensure );
-		add_action( 'admin_init', $ensure );
+		add_action( 'init', $ensure );
 
 		$audit->register();
 	}
