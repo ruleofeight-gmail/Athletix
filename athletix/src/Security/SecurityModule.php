@@ -59,6 +59,11 @@ class SecurityModule implements Module {
 		add_action( 'athletix/activate', $ensure );
 		add_action( 'init', $ensure );
 
+		// Make manage_athletix reliable for every administrator, independent of
+		// whether the role grant above ever persisted, so the capability-gated
+		// menus and hub tabs are never hidden from an admin.
+		add_filter( 'user_has_cap', array( $roles, 'grant_to_admins' ) );
+
 		$audit->register();
 	}
 }

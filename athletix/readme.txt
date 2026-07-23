@@ -4,7 +4,7 @@ Tags: sports, league, teams, players, standings, elementor, competition
 Requires at least: 5.8
 Tested up to: 6.5
 Requires PHP: 7.4
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,6 +97,9 @@ In a dedicated custom table, recomputed from completed matches whenever a match
 changes, so the table can never drift from the results.
 
 == Changelog ==
+
+= 2.1.1 =
+* Fix: administrators now always resolve the manage_athletix capability (mapped from manage_options), so the Settings, Competitions, Registrations, Automation and Import/Export hub tabs and the Customize/taxonomy menus are never hidden.
 
 = 2.1.0 =
 * Multi-sport profiles: per-league sport resolution driving scoring and tie-breaks.

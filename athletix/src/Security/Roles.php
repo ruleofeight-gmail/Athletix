@@ -49,6 +49,29 @@ class Roles {
 	}
 
 	/**
+	 * Dynamically grant manage_athletix to anyone who can manage_options.
+	 *
+	 * The role-based grant in ensure() writes the capability to the administrator
+	 * role, but that write can be missed (an install where the activation/boot
+	 * grant never ran, a migrated or role-managed site). Because every part of the
+	 * admin UI is gated on manage_athletix, a missing grant silently hides whole
+	 * screens and hub tabs. Mapping the capability here — so any user with the
+	 * core manage_options capability is treated as having manage_athletix — makes
+	 * that gate reliable for every administrator, on every request, regardless of
+	 * what the stored role option says.
+	 *
+	 * @param array $allcaps All capabilities the user currently has.
+	 * @return array
+	 */
+	public function grant_to_admins( $allcaps ) {
+		if ( ! empty( $allcaps['manage_options'] ) ) {
+			$allcaps[ self::CAP ] = true;
+		}
+
+		return $allcaps;
+	}
+
+	/**
 	 * Remove the custom role (used on uninstall paths). Capability on the
 	 * administrator is left intact.
 	 *
