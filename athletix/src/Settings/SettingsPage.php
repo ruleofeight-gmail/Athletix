@@ -73,10 +73,9 @@ class SettingsPage {
 			self::PAGE
 		);
 
+		// Standings scoring/tie-breaks are configured in Athletix → Customize
+		// (Standings Columns / Outcomes), so only the default sport lives here.
 		$this->field( 'active_sport', __( 'Active Sport', 'athletix' ), 'text', 'athletix_general' );
-		$this->field( 'points_win', __( 'Points for a Win', 'athletix' ), 'number', 'athletix_general' );
-		$this->field( 'points_draw', __( 'Points for a Draw', 'athletix' ), 'number', 'athletix_general' );
-		$this->field( 'points_loss', __( 'Points for a Loss', 'athletix' ), 'number', 'athletix_general' );
 
 		add_settings_section(
 			'athletix_notifications',
@@ -185,9 +184,6 @@ class SettingsPage {
 
 		$clean = array(
 			'active_sport'     => isset( $input['active_sport'] ) ? sanitize_text_field( $input['active_sport'] ) : 'soccer',
-			'points_win'       => isset( $input['points_win'] ) ? (int) $input['points_win'] : 3,
-			'points_draw'      => isset( $input['points_draw'] ) ? (int) $input['points_draw'] : 1,
-			'points_loss'      => isset( $input['points_loss'] ) ? (int) $input['points_loss'] : 0,
 			'notify_results'   => ! empty( $input['notify_results'] ),
 			'notify_reminders' => ! empty( $input['notify_reminders'] ),
 			'notify_email'     => isset( $input['notify_email'] ) ? sanitize_email( $input['notify_email'] ) : '',
