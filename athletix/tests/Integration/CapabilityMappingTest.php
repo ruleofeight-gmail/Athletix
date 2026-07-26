@@ -51,9 +51,14 @@ class CapabilityMappingTest extends IntegrationTestCase {
 
 		$can = \Athletix\Support\Keys::can_manage();
 
+		// Capture the custom-cap check while the stripper is still active. Once it
+		// is removed, the Security module's grant_to_admins mapping (also at
+		// PHP_INT_MAX) legitimately re-grants the cap to the administrator.
+		$custom_cap_stripped = ! current_user_can( \Athletix\Support\Keys::capability() );
+
 		remove_filter( 'user_has_cap', $stripper, PHP_INT_MAX );
 
-		$this->assertFalse( current_user_can( \Athletix\Support\Keys::capability() ), 'The custom cap is fully stripped.' );
+		$this->assertTrue( $custom_cap_stripped, 'The custom cap is fully stripped.' );
 		$this->assertTrue( $can, 'can_manage() still passes via manage_options.' );
 	}
 

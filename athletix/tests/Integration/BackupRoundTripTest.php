@@ -78,9 +78,11 @@ class BackupRoundTripTest extends IntegrationTestCase {
 		$this->assertNotEmpty( $data['relationships'] );
 		$this->assertNotEmpty( $data['player_stats'] );
 
-		// Import re-creates everything under fresh ids.
+		// Import re-creates everything under fresh ids. import() returns the
+		// number of posts created; this round trip restores two (team + player) —
+		// the league is a taxonomy term, not a post.
 		$created = $backup->import( $data );
-		$this->assertGreaterThanOrEqual( 3, $created );
+		$this->assertGreaterThanOrEqual( 2, $created );
 
 		$new_team   = $this->imported_id( Keys::TEAM, 'RT Team', $team );
 		$new_player = $this->imported_id( Keys::PLAYER, 'RT Player', $player );

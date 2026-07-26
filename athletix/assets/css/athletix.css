@@ -607,3 +607,172 @@
 		color: #f3f4f6;
 	}
 }
+
+/* ==========================================================================
+   Team page (SportsPress-style composite) + Staff + Form
+   ========================================================================== */
+.athletix-team {
+	--athletix-team-color: #1a73e8;
+}
+
+.athletix-team__header {
+	display: flex;
+	align-items: center;
+	gap: 1.25rem;
+	padding: 1.25rem 0;
+	border-bottom: 3px solid var( --athletix-team-color );
+	margin-bottom: 1.5rem;
+}
+
+.athletix-team__badge img {
+	width: 96px;
+	height: 96px;
+	object-fit: contain;
+	border-radius: 8px;
+}
+
+.athletix-team__name {
+	margin: 0;
+	line-height: 1.1;
+}
+
+.athletix-team__league {
+	margin: 0.35rem 0 0;
+	font-weight: 600;
+}
+
+.athletix-team__league a {
+	color: var( --athletix-team-color );
+	text-decoration: none;
+}
+
+.athletix-team__form {
+	margin-top: 0.6rem;
+}
+
+.athletix-team__details {
+	margin-bottom: 1.5rem;
+}
+
+.athletix-team__detail-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.athletix-team__detail-table th,
+.athletix-team__detail-table td {
+	text-align: left;
+	padding: 0.5rem 0.75rem;
+	border-bottom: 1px solid rgba( 0, 0, 0, 0.08 );
+}
+
+.athletix-team__detail-table th {
+	width: 40%;
+	font-weight: 600;
+	opacity: 0.7;
+}
+
+.athletix-team__section {
+	margin: 2rem 0;
+}
+
+.athletix-team__section-title {
+	margin: 0 0 0.85rem;
+	padding-bottom: 0.4rem;
+	border-bottom: 2px solid var( --athletix-team-color );
+	font-size: 1.15rem;
+}
+
+.athletix-team__bio {
+	margin-bottom: 1.5rem;
+}
+
+/* Squad grouped by position */
+.athletix-roster-group {
+	margin-bottom: 1.5rem;
+}
+
+.athletix-roster-group__title {
+	margin: 0 0 0.75rem;
+	font-size: 0.95rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	opacity: 0.65;
+}
+
+/* Staff list */
+.athletix-staff {
+	display: grid;
+	grid-template-columns: repeat( 4, 1fr );
+	gap: 20px;
+}
+
+@media ( max-width: 767px ) {
+	.athletix-staff {
+		grid-template-columns: repeat( 2, 1fr );
+	}
+}
+
+.athletix-staff__link {
+	display: block;
+	text-align: center;
+	text-decoration: none;
+	color: inherit;
+}
+
+.athletix-staff__photo img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 6px;
+}
+
+.athletix-staff__name {
+	display: block;
+	margin-top: 0.6rem;
+	font-weight: 700;
+}
+
+.athletix-staff__role {
+	display: block;
+	font-size: 0.85rem;
+	color: var( --athletix-team-color, #1a73e8 );
+	font-weight: 600;
+}
+
+.athletix-staff__country {
+	display: block;
+	font-size: 0.8rem;
+	opacity: 0.6;
+}
+
+/* Recent form badges */
+.athletix-form {
+	display: flex;
+	gap: 0.35rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.athletix-form__badge {
+	display: grid;
+	place-items: center;
+	width: 1.7rem;
+	height: 1.7rem;
+	border-radius: 50%;
+	font-size: 0.8rem;
+	font-weight: 700;
+	color: #fff;
+	text-decoration: none;
+}
+
+.athletix-form__item--w .athletix-form__badge { background: #16a34a; }
+.athletix-form__item--d .athletix-form__badge { background: #9ca3af; }
+.athletix-form__item--l .athletix-form__badge { background: #dc2626; }
+
+@media ( prefers-color-scheme: dark ) {
+	.athletix-team__detail-table th,
+	.athletix-team__detail-table td {
+		border-bottom-color: rgba( 255, 255, 255, 0.1 );
+	}
+}

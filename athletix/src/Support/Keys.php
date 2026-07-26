@@ -26,6 +26,7 @@ final class Keys {
 	const TEAM   = 'ax_team';
 	const PLAYER = 'ax_player';
 	const MATCH  = 'ax_match';
+	const STAFF  = 'ax_staff';
 
 	/* Customize variable post types (admin-defined standings columns + outcomes). */
 	const STANDING    = 'ax_standing';
@@ -55,6 +56,12 @@ final class Keys {
 	const TEAM_VENUE   = '_ax_team_venue';
 	const TEAM_FOUNDED = '_ax_team_founded';
 	const TEAM_COLOR   = '_ax_team_color';
+
+	/* Staff meta (coaches/managers attached to a team, like SportsPress staff). */
+	const STAFF_ROLE    = '_ax_staff_role';
+	const STAFF_TEAM    = '_ax_staff_team';
+	const STAFF_COUNTRY = '_ax_staff_country';
+	const STAFF_EMAIL   = '_ax_staff_email';
 
 	/* Player meta. */
 	const PLAYER_TEAM     = '_ax_player_team';
@@ -99,7 +106,7 @@ final class Keys {
 	 * @return string[]
 	 */
 	public static function post_types() {
-		return array( self::TEAM, self::PLAYER, self::MATCH );
+		return array( self::TEAM, self::PLAYER, self::MATCH, self::STAFF );
 	}
 
 	/**

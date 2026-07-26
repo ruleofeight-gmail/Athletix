@@ -57,7 +57,7 @@ class FrontendModule implements Module {
 		add_action(
 			'wp_enqueue_scripts',
 			static function () {
-				if ( is_singular( array( 'ax_team', 'ax_player', 'ax_match' ) ) || is_post_type_archive( array( 'ax_team', 'ax_player' ) ) ) {
+				if ( is_singular( array( 'ax_team', 'ax_player', 'ax_match', 'ax_staff' ) ) || is_post_type_archive( array( 'ax_team', 'ax_player', 'ax_staff' ) ) ) {
 					wp_enqueue_style( 'athletix' );
 				}
 			}

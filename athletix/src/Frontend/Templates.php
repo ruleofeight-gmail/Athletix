@@ -40,6 +40,7 @@ class Templates {
 				Keys::TEAM   => 'single-ax_team.php',
 				Keys::PLAYER => 'single-ax_player.php',
 				Keys::MATCH  => 'single-ax_match.php',
+				Keys::STAFF  => 'single-ax_staff.php',
 			),
 			'archive' => array(
 				Keys::TEAM   => 'archive-ax_team.php',

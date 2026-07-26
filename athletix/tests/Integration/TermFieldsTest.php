@@ -72,7 +72,8 @@ class TermFieldsTest extends IntegrationTestCase {
 	 * @return void
 	 */
 	public function test_standings_tab_registered() {
-		$tabs = ( new StandingsTab( $this->plugin() ) )->tab( array() );
+		( new StandingsTab( $this->plugin() ) )->register();
+		$tabs = apply_filters( 'athletix/admin_tabs', array() );
 
 		$this->assertArrayHasKey( 'tables', $tabs );
 		$this->assertSame( 10, $tabs['tables']['order'] );
